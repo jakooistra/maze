@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		DBB26BC129E8C56400C14D5B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BC029E8C56400C14D5B /* main.cpp */; };
+		DBB26BCA29E8C6A100C14D5B /* lodepng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BC929E8C6A100C14D5B /* lodepng.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,8 @@
 /* Begin PBXFileReference section */
 		DBB26BBD29E8C56400C14D5B /* Maze */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Maze; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBB26BC029E8C56400C14D5B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		DBB26BC829E8C69A00C14D5B /* lodepng.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lodepng.h; sourceTree = "<group>"; };
+		DBB26BC929E8C6A100C14D5B /* lodepng.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lodepng.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -57,6 +60,8 @@
 		DBB26BBF29E8C56400C14D5B /* Maze */ = {
 			isa = PBXGroup;
 			children = (
+				DBB26BC829E8C69A00C14D5B /* lodepng.h */,
+				DBB26BC929E8C6A100C14D5B /* lodepng.cpp */,
 				DBB26BC029E8C56400C14D5B /* main.cpp */,
 			);
 			path = Maze;
@@ -120,6 +125,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBB26BC129E8C56400C14D5B /* main.cpp in Sources */,
+				DBB26BCA29E8C6A100C14D5B /* lodepng.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
