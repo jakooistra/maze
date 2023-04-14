@@ -22,5 +22,5 @@ void Analysis::print() {
     
     int totalCells = reachableCells + unreachableCells;
     int percentReachable = (100 * reachableCells) / totalCells;
-    std::cout << "  Reachability: " << percentReachable << "% of cells can be reached." << std::endl;
+    std::cout << "  " << percentReachable << "% of cells can be reached." << std::endl;
 }

@@ -31,6 +31,8 @@ struct Analysis {
     int reachableCells;
     int unreachableCells;
     
+    // TODO: "donuts" - areas that have unnecessarily high connectivity
+    
     // Returns true if there is a solution to the analyzed maze.
     bool isSolvable() const { return !shortestPath.empty(); }
     
