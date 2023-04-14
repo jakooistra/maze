@@ -1,11 +1,11 @@
 //
-//  maze.cpp
+//  Maze.cpp
 //  Maze
 //
 //  Created by John Kooistra on 2023-04-13.
 //
 
-#include "maze.h"
+#include "Maze.h"
 
 Maze::Maze(int _width, int _height)
 :   width(_width)

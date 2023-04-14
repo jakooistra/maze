@@ -1,16 +1,16 @@
 //
-//  analysis.h
+//  Analysis.h
 //  Maze
 //
 //  Created by John Kooistra on 2023-04-13.
 //
 
-#ifndef analysis_h
-#define analysis_h
+#ifndef Analysis_h
+#define Analysis_h
 
 #include <vector>
 
-#include "xy.h"
+#include "XY.h"
 
 struct BranchEndpoint {
     XY position;
@@ -39,4 +39,4 @@ struct Analysis {
     void print() const;
 };
 
-#endif /* analysis_h */
+#endif /* Analysis_h */

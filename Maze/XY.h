@@ -1,12 +1,12 @@
 //
-//  xy.h
+//  XY.h
 //  Maze
 //
 //  Created by John Kooistra on 2023-04-13.
 //
 
-#ifndef xy_h
-#define xy_h
+#ifndef XY_h
+#define XY_h
 
 #include <vector>
 
@@ -39,4 +39,4 @@ struct XY {
     };
 };
 
-#endif /* xy_h */
+#endif /* XY_h */

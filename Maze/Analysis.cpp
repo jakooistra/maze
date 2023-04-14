@@ -1,5 +1,5 @@
 //
-//  analysis.cpp
+//  Analysis.cpp
 //  Maze
 //
 //  Created by John Kooistra on 2023-04-13.
@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "analysis.h"
+#include "Analysis.h"
 
 void Analysis::print() const {
     std::cout << "Analysis:" << std::endl;

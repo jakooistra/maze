@@ -1,11 +1,11 @@
 //
-//  mazetoimage.cpp
+//  MazeToImage.cpp
 //  Maze
 //
 //  Created by John Kooistra on 2023-04-13.
 //
 
-#include "mazetoimage.h"
+#include "MazeToImage.h"
 
 static void paintRect(Image *image, int x, int y, int width, int height, unsigned char value = 255) {
     for (int row = y; row < y + height; ++row) {

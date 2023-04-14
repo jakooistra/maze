@@ -1,5 +1,5 @@
 //
-//  solver.cpp
+//  Solver.cpp
 //  Maze
 //
 //  Created by John Kooistra on 2023-04-13.
@@ -7,7 +7,7 @@
 
 #include <queue>
 
-#include "solver.h"
+#include "Solver.h"
 
 static XY invalid { -1, -1 };
 

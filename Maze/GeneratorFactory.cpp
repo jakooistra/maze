@@ -1,11 +1,11 @@
 //
-//  generatorfactory.cpp
+//  GeneratorFactory.cpp
 //  Maze
 //
 //  Created by John Kooistra on 2023-04-14.
 //
 
-#include "generatorfactory.h"
+#include "GeneratorFactory.h"
 #include "RemoveRandomWallsGenerator.h"
 
 std::unique_ptr<MazeGenerator> createGenerator(MazeType type) {

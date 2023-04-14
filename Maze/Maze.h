@@ -1,16 +1,16 @@
 //
-//  maze.h
+//  Maze.h
 //  Maze
 //
 //  Created by John Kooistra on 2023-04-13.
 //
 
-#ifndef maze_h
-#define maze_h
+#ifndef Maze_h
+#define Maze_h
 
 #include <vector>
 
-#include "xy.h"
+#include "XY.h"
 
 struct Cell {
     bool leftWall { true };
@@ -49,4 +49,4 @@ public:
 };
 
 
-#endif /* maze_h */
+#endif /* Maze_h */

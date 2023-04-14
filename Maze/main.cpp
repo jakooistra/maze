@@ -6,13 +6,13 @@
 //
 
 #include <iostream>
-
-#include "generatorfactory.h"
 #include "lodepng.h"
-#include "maze.h"
-#include "mazetoimage.h"
-#include "solver.h"
-#include "stats.h"
+
+#include "GeneratorFactory.h"
+#include "Maze.h"
+#include "MazeToImage.h"
+#include "Solver.h"
+#include "Stats.h"
 
 int main(int argc, const char * argv[]) {
     auto generator = createGenerator(MazeType::RemoveRandomWalls);

@@ -9,7 +9,8 @@
 #define MazeGenerator_h
 
 #include <memory>
-#include "maze.h"
+
+#include "Maze.h"
 #include "MazeType.h"
 
 class MazeGenerator {

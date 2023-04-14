@@ -1,12 +1,13 @@
 //
-//  image.cpp
+//  Image.cpp
 //  Maze
 //
 //  Created by John Kooistra on 2023-04-13.
 //
 
-#include "image.h"
 #include "lodepng.h"
+
+#include "Image.h"
 
 bool Image::encodeRGBA(std::vector<unsigned char> &out) const {
     if (width <= 0 || height <= 0 || data.size() < width * height) {

@@ -1,12 +1,12 @@
 //
-//  image.h
+//  Image.h
 //  Maze
 //
 //  Created by John Kooistra on 2023-04-13.
 //
 
-#ifndef image_h
-#define image_h
+#ifndef Image_h
+#define Image_h
 
 #include <vector>
 
@@ -20,4 +20,4 @@ struct Image {
     unsigned int encodePNG(std::vector<unsigned char> &out) const;
 };
 
-#endif /* image_h */
+#endif /* Image_h */

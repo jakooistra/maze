@@ -1,5 +1,5 @@
 //
-//  stats.cpp
+//  Stats.cpp
 //  Maze
 //
 //  Created by John Kooistra on 2023-04-13.
@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "stats.h"
+#include "Stats.h"
 
 void Stats::accumulate(Analysis const *analysis) {
     count++;

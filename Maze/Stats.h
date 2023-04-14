@@ -1,14 +1,14 @@
 //
-//  stats.h
+//  Stats.h
 //  Maze
 //
 //  Created by John Kooistra on 2023-04-13.
 //
 
-#ifndef stats_h
-#define stats_h
+#ifndef Stats_h
+#define Stats_h
 
-#include "analysis.h"
+#include "Analysis.h"
 
 struct Stats {
     // The number of analyses accumulated in these statistics.
@@ -30,4 +30,4 @@ struct Stats {
     void print(std::string const &title) const;
 };
 
-#endif /* stats_h */
+#endif /* Stats_h */
