@@ -33,6 +33,8 @@ struct Analysis {
     
     // TODO: "donuts" - areas that have unnecessarily high connectivity
     
+    // TODO: degenerate mazes, start == end?
+    
     // Returns true if there is a solution to the analyzed maze.
     bool isSolvable() const { return !shortestPath.empty(); }
     

@@ -21,21 +21,19 @@ struct SolverCell {
     }
 };
 
-void solve(Maze const *maze, Analysis &analysis) {
-    // reset the analysis
-    analysis = Analysis();
-    
+static std::vector<std::vector<SolverCell>> runBreadthFirstPathing(Maze const *maze, std::vector<XY> const &startingLocations) {
     std::vector<std::vector<SolverCell>> solverCells;
     solverCells.resize(maze->getWidth());
     for (int x = 0; x < maze->getWidth(); ++x) {
         solverCells[x].resize(maze->getHeight());
     }
     
-    auto start = maze->getStart();
-    solverCells[start.x][start.y].shortestLink = start;
-    
     std::queue<XY> bfs;
-    bfs.push(start);
+    for (auto start : startingLocations) {
+        solverCells[start.x][start.y].shortestLink = start;
+        bfs.push(start);
+    }
+    
     while (!bfs.empty()) {
         XY currentPosition = bfs.front();
         bfs.pop();
@@ -54,41 +52,46 @@ void solve(Maze const *maze, Analysis &analysis) {
         }
     }
     
+    // Mark linked cells.
+    for (int x = 0; x < maze->getWidth(); ++x) {
+        for (int y = 0; y < maze->getHeight(); ++y) {
+            auto cell = solverCells[x][y];
+            if (cell.visited()) {
+                auto link = cell.shortestLink;
+                solverCells[link.x][link.y].somethingPointsToThis = true;
+            }
+        }
+    }
+    
+    return solverCells;
+}
+
+void solve(Maze const *maze, Analysis &analysis) {
+    // reset the analysis
+    analysis = Analysis();
+    
+    auto solverCells = runBreadthFirstPathing(maze, {maze->getStart()});
+    
     // Record the solution if it exists.
     auto finish = maze->getFinish();
     auto finishCell = solverCells[finish.x][finish.y];
     if (finishCell.visited()) {
         XY path = finish;
         analysis.shortestPath.push_back(path);
-        while (path != start) {
+        while (path != maze->getStart()) {
             path = solverCells[path.x][path.y].shortestLink;
             analysis.shortestPath.insert(analysis.shortestPath.begin(), path);
         }
     }
     
-    // Check reachable areas and mark linked cells.
+    // Check reachable areas.
     for (int x = 0; x < maze->getWidth(); ++x) {
         for (int y = 0; y < maze->getHeight(); ++y) {
             auto cell = solverCells[x][y];
             if (cell.visited()) {
                 analysis.reachableCells++;
-                auto link = cell.shortestLink;
-                solverCells[link.x][link.y].somethingPointsToThis = true;
             } else {
                 analysis.unreachableCells++;
-            }
-        }
-    }
-    
-    // Find all branch endpoints.
-    for (int x = 0; x < maze->getWidth(); ++x) {
-        for (int y = 0; y < maze->getHeight(); ++y) {
-            const XY position(x, y);
-            if (position != finish) {
-                auto cell = solverCells[x][y];
-                if (!cell.somethingPointsToThis && cell.visited()) {
-                    analysis.branches.push_back({position, cell.distanceToStart});
-                }
             }
         }
     }
@@ -133,6 +136,23 @@ void solve(Maze const *maze, Analysis &analysis) {
         }
         if (!analysis.singularPath) {
             break;
+        }
+    }
+    
+    if (analysis.isSolvable()) {
+        solverCells = runBreadthFirstPathing(maze, analysis.shortestPath);
+        
+        // Find all branch endpoints.
+        for (int x = 0; x < maze->getWidth(); ++x) {
+            for (int y = 0; y < maze->getHeight(); ++y) {
+                const XY position(x, y);
+                if (position != finish) {
+                    auto cell = solverCells[x][y];
+                    if (!cell.somethingPointsToThis && cell.visited()) {
+                        analysis.branches.push_back({position, cell.distanceToStart});
+                    }
+                }
+            }
         }
     }
 }

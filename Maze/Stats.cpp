@@ -27,7 +27,6 @@ void Stats::accumulate(Analysis const *analysis) {
     
     numDeadEnds += analysis->branches.size();
     
-    // TODO: dead end calculation based on distance from solution path, not distance from start of maze.
     for (auto branch : analysis->branches) {
         int bucket = 1;
         while (branch.length > bucket) {
@@ -61,7 +60,7 @@ void Stats::print(std::string const &title) const {
     std::cout << "  " << percentReachable << "% of cells are unreachable" << std::endl;
     
     int averageDeadEnds = (numDeadEnds + count / 2) / count;
-    std::cout << "  " << averageDeadEnds << " dead ends per maze on average" << std::endl;
+    std::cout << "  " << averageDeadEnds << " dead ends per solvable maze on average" << std::endl;
     
     int largestBucketCount = 0;
     for (auto deadEndCount : deadEndLength) {
