@@ -27,10 +27,12 @@ void Stats::accumulate(Analysis const *analysis) {
 }
 
 void Stats::print(std::string const &title) const {
-    std::cout << "Stats for " << title << ":" << std::endl;
+    std::cout << title << ":" << std::endl;
     if (count == 0) {
         std::cout << "  No analyses accumulated." << std::endl;
         return;
+    } else {
+        std::cout << "  " << count << " mazes analyzed" << std::endl;
     }
     
     int percentSolvable = (100 * numSolvable + count / 2) / count;

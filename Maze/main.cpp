@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-#include "generator.h"
+#include "generatorfactory.h"
 #include "lodepng.h"
 #include "maze.h"
 #include "mazetoimage.h"
@@ -15,7 +15,8 @@
 #include "stats.h"
 
 int main(int argc, const char * argv[]) {
-    auto maze = generate(10, 10, 0);
+    auto generator = createGenerator(MazeType::RemoveRandomWalls);
+    auto maze = generator->generate(10, 10, 0);
     
     Analysis analysis;
     solve(maze.get(), analysis);
@@ -30,11 +31,11 @@ int main(int argc, const char * argv[]) {
     
     Stats stats;
     for (int i = 0; i < 1000; ++i) {
-        maze = generate(10, 10, i);
+        maze = generator->generate(10, 10, i);
         solve(maze.get(), analysis);
         stats.accumulate(&analysis);
     }
-    stats.print("basic maze generation");
+    stats.print(getMazeTypeName(generator->getType()));
     
     return 0;
 }
