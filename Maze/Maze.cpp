@@ -30,35 +30,24 @@ void Maze::setFinish(XY _finish) {
     finish = _finish;
 }
 
-Cell &Maze::operator[](XY pos) {
-    if (contains(pos)) {
-        Cell &cellValue = cell[pos.x][pos.y];
-        if (pos.x == 0) { cellValue.leftWall = true; }
-        if (pos.y == 0) { cellValue.topWall = true; }
-        return cellValue;
-    } else {
-        static Cell s_dummyCell;
-        s_dummyCell = Cell();
-        return s_dummyCell;
+void Maze::setCell(int x, int y, Cell cellValue) {
+    if (contains(x, y)) {
+        if (x == 0) { cellValue.leftWall = true; }
+        if (y == 0) { cellValue.topWall = true; }
+        cell[x][y] = cellValue;
     }
 }
 
 Cell Maze::operator[](XY pos) const {
     if (contains(pos)) {
-        Cell cellValue = cell[pos.x][pos.y];
-        if (pos.x == 0) { cellValue.leftWall = true; }
-        if (pos.y == 0) { cellValue.topWall = true; }
-        return cellValue;
+        return cell[pos.x][pos.y];
     } else {
         return Cell();
     }
 }
 
-bool Maze::contains(XY position) const {
-    return position.x >= 0
-        && position.y >= 0
-        && position.x < width
-        && position.y < height;
+bool Maze::contains(int x, int y) const {
+    return x >= 0 && y >= 0 && x < width && y < height;
 }
 
 bool Maze::canTraverse(XY p1, XY p2) const {

@@ -17,9 +17,19 @@ std::unique_ptr<Maze> RemoveRandomWallsGenerator::generate(int width, int height
         maze->setFinish({rand() % width, rand() % height});
     }
     
-    for (int i = 0; i < (width * height * 6) / 10; ++i) {
-        (*maze)[{rand() % width, rand() % height}].topWall = false;
-        (*maze)[{rand() % width, rand() % height}].leftWall = false;
+    for (int x = 0; x < width; ++x) {
+        for (int y = 0; y < height; ++y) {
+            bool leftWall = (rand() % 2) == 1;
+            bool topWall = (rand() % 2) == 1;
+            maze->setCell(x, y, Cell(leftWall, topWall));
+        }
+    }
+    
+    for (int i = 0; i < (width * height * 10) / 10; ++i) {
+        maze->setCell(rand() % width,
+                      rand() % height,
+                      Cell((rand() % 2) == 1,
+                           (rand() % 2) == 1));
     }
     
     return maze;

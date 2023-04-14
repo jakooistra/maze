@@ -38,6 +38,10 @@ struct Analysis {
     // Returns true if there is a solution to the analyzed maze.
     bool isSolvable() const { return !shortestPath.empty(); }
     
+    // Returns true if there is a solution to the maze, and it is trivial.
+    // This means the end is either in the same location as the start or is adjacent.
+    bool isDegenerate() const { return isSolvable() && shortestPath.size() <= 2; }
+    
     int totalCellCount() const { return reachableCells + unreachableCells; }
     
     void print() const;

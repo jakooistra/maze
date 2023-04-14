@@ -18,10 +18,10 @@ std::unique_ptr<Maze> VerticalPathBreaksGenerator::generate(int width, int heigh
     }
     
     for (int x = 0; x < width; ++x) {
+        int yHole = rand() % height;
         for (int y = 1; y < height; ++y) {
-            (*maze)[{x, y}].topWall = false;
+            maze->setCell(x, y, Cell(y != yHole, false));
         }
-        (*maze)[{x, rand() % height}].leftWall = false;
     }
     
     return maze;

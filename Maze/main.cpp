@@ -15,11 +15,11 @@
 #include "Stats.h"
 
 int main(int argc, const char * argv[]) {
-    int wallWidth = 4;
-    int cellSize = 20;
+    int wallWidth = 2;
+    int cellSize = 12;
     
-    int width = 10;
-    int height = 10;
+    int width = 12;
+    int height = 12;
     int numMazesToGenerateForStats = 1000;
     
     std::vector<MazeType> types = {
@@ -31,8 +31,8 @@ int main(int argc, const char * argv[]) {
         auto generator = createGenerator(type);
         auto typeName = getMazeTypeName(generator->getType());
         
-        std::shared_ptr<Maze> maze;
-        std::shared_ptr<Maze> longestSolvableMaze;
+        std::shared_ptr<Maze const> maze;
+        std::shared_ptr<Maze const> longestSolvableMaze;
         size_t longestPathLength = 0;
         
         Stats stats;

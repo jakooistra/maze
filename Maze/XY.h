@@ -41,6 +41,9 @@ struct XY {
     std::vector<XY> allAdjacent() const {
         return { left(), right(), up(), down() };
     };
+    
+    int manhattanDistance() const { return abs(x) + abs(y); }
+    int area() const { return abs(x * y); }
 };
 
 #endif /* XY_h */

@@ -66,16 +66,18 @@ void Stats::print(std::string const &title) const {
     for (auto deadEndCount : deadEndLength) {
         largestBucketCount = std::max(largestBucketCount, deadEndCount.second);
     }
-    int normalizedLength = std::min(64, largestBucketCount);
-    int lastBucket = deadEndLength.rbegin()->first;
-    std::stringstream lastbucketStream;
-    lastbucketStream << lastBucket;
-    int bucketPadLength = (int)lastbucketStream.str().size();
-    for (int bucket = deadEndLength.rbegin()->first; bucket >= deadEndLength.begin()->first; bucket /= 2) {
-        std::cout << "    " << std::setw(bucketPadLength) << std::setfill(' ') << bucket << ": ";
-        auto tuple = deadEndLength.find(bucket);
-        int length = ((tuple == deadEndLength.end() ? 0 : tuple->second) * normalizedLength + largestBucketCount - 1) / largestBucketCount;
-        std::cout << std::setw(length) << std::setfill('X') << "";
-        std::cout << std::endl;
+    if (!deadEndLength.empty()) {
+        int normalizedLength = std::min(64, largestBucketCount);
+        int lastBucket = deadEndLength.rbegin()->first;
+        std::stringstream lastbucketStream;
+        lastbucketStream << lastBucket;
+        int bucketPadLength = (int)lastbucketStream.str().size();
+        for (int bucket = deadEndLength.rbegin()->first; bucket >= deadEndLength.begin()->first; bucket /= 2) {
+            std::cout << "    " << std::setw(bucketPadLength) << std::setfill(' ') << bucket << ": ";
+            auto tuple = deadEndLength.find(bucket);
+            int length = ((tuple == deadEndLength.end() ? 0 : tuple->second) * normalizedLength + largestBucketCount - 1) / largestBucketCount;
+            std::cout << std::setw(length) << std::setfill('X') << "";
+            std::cout << std::endl;
+        }
     }
 }
