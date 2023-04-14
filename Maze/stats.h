@@ -8,20 +8,26 @@
 #ifndef stats_h
 #define stats_h
 
+#include "analysis.h"
+
 struct Stats {
     // The number of analyses accumulated in these statistics.
-    int count;
+    int count { 0 };
     
-    int numSolvable;
-    int numSingular;
+    int numSolvable { 0 };
+    int numSingular { 0 };
     
-    int totalPathLength;
+    int totalSolvablePathLength { 0 };
     
-    int totalReachable;
-    int totalUnreachable;
+    int totalReachable { 0 };
+    int totalUnreachable { 0 };
     
-    int numDeadEnds;
+    int numDeadEnds { 0 };
+    
     // TODO: buckets for dead end branch length?
+    
+    void accumulate(Analysis const *analysis);
+    void print(std::string const &title) const;
 };
 
 #endif /* stats_h */

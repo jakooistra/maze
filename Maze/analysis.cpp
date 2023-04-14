@@ -9,7 +9,7 @@
 
 #include "analysis.h"
 
-void Analysis::print() {
+void Analysis::print() const {
     std::cout << "Analysis:" << std::endl;
     if (isSolvable()) {
         std::cout << "  Shortest path is " << shortestPath.size() << " long." << std::endl;

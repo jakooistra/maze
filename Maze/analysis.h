@@ -36,7 +36,7 @@ struct Analysis {
     // Returns true if there is a solution to the analyzed maze.
     bool isSolvable() const { return !shortestPath.empty(); }
     
-    void print();
+    void print() const;
 };
 
 #endif /* analysis_h */

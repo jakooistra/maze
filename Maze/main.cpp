@@ -32,10 +32,9 @@ int main(int argc, const char * argv[]) {
     for (int i = 0; i < 1000; ++i) {
         maze = generate(10, 10, i);
         solve(maze.get(), analysis);
-        
-        // TODO: accumulate stats
+        stats.accumulate(&analysis);
     }
-    // TODO: print accumulated stats
+    stats.print("basic maze generation");
     
     return 0;
 }
