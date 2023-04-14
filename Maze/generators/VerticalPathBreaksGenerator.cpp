@@ -19,7 +19,7 @@ std::unique_ptr<Maze> VerticalPathBreaksGenerator::generate(int width, int heigh
     
     for (int x = 0; x < width; ++x) {
         int yHole = rand() % height;
-        for (int y = 1; y < height; ++y) {
+        for (int y = 0; y < height; ++y) {
             maze->setCell(x, y, Cell(y != yHole, false));
         }
     }
