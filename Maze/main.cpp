@@ -16,15 +16,21 @@
 #include "MazeToImage.h"
 #include "Stats.h"
 
+static void writeMazeImageFile(std::string const &fileName, FullAssessment const &assessment, int wallWidth, int cellSize) {
+    auto image = convertToImage(assessment.maze.get(), wallWidth, cellSize,
+                                assessment.analysis->shortestPath);
+    std::vector<unsigned char> rgba;
+    image->encodeRGBA(rgba);
+    lodepng::encode(fileName, &rgba[0], image->width, image->height);
+}
+
 int main(int argc, const char * argv[]) {
     int wallWidth = 2;
     int cellSize = 12;
     
-    int width = 12;
-    int height = 12;
-    int numMazesToGenerateForStats = 1000;
-    
-    int bestAndWorstCount = 3;
+    int width = 16;
+    int height = 16;
+    int numMazesToGenerateForStats = 250;
     
     std::vector<MazeType> types = {
         MazeType::RemoveRandomWalls,
@@ -41,27 +47,14 @@ int main(int argc, const char * argv[]) {
         Stats stats;
         for (int i = 0; i < numMazesToGenerateForStats; ++i) {
             auto assessment = assessValue(generator->generate(width, height, i));
-            stats.accumulate(assessment.analysis.get());
-            
             bestMazes.insert(assessment);
-            if (bestMazes.size() > bestAndWorstCount) {
-                bestMazes.erase(bestMazes.begin());
-            }
-            
             worstMazes.insert(assessment);
-            if (worstMazes.size() > bestAndWorstCount) {
-                worstMazes.erase(*worstMazes.rbegin());
-            }
+            stats.accumulate(assessment.analysis.get());
         }
         stats.print(typeName);
         
-        // Write an image of a solvable maze, or the last-generated unsolvable one.
-        auto assessment = *bestMazes.rbegin();
-        auto image = convertToImage(assessment.maze.get(), wallWidth, cellSize,
-                                    assessment.analysis->shortestPath);
-        std::vector<unsigned char> rgba;
-        image->encodeRGBA(rgba);
-        lodepng::encode(typeName + ".png", &rgba[0], image->width, image->height);
+        writeMazeImageFile(typeName + " (Best).png", *bestMazes.rbegin(), wallWidth, cellSize);
+        writeMazeImageFile(typeName + " (Worst).png", *worstMazes.begin(), wallWidth, cellSize);
     }
     
     return 0;
