@@ -7,30 +7,35 @@
 
 #include <iostream>
 
+#include "generator.h"
 #include "lodepng.h"
 #include "maze.h"
 #include "mazetoimage.h"
+#include "solver.h"
+#include "stats.h"
 
 int main(int argc, const char * argv[]) {
-    Maze maze(3, 3);
-    maze[{0, -1}].topWall = false;
-    maze[{0, 0}].topWall = false;
-    maze[{0, 1}].topWall = false;
-    maze[{2, 2}].leftWall = false;
-    maze[{1, 1}].leftWall = false;
+    auto maze = generate(10, 10, 0);
     
-    auto image = convertToImage(&maze, 4, 20);
+    Analysis analysis;
+    solve(maze.get(), analysis);
+    analysis.print();
     
+    // TODO: add solution line to image
+    
+    auto image = convertToImage(maze.get(), 4, 20);
     std::vector<unsigned char> rgba;
     image->encodeRGBA(rgba);
+    lodepng::encode("maze.png", &rgba[0], image->width, image->height);
     
-    auto error = lodepng::encode("maze.png", &rgba[0], image->width, image->height);
-    
-    if (error != 0) {
-        std::cout << "Image written with error code: " << lodepng_error_text(error) << std::endl;
-    } else {
-        std::cout << "Image written sccessfully." << std::endl;
+    Stats stats;
+    for (int i = 0; i < 1000; ++i) {
+        maze = generate(10, 10, i);
+        solve(maze.get(), analysis);
+        
+        // TODO: accumulate stats
     }
+    // TODO: print accumulated stats
     
     return 0;
 }

@@ -78,14 +78,14 @@ std::unique_ptr<Image> convertToImage(Maze const *maze, int wallWidth, int cellW
             if (!cell.leftWall) {
                 clearLeftWall(image.get(), xy, wallWidth, cellWidth);
             }
-            
-            // TODO: pathing? Or do that as an extra pass?
         }
     }
     
     // Start and end definition
     indicateStartEnd(image.get(), maze, maze->getStart(), wallWidth, cellWidth, 255);
     indicateStartEnd(image.get(), maze, maze->getFinish(), wallWidth, cellWidth, 255);
+    
+    // TODO: add extra pass or argument for path drawing
     
     return image;
 }

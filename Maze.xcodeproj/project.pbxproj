@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DB4D383B29E904FA007ACBDF /* analysis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D383929E904FA007ACBDF /* analysis.cpp */; };
+		DB4D383E29E90505007ACBDF /* stats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D383C29E90505007ACBDF /* stats.cpp */; };
+		DB4D384429E905CE007ACBDF /* solver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D384229E905CE007ACBDF /* solver.cpp */; };
+		DB4D384A29E91A0F007ACBDF /* generator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D384829E91A0F007ACBDF /* generator.cpp */; };
 		DBB26BC129E8C56400C14D5B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BC029E8C56400C14D5B /* main.cpp */; };
 		DBB26BCA29E8C6A100C14D5B /* lodepng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BC929E8C6A100C14D5B /* lodepng.cpp */; };
 		DBB26BCE29E8C86100C14D5B /* maze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BCC29E8C86100C14D5B /* maze.cpp */; };
@@ -27,6 +31,15 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DB4D383929E904FA007ACBDF /* analysis.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = analysis.cpp; sourceTree = "<group>"; };
+		DB4D383A29E904FA007ACBDF /* analysis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = analysis.h; sourceTree = "<group>"; };
+		DB4D383C29E90505007ACBDF /* stats.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = stats.cpp; sourceTree = "<group>"; };
+		DB4D383D29E90505007ACBDF /* stats.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stats.h; sourceTree = "<group>"; };
+		DB4D384029E90565007ACBDF /* xy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = xy.h; sourceTree = "<group>"; };
+		DB4D384229E905CE007ACBDF /* solver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = solver.cpp; sourceTree = "<group>"; };
+		DB4D384329E905CE007ACBDF /* solver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = solver.h; sourceTree = "<group>"; };
+		DB4D384829E91A0F007ACBDF /* generator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = generator.cpp; sourceTree = "<group>"; };
+		DB4D384929E91A0F007ACBDF /* generator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = generator.h; sourceTree = "<group>"; };
 		DBB26BBD29E8C56400C14D5B /* Maze */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Maze; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBB26BC029E8C56400C14D5B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		DBB26BC829E8C69A00C14D5B /* lodepng.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lodepng.h; sourceTree = "<group>"; };
@@ -69,6 +82,10 @@
 		DBB26BBF29E8C56400C14D5B /* Maze */ = {
 			isa = PBXGroup;
 			children = (
+				DB4D383929E904FA007ACBDF /* analysis.cpp */,
+				DB4D383A29E904FA007ACBDF /* analysis.h */,
+				DB4D384829E91A0F007ACBDF /* generator.cpp */,
+				DB4D384929E91A0F007ACBDF /* generator.h */,
 				DBB26BD529E8CD2D00C14D5B /* image.cpp */,
 				DBB26BD629E8CD2D00C14D5B /* image.h */,
 				DBB26BC829E8C69A00C14D5B /* lodepng.h */,
@@ -78,6 +95,11 @@
 				DBB26BCD29E8C86100C14D5B /* maze.h */,
 				DBB26BD229E8CCB700C14D5B /* mazetoimage.cpp */,
 				DBB26BD329E8CCB700C14D5B /* mazetoimage.h */,
+				DB4D384229E905CE007ACBDF /* solver.cpp */,
+				DB4D384329E905CE007ACBDF /* solver.h */,
+				DB4D383C29E90505007ACBDF /* stats.cpp */,
+				DB4D383D29E90505007ACBDF /* stats.h */,
+				DB4D384029E90565007ACBDF /* xy.h */,
 			);
 			path = Maze;
 			sourceTree = "<group>";
@@ -140,10 +162,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBB26BC129E8C56400C14D5B /* main.cpp in Sources */,
+				DB4D383E29E90505007ACBDF /* stats.cpp in Sources */,
 				DBB26BCA29E8C6A100C14D5B /* lodepng.cpp in Sources */,
 				DBB26BD729E8CD2D00C14D5B /* image.cpp in Sources */,
+				DB4D383B29E904FA007ACBDF /* analysis.cpp in Sources */,
 				DBB26BCE29E8C86100C14D5B /* maze.cpp in Sources */,
+				DB4D384429E905CE007ACBDF /* solver.cpp in Sources */,
 				DBB26BD429E8CCB700C14D5B /* mazetoimage.cpp in Sources */,
+				DB4D384A29E91A0F007ACBDF /* generator.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
