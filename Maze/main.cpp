@@ -24,6 +24,7 @@ int main(int argc, const char * argv[]) {
     
     std::vector<MazeType> types = {
         MazeType::RemoveRandomWalls,
+        MazeType::VerticalPathBreaks,
     };
     
     for (auto type : types) {
@@ -31,7 +32,8 @@ int main(int argc, const char * argv[]) {
         auto typeName = getMazeTypeName(generator->getType());
         
         std::shared_ptr<Maze> maze;
-        std::shared_ptr<Maze> solvableMaze;
+        std::shared_ptr<Maze> longestSolvableMaze;
+        size_t longestPathLength = 0;
         
         Stats stats;
         for (int i = 0; i < numMazesToGenerateForStats; ++i) {
@@ -39,8 +41,9 @@ int main(int argc, const char * argv[]) {
             
             Analysis analysis;
             solve(maze.get(), analysis);
-            if (analysis.isSolvable()) {
-                solvableMaze = maze;
+            if (analysis.isSolvable() && (longestSolvableMaze == nullptr || analysis.shortestPath.size() > longestPathLength)) {
+                longestPathLength = analysis.shortestPath.size();
+                longestSolvableMaze = maze;
             }
             
             stats.accumulate(&analysis);
@@ -48,8 +51,8 @@ int main(int argc, const char * argv[]) {
         stats.print(typeName);
         
         // Write an image of a solvable maze, or the last-generated unsolvable one.
-        if (solvableMaze != nullptr) {
-            maze = solvableMaze;
+        if (longestSolvableMaze != nullptr) {
+            maze = longestSolvableMaze;
         }
         Analysis analysis;
         solve(maze.get(), analysis);
