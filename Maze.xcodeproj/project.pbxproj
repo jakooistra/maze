@@ -13,6 +13,7 @@
 		DB4D384E29E9852C007ACBDF /* GeneratorFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D384C29E9852C007ACBDF /* GeneratorFactory.cpp */; };
 		DB4D385229E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D385029E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp */; };
 		DB4D385529E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D385329E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp */; };
+		DB4D385829E9E9A7007ACBDF /* Assessment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D385629E9E9A7007ACBDF /* Assessment.cpp */; };
 		DBB26BC129E8C56400C14D5B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BC029E8C56400C14D5B /* main.cpp */; };
 		DBB26BCA29E8C6A100C14D5B /* lodepng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BC929E8C6A100C14D5B /* lodepng.cpp */; };
 		DBB26BCE29E8C86100C14D5B /* Maze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BCC29E8C86100C14D5B /* Maze.cpp */; };
@@ -48,6 +49,8 @@
 		DB4D385129E986A1007ACBDF /* RemoveRandomWallsGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoveRandomWallsGenerator.h; sourceTree = "<group>"; };
 		DB4D385329E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalPathBreaksGenerator.cpp; sourceTree = "<group>"; };
 		DB4D385429E994AD007ACBDF /* VerticalPathBreaksGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VerticalPathBreaksGenerator.h; sourceTree = "<group>"; };
+		DB4D385629E9E9A7007ACBDF /* Assessment.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Assessment.cpp; sourceTree = "<group>"; };
+		DB4D385729E9E9A7007ACBDF /* Assessment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Assessment.h; sourceTree = "<group>"; };
 		DBB26BBD29E8C56400C14D5B /* Maze */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Maze; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBB26BC029E8C56400C14D5B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		DBB26BC829E8C69A00C14D5B /* lodepng.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lodepng.h; sourceTree = "<group>"; };
@@ -104,6 +107,8 @@
 				DB4D384B29E984D2007ACBDF /* generators */,
 				DB4D383929E904FA007ACBDF /* Analysis.cpp */,
 				DB4D383A29E904FA007ACBDF /* Analysis.h */,
+				DB4D385629E9E9A7007ACBDF /* Assessment.cpp */,
+				DB4D385729E9E9A7007ACBDF /* Assessment.h */,
 				DB4D384929E91A0F007ACBDF /* MazeGenerator.h */,
 				DB4D384C29E9852C007ACBDF /* GeneratorFactory.cpp */,
 				DB4D384D29E9852C007ACBDF /* GeneratorFactory.h */,
@@ -188,6 +193,7 @@
 				DBB26BCA29E8C6A100C14D5B /* lodepng.cpp in Sources */,
 				DBB26BD729E8CD2D00C14D5B /* Image.cpp in Sources */,
 				DB4D383B29E904FA007ACBDF /* Analysis.cpp in Sources */,
+				DB4D385829E9E9A7007ACBDF /* Assessment.cpp in Sources */,
 				DBB26BCE29E8C86100C14D5B /* Maze.cpp in Sources */,
 				DB4D384E29E9852C007ACBDF /* GeneratorFactory.cpp in Sources */,
 				DB4D385229E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp in Sources */,
