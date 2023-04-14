@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		DBB26BC129E8C56400C14D5B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BC029E8C56400C14D5B /* main.cpp */; };
 		DBB26BCA29E8C6A100C14D5B /* lodepng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BC929E8C6A100C14D5B /* lodepng.cpp */; };
+		DBB26BCE29E8C86100C14D5B /* maze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BCC29E8C86100C14D5B /* maze.cpp */; };
+		DBB26BD429E8CCB700C14D5B /* mazetoimage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BD229E8CCB700C14D5B /* mazetoimage.cpp */; };
+		DBB26BD729E8CD2D00C14D5B /* image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BD529E8CD2D00C14D5B /* image.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -28,6 +31,12 @@
 		DBB26BC029E8C56400C14D5B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		DBB26BC829E8C69A00C14D5B /* lodepng.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lodepng.h; sourceTree = "<group>"; };
 		DBB26BC929E8C6A100C14D5B /* lodepng.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lodepng.cpp; sourceTree = "<group>"; };
+		DBB26BCC29E8C86100C14D5B /* maze.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = maze.cpp; sourceTree = "<group>"; };
+		DBB26BCD29E8C86100C14D5B /* maze.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = maze.h; sourceTree = "<group>"; };
+		DBB26BD229E8CCB700C14D5B /* mazetoimage.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = mazetoimage.cpp; sourceTree = "<group>"; };
+		DBB26BD329E8CCB700C14D5B /* mazetoimage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = mazetoimage.h; sourceTree = "<group>"; };
+		DBB26BD529E8CD2D00C14D5B /* image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = image.cpp; sourceTree = "<group>"; };
+		DBB26BD629E8CD2D00C14D5B /* image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = image.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -60,9 +69,15 @@
 		DBB26BBF29E8C56400C14D5B /* Maze */ = {
 			isa = PBXGroup;
 			children = (
+				DBB26BD529E8CD2D00C14D5B /* image.cpp */,
+				DBB26BD629E8CD2D00C14D5B /* image.h */,
 				DBB26BC829E8C69A00C14D5B /* lodepng.h */,
 				DBB26BC929E8C6A100C14D5B /* lodepng.cpp */,
 				DBB26BC029E8C56400C14D5B /* main.cpp */,
+				DBB26BCC29E8C86100C14D5B /* maze.cpp */,
+				DBB26BCD29E8C86100C14D5B /* maze.h */,
+				DBB26BD229E8CCB700C14D5B /* mazetoimage.cpp */,
+				DBB26BD329E8CCB700C14D5B /* mazetoimage.h */,
 			);
 			path = Maze;
 			sourceTree = "<group>";
@@ -126,6 +141,9 @@
 			files = (
 				DBB26BC129E8C56400C14D5B /* main.cpp in Sources */,
 				DBB26BCA29E8C6A100C14D5B /* lodepng.cpp in Sources */,
+				DBB26BD729E8CD2D00C14D5B /* image.cpp in Sources */,
+				DBB26BCE29E8C86100C14D5B /* maze.cpp in Sources */,
+				DBB26BD429E8CCB700C14D5B /* mazetoimage.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -247,6 +265,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F9S72MW8RJ;
 				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Maze/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnkooistra.maze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -257,6 +277,8 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = F9S72MW8RJ;
 				ENABLE_HARDENED_RUNTIME = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Maze/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = com.johnkooistra.maze;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
