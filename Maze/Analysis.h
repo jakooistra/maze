@@ -24,16 +24,19 @@ struct Analysis {
     std::vector<XY> shortestPath;
     
     // True if there is only one way to solve the maze.
-    bool singularPath;
+    bool singularPath { false };
     
     // The length and location of all branch dead ends.
     std::vector<BranchEndpoint> branches;
     
     // How many cells were reachable/unreachable in the analyzed maze.
-    int reachableCells;
-    int unreachableCells;
+    int reachableCells { 0 };
+    int unreachableCells { 0 };
     
-    // TODO: "donuts" - areas that have unnecessarily high connectivity
+    // Unnecessarily high connectivity, measured as fully-connected corners.
+    // If there is a path of length 4 that leads back to a cell, the corner
+    // in the middle of that path counts as a degenerate corner.
+    int numDegenerateCorners { 0 };
     
     // Returns true if there is a solution to the analyzed maze.
     bool isSolvable() const { return !shortestPath.empty(); }

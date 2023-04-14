@@ -38,6 +38,8 @@ void Stats::accumulate(Analysis const *analysis) {
         }
     }
     
+    totalDegenerateCorners += analysis->numDegenerateCorners;
+    
     totalReachable += analysis->reachableCells;
     totalUnreachable += analysis->unreachableCells;
     
@@ -66,8 +68,10 @@ void Stats::print(std::string const &title) const {
         std::cout << std::endl;
     }
     
-    int percentSolvable = (100 * numSolvable + count / 2) / count;
-    std::cout << "  " << percentSolvable << "% solvable" << std::endl;
+    if (numSolvable < count) {
+        int percentSolvable = (100 * numSolvable + count / 2) / count;
+        std::cout << "  " << percentSolvable << "% solvable" << std::endl;
+    }
     
     int percentSingular = (100 * numSingular + numSolvable / 2) / numSolvable;
     std::cout << "  " << percentSingular << "% of solvable mazes have singular solutions" << std::endl;
@@ -75,12 +79,26 @@ void Stats::print(std::string const &title) const {
     int averageLength = (totalSolvablePathLength + numSolvable / 2) / numSolvable;
     std::cout << "  " << averageLength << " average path length" << std::endl;
     
-    int percentDegenerate = (100 * numDegenerate + numSolvable / 2) / numSolvable;
-    std::cout << "  " << percentDegenerate << "% of solvable mazes have adjacent start/finish" << std::endl;
+    if (numDegenerate > 0) {
+        int percentDegenerate = (100 * numDegenerate + numSolvable / 2) / numSolvable;
+        std::cout << "  " << percentDegenerate << "% of solvable mazes are trivial" << std::endl;
+    }
     
-    int totalCells = totalReachable + totalUnreachable;
-    int percentReachable = (100 * totalUnreachable + totalCells / 2) / totalCells;
-    std::cout << "  " << percentReachable << "% of cells are unreachable" << std::endl;
+    if (totalUnreachable > 0) {
+        int totalCells = totalReachable + totalUnreachable;
+        int percentReachable = (100 * totalUnreachable + totalCells / 2) / totalCells;
+        std::cout << "  " << percentReachable << "% of cells are unreachable" << std::endl;
+    }
+    
+    if (totalDegenerateCorners > 0) {
+        int averageDegenerateCorners = (totalDegenerateCorners + count / 2) / count;
+        if (averageDegenerateCorners < 1) {
+            std::cout << "  <1";
+        } else {
+            std::cout << "  " << averageDegenerateCorners;
+        }
+        std::cout << " average degenerate corners per maze" << std::endl;
+    }
     
     int averageDeadEnds = (numDeadEnds + count / 2) / count;
     std::cout << "  " << averageDeadEnds << " dead ends per solvable maze on average" << std::endl;
@@ -93,10 +111,15 @@ void Stats::print(std::string const &title) const {
         int normalizedLength = std::min(64, largestBucketCount);
         int lastBucket = deadEndLength.rbegin()->first;
         std::stringstream lastbucketStream;
-        lastbucketStream << lastBucket;
+        lastbucketStream << lastBucket / 2 + 1 << "-" << lastBucket;
         int bucketPadLength = (int)lastbucketStream.str().size();
         for (int bucket = deadEndLength.rbegin()->first; bucket >= deadEndLength.begin()->first; bucket /= 2) {
-            std::cout << "    " << std::setw(bucketPadLength) << std::setfill(' ') << bucket << ": ";
+            std::stringstream bucketText;
+            if (bucket > 2) {
+                bucketText << bucket / 2 + 1 << "-";
+            }
+            bucketText << bucket;
+            std::cout << "    " << std::setw(bucketPadLength) << std::setfill(' ') << bucketText.str() << ": ";
             auto tuple = deadEndLength.find(bucket);
             int length = ((tuple == deadEndLength.end() ? 0 : tuple->second) * normalizedLength + largestBucketCount - 1) / largestBucketCount;
             std::cout << std::setw(length) << std::setfill('X') << "";

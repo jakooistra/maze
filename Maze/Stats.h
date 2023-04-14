@@ -25,6 +25,8 @@ struct Stats {
     
     int totalSolvablePathLength { 0 };
     
+    int totalDegenerateCorners { 0 };
+    
     int totalReachable { 0 };
     int totalUnreachable { 0 };
     

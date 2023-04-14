@@ -156,4 +156,16 @@ void solve(Maze const *maze, Analysis &analysis) {
             }
         }
     }
+    
+    for (int x = 1; x < maze->getWidth(); ++x) {
+        for (int y = 1; y < maze->getHeight(); ++y) {
+            if (!(*maze)[{x, y}].leftWall &&
+                !(*maze)[{x, y}].topWall &&
+                !(*maze)[{x-1, y}].topWall &&
+                !(*maze)[{x, y-1}].leftWall)
+            {
+                analysis.numDegenerateCorners++;
+            }
+        }
+    }
 }
