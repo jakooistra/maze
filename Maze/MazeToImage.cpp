@@ -7,55 +7,73 @@
 
 #include "MazeToImage.h"
 
-static void paintRect(Image *image, int x, int y, int width, int height, unsigned char value = 255) {
+constexpr int PATH_COLOR = 204;
+constexpr int BG_COLOR = 255;
+
+static void paintRect(Image *image, int x, int y, int width, int height, unsigned char value = BG_COLOR) {
     for (int row = y; row < y + height; ++row) {
         memset(&image->data[x + row * image->width], value, width);
     }
 }
 
-static void clearTopWall(Image *image, XY pos, int wallWidth, int cellWidth, unsigned char value = 255) {
+static void clearTopWall(Image *image, XY pos, int wallWidth, int cellWidth, unsigned char value = BG_COLOR) {
     int stride = cellWidth + wallWidth;
     paintRect(image, wallWidth + pos.x * stride, pos.y * stride, cellWidth, wallWidth, value);
 }
 
-static void clearLeftWall(Image *image, XY pos, int wallWidth, int cellWidth, unsigned char value = 255) {
+static void clearLeftWall(Image *image, XY pos, int wallWidth, int cellWidth, unsigned char value = BG_COLOR) {
     int stride = cellWidth + wallWidth;
     paintRect(image, pos.x * stride, wallWidth + pos.y * stride, wallWidth, cellWidth, value);
 }
 
-static void indicateStartEnd(Image *image, Maze const *maze, XY pos, int wallWidth, int cellWidth, unsigned char value = 128) {
+static void indicateStartEnd(Image *image, Maze const *maze, XY pos, int wallWidth, int cellWidth, unsigned char value = PATH_COLOR) {
     int stride = cellWidth + wallWidth;
     int inset = std::max(0, std::min(2, (cellWidth - 1) / 2));
-    paintRect(image,
-              wallWidth + pos.x * stride + inset,
-              wallWidth + pos.y * stride + inset,
-              cellWidth - inset * 2,
-              cellWidth - inset * 2,
-              value);
 
     if (pos.x == 0) {
-        clearLeftWall(image, pos, wallWidth, cellWidth, value);
-        paintRect(image, wallWidth + pos.x * stride, stride / 2 + pos.y * stride, inset, wallWidth, value);
+        clearLeftWall(image, pos, wallWidth, cellWidth, BG_COLOR);
+        paintRect(image,
+                  pos.x * stride,
+                  stride / 2 + pos.y * stride,
+                  stride / 2,
+                  wallWidth,
+                  value);
     } else if (pos.x == maze->getWidth() - 1) {
-        clearLeftWall(image, XY(pos.x + 1, pos.y), wallWidth, cellWidth, value);
-        paintRect(image, (pos.x + 1) * stride - inset, stride / 2 + pos.y * stride, inset, wallWidth, value);
+        clearLeftWall(image, XY(pos.x + 1, pos.y), wallWidth, cellWidth, BG_COLOR);
+        paintRect(image,
+                  wallWidth + (pos.x + 1) * stride - stride / 2,
+                  stride / 2 + pos.y * stride,
+                  stride / 2,
+                  wallWidth,
+                  value);
     } else if (pos.y == 0) {
-        clearTopWall(image, pos, wallWidth, cellWidth, value);
-        paintRect(image, stride / 2 + pos.x * stride, wallWidth + pos.y * stride, wallWidth, inset, value);
+        clearTopWall(image, pos, wallWidth, cellWidth, BG_COLOR);
+        paintRect(image,
+                  stride / 2 + pos.x * stride,
+                  pos.y * stride,
+                  wallWidth,
+                  stride / 2,
+                  value);
     } else if (pos.y == maze->getHeight() - 1) {
-        clearTopWall(image, XY(pos.x, pos.y + 1), wallWidth, cellWidth, value);
-        paintRect(image, stride / 2 + pos.x * stride, (pos.y + 1) * stride - inset, wallWidth, inset, value);
+        clearTopWall(image, XY(pos.x, pos.y + 1), wallWidth, cellWidth, BG_COLOR);
+        paintRect(image,
+                  stride / 2 + pos.x * stride,
+                  wallWidth + (pos.y + 1) * stride - stride / 2,
+                  wallWidth,
+                  stride / 2,
+                  value);
     } else {
+        // Draw a square to indicate that this is an endpoint.
         paintRect(image,
                   wallWidth + pos.x * stride + inset,
                   wallWidth + pos.y * stride + inset,
                   cellWidth - inset * 2,
                   cellWidth - inset * 2,
-                  128);
+                  PATH_COLOR);
     }
 }
 
-std::unique_ptr<Image> convertToImage(Maze const *maze, int wallWidth, int cellWidth) {
+std::unique_ptr<Image> convertToImage(Maze const *maze, int wallWidth, int cellWidth, std::vector<XY> const &shortestPath) {
     auto image = std::make_unique<Image>();
     image->width = wallWidth + ((wallWidth + cellWidth) * maze->getWidth());
     image->height = wallWidth + ((wallWidth + cellWidth) * maze->getHeight());
@@ -82,10 +100,27 @@ std::unique_ptr<Image> convertToImage(Maze const *maze, int wallWidth, int cellW
     }
     
     // Start and end definition
-    indicateStartEnd(image.get(), maze, maze->getStart(), wallWidth, cellWidth, 255);
-    indicateStartEnd(image.get(), maze, maze->getFinish(), wallWidth, cellWidth, 255);
+    unsigned char pathColor = shortestPath.empty() ? BG_COLOR : PATH_COLOR;
+    indicateStartEnd(image.get(), maze, maze->getStart(), wallWidth, cellWidth, pathColor);
+    indicateStartEnd(image.get(), maze, maze->getFinish(), wallWidth, cellWidth, pathColor);
     
-    // TODO: add extra pass or argument for path drawing
+    // Path drawing
+    for (int i = 1; i < shortestPath.size(); ++i) {
+        XY p1 = shortestPath[i-1];
+        XY p2 = shortestPath[i];
+        if (p2 < p1) {
+            XY swap = p1;
+            p1 = p2;
+            p2 = swap;
+        }
+        
+        paintRect(image.get(),
+                  stride / 2 + p1.x * stride,
+                  stride / 2 + p1.y * stride,
+                  (p2.x - p1.x) * stride + wallWidth,
+                  (p2.y - p1.y) * stride + wallWidth,
+                  pathColor);
+    }
     
     return image;
 }

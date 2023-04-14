@@ -15,27 +15,49 @@
 #include "Stats.h"
 
 int main(int argc, const char * argv[]) {
-    auto generator = createGenerator(MazeType::RemoveRandomWalls);
-    auto maze = generator->generate(10, 10, 0);
+    int wallWidth = 4;
+    int cellSize = 20;
     
-    Analysis analysis;
-    solve(maze.get(), analysis);
-    analysis.print();
+    int width = 10;
+    int height = 10;
+    int numMazesToGenerateForStats = 1000;
     
-    // TODO: add solution line to image
+    std::vector<MazeType> types = {
+        MazeType::RemoveRandomWalls,
+    };
     
-    auto image = convertToImage(maze.get(), 4, 20);
-    std::vector<unsigned char> rgba;
-    image->encodeRGBA(rgba);
-    lodepng::encode("maze.png", &rgba[0], image->width, image->height);
-    
-    Stats stats;
-    for (int i = 0; i < 1000; ++i) {
-        maze = generator->generate(10, 10, i);
+    for (auto type : types) {
+        auto generator = createGenerator(type);
+        auto typeName = getMazeTypeName(generator->getType());
+        
+        std::shared_ptr<Maze> maze;
+        std::shared_ptr<Maze> solvableMaze;
+        
+        Stats stats;
+        for (int i = 0; i < numMazesToGenerateForStats; ++i) {
+            maze = generator->generate(width, height, i);
+            
+            Analysis analysis;
+            solve(maze.get(), analysis);
+            if (analysis.isSolvable()) {
+                solvableMaze = maze;
+            }
+            
+            stats.accumulate(&analysis);
+        }
+        stats.print(typeName);
+        
+        // Write an image of a solvable maze, or the last-generated unsolvable one.
+        if (solvableMaze != nullptr) {
+            maze = solvableMaze;
+        }
+        Analysis analysis;
         solve(maze.get(), analysis);
-        stats.accumulate(&analysis);
+        auto image = convertToImage(maze.get(), wallWidth, cellSize, analysis.shortestPath);
+        std::vector<unsigned char> rgba;
+        image->encodeRGBA(rgba);
+        lodepng::encode(typeName + ".png", &rgba[0], image->width, image->height);
     }
-    stats.print(getMazeTypeName(generator->getType()));
     
     return 0;
 }

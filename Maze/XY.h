@@ -24,6 +24,10 @@ struct XY {
         return x != other.x || y != other.y;
     }
     
+    bool operator<(const XY &other) const {
+        return y < other.y || (y == other.y && x < other.x);
+    }
+    
     XY left() const { return XY(x - 1, y); }
     XY right() const { return XY(x + 1, y); }
     XY up() const { return XY(x, y - 1); }
