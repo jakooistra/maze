@@ -20,7 +20,6 @@ void Analysis::print() const {
     
     std::cout << "  Dead ends: " << branches.size() << std::endl;
     
-    int totalCells = reachableCells + unreachableCells;
-    int percentReachable = (100 * reachableCells) / totalCells;
+    int percentReachable = (100 * reachableCells) / totalCellCount();
     std::cout << "  " << percentReachable << "% of cells can be reached." << std::endl;
 }

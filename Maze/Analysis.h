@@ -36,6 +36,8 @@ struct Analysis {
     // Returns true if there is a solution to the analyzed maze.
     bool isSolvable() const { return !shortestPath.empty(); }
     
+    int totalCellCount() const { return reachableCells + unreachableCells; }
+    
     void print() const;
 };
 

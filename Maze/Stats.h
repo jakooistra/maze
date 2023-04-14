@@ -8,6 +8,8 @@
 #ifndef Stats_h
 #define Stats_h
 
+#include <map>
+
 #include "Analysis.h"
 
 struct Stats {
@@ -24,7 +26,11 @@ struct Stats {
     
     int numDeadEnds { 0 };
     
-    // TODO: buckets for dead end branch length?
+    // Map of dead end length buckets to a count of lengths in that bucket.
+    // Length buckets are exponential (1, 2, 4, 8, 16, 32), and a dead end
+    // branch will be included in that bucket if it is <= the bucket value.
+    // Example: lengths of (5, 7, 10) would map to { 8:2, 16:1 }
+    std::map<int, int> deadEndLength;
     
     void accumulate(Analysis const *analysis);
     void print(std::string const &title) const;

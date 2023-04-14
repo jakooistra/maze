@@ -6,6 +6,8 @@
 //
 
 #include <iostream>
+#include <sstream>
+#include <iomanip>
 
 #include "Stats.h"
 
@@ -24,6 +26,16 @@ void Stats::accumulate(Analysis const *analysis) {
     totalUnreachable += analysis->unreachableCells;
     
     numDeadEnds += analysis->branches.size();
+    
+    // TODO: dead end calculation based on distance from solution path, not distance from start of maze.
+    for (auto branch : analysis->branches) {
+        int bucket = 1;
+        while (branch.length > bucket) {
+            // There is a better way to do this.
+            bucket *= 2;
+        }
+        deadEndLength[bucket]++;
+    }
 }
 
 void Stats::print(std::string const &title) const {
@@ -42,12 +54,29 @@ void Stats::print(std::string const &title) const {
     std::cout << "  " << percentSingular << "% of solvable mazes have singular solutions" << std::endl;
     
     int averageLength = (totalSolvablePathLength + numSolvable / 2) / numSolvable;
-    std::cout << "  " << averageLength << " cells in average shortest solution" << std::endl;
+    std::cout << "  " << averageLength << " average path length" << std::endl;
     
     int totalCells = totalReachable + totalUnreachable;
-    int percentReachable = (100 * totalReachable + totalCells / 2) / totalCells;
-    std::cout << "  " << percentReachable << "% of cells can be reached" << std::endl;
+    int percentReachable = (100 * totalUnreachable + totalCells / 2) / totalCells;
+    std::cout << "  " << percentReachable << "% of cells are unreachable" << std::endl;
     
     int averageDeadEnds = (numDeadEnds + count / 2) / count;
     std::cout << "  " << averageDeadEnds << " dead ends per maze on average" << std::endl;
+    
+    int largestBucketCount = 0;
+    for (auto deadEndCount : deadEndLength) {
+        largestBucketCount = std::max(largestBucketCount, deadEndCount.second);
+    }
+    int normalizedLength = std::min(64, largestBucketCount);
+    int lastBucket = deadEndLength.rbegin()->first;
+    std::stringstream lastbucketStream;
+    lastbucketStream << lastBucket;
+    int bucketPadLength = (int)lastbucketStream.str().size();
+    for (int bucket = deadEndLength.rbegin()->first; bucket >= deadEndLength.begin()->first; bucket /= 2) {
+        std::cout << "    " << std::setw(bucketPadLength) << std::setfill(' ') << bucket << ": ";
+        auto tuple = deadEndLength.find(bucket);
+        int length = ((tuple == deadEndLength.end() ? 0 : tuple->second) * normalizedLength + largestBucketCount - 1) / largestBucketCount;
+        std::cout << std::setw(length) << std::setfill('X') << "";
+        std::cout << std::endl;
+    }
 }
