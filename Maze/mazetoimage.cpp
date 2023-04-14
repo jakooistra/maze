@@ -45,6 +45,13 @@ static void indicateStartEnd(Image *image, Maze const *maze, XY pos, int wallWid
     } else if (pos.y == maze->getHeight() - 1) {
         clearTopWall(image, XY(pos.x, pos.y + 1), wallWidth, cellWidth, value);
         paintRect(image, stride / 2 + pos.x * stride, (pos.y + 1) * stride - inset, wallWidth, inset, value);
+    } else {
+        paintRect(image,
+                  wallWidth + pos.x * stride + inset,
+                  wallWidth + pos.y * stride + inset,
+                  cellWidth - inset * 2,
+                  cellWidth - inset * 2,
+                  128);
     }
 }
 
@@ -77,8 +84,8 @@ std::unique_ptr<Image> convertToImage(Maze const *maze, int wallWidth, int cellW
     }
     
     // Start and end definition
-    indicateStartEnd(image.get(), maze, maze->getStart(), wallWidth, cellWidth);
-    indicateStartEnd(image.get(), maze, maze->getFinish(), wallWidth, cellWidth);
+    indicateStartEnd(image.get(), maze, maze->getStart(), wallWidth, cellWidth, 255);
+    indicateStartEnd(image.get(), maze, maze->getFinish(), wallWidth, cellWidth, 255);
     
     return image;
 }
