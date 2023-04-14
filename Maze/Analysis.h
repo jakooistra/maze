@@ -18,6 +18,8 @@ struct BranchEndpoint {
 };
 
 struct Analysis {
+    XY size {0, 0};
+    
     // Shortest solution, from start to finish inclusive.
     std::vector<XY> shortestPath;
     
@@ -32,8 +34,6 @@ struct Analysis {
     int unreachableCells;
     
     // TODO: "donuts" - areas that have unnecessarily high connectivity
-    
-    // TODO: degenerate mazes, start == end?
     
     // Returns true if there is a solution to the analyzed maze.
     bool isSolvable() const { return !shortestPath.empty(); }

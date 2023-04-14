@@ -12,6 +12,19 @@
 #include "Stats.h"
 
 void Stats::accumulate(Analysis const *analysis) {
+    if (count == 0) {
+        smallest = analysis->size;
+        largest = analysis->size;
+    } else {
+        int manhattan = analysis->size.manhattanDistance();
+        if (manhattan < smallest.manhattanDistance()) {
+            smallest = analysis->size;
+        }
+        if (manhattan > largest.manhattanDistance()) {
+            largest = analysis->size;
+        }
+    }
+    
     count++;
     
     if (analysis->isSolvable()) {
@@ -19,6 +32,9 @@ void Stats::accumulate(Analysis const *analysis) {
         totalSolvablePathLength += analysis->shortestPath.size();
         if (analysis->singularPath) {
             numSingular++;
+        }
+        if (analysis->isDegenerate()) {
+            numDegenerate++;
         }
     }
     
@@ -43,7 +59,11 @@ void Stats::print(std::string const &title) const {
         std::cout << "  No analyses accumulated." << std::endl;
         return;
     } else {
-        std::cout << "  " << count << " mazes analyzed" << std::endl;
+        std::cout << "  " << count << " mazes analyzed, " << smallest.x << "x" << smallest.y;
+        if (smallest != largest) {
+            std::cout << "-" << largest.x << "x" << largest.y;
+        }
+        std::cout << std::endl;
     }
     
     int percentSolvable = (100 * numSolvable + count / 2) / count;
@@ -54,6 +74,9 @@ void Stats::print(std::string const &title) const {
     
     int averageLength = (totalSolvablePathLength + numSolvable / 2) / numSolvable;
     std::cout << "  " << averageLength << " average path length" << std::endl;
+    
+    int percentDegenerate = (100 * numDegenerate + numSolvable / 2) / numSolvable;
+    std::cout << "  " << percentDegenerate << "% of solvable mazes have adjacent start/finish" << std::endl;
     
     int totalCells = totalReachable + totalUnreachable;
     int percentReachable = (100 * totalUnreachable + totalCells / 2) / totalCells;

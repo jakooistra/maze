@@ -35,6 +35,7 @@ public:
     
     int getWidth() const { return width; }
     int getHeight() const { return height; }
+    XY getSize() const { return XY(width, height); }
     
     XY getStart() const { return start; }
     XY getFinish() const { return finish; }

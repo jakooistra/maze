@@ -69,6 +69,7 @@ static std::vector<std::vector<SolverCell>> runBreadthFirstPathing(Maze const *m
 void solve(Maze const *maze, Analysis &analysis) {
     // reset the analysis
     analysis = Analysis();
+    analysis.size = maze->getSize();
     
     auto solverCells = runBreadthFirstPathing(maze, {maze->getStart()});
     
