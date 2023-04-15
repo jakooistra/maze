@@ -25,8 +25,8 @@ static void writeMazeImageFile(std::string const &fileName, FullAssessment const
 }
 
 int main(int argc, const char * argv[]) {
-    int wallWidth = 2;
-    int cellSize = 12;
+    int wallWidth = 1;
+    int cellSize = 9;
     
     int width = 16;
     int height = 16;
