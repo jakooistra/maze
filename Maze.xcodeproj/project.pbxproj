@@ -55,7 +55,7 @@
 		DB4D385729E9E9A7007ACBDF /* Assessment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Assessment.h; sourceTree = "<group>"; };
 		DB4D385A29EA05DA007ACBDF /* ChainBurstGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ChainBurstGenerator.cpp; sourceTree = "<group>"; };
 		DB4D385B29EA05DA007ACBDF /* ChainBurstGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChainBurstGenerator.h; sourceTree = "<group>"; };
-		DBB26BBD29E8C56400C14D5B /* Maze */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Maze; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBB26BBD29E8C56400C14D5B /* maze */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = maze; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBB26BC029E8C56400C14D5B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		DBB26BC829E8C69A00C14D5B /* lodepng.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lodepng.h; sourceTree = "<group>"; };
 		DBB26BC929E8C6A100C14D5B /* lodepng.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = lodepng.cpp; sourceTree = "<group>"; };
@@ -102,7 +102,7 @@
 		DBB26BBE29E8C56400C14D5B /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DBB26BBD29E8C56400C14D5B /* Maze */,
+				DBB26BBD29E8C56400C14D5B /* maze */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -141,9 +141,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		DBB26BBC29E8C56400C14D5B /* Maze */ = {
+		DBB26BBC29E8C56400C14D5B /* maze */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DBB26BC429E8C56400C14D5B /* Build configuration list for PBXNativeTarget "Maze" */;
+			buildConfigurationList = DBB26BC429E8C56400C14D5B /* Build configuration list for PBXNativeTarget "maze" */;
 			buildPhases = (
 				DBB26BB929E8C56400C14D5B /* Sources */,
 				DBB26BBA29E8C56400C14D5B /* Frameworks */,
@@ -153,9 +153,9 @@
 			);
 			dependencies = (
 			);
-			name = Maze;
+			name = maze;
 			productName = Maze;
-			productReference = DBB26BBD29E8C56400C14D5B /* Maze */;
+			productReference = DBB26BBD29E8C56400C14D5B /* maze */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -185,7 +185,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DBB26BBC29E8C56400C14D5B /* Maze */,
+				DBB26BBC29E8C56400C14D5B /* maze */,
 			);
 		};
 /* End PBXProject section */
@@ -359,7 +359,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DBB26BC429E8C56400C14D5B /* Build configuration list for PBXNativeTarget "Maze" */ = {
+		DBB26BC429E8C56400C14D5B /* Build configuration list for PBXNativeTarget "maze" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				DBB26BC529E8C56400C14D5B /* Debug */,
