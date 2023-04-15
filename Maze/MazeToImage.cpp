@@ -7,11 +7,12 @@
 
 #include "MazeToImage.h"
 
-constexpr int PATH_COLOR = 204;
-constexpr int BG_COLOR = 255;
+constexpr RGBA PATH_COLOR = { 192, 212, 255, 255 };
+constexpr RGBA BG_COLOR = { 255, 255, 255, 255 };
+constexpr RGBA START_COLOR = { 0, 204, 0, 255 };
+constexpr RGBA FINISH_COLOR = { 255, 0, 0, 255 };
 
-static void paintRect(Image *image, int x, int y, int width, int height, unsigned char value = BG_COLOR) {
-    RGBA color = { value, value, value, 255 };
+static void paintRect(Image *image, int x, int y, int width, int height, RGBA color = BG_COLOR) {
     for (int row = y; row < y + height; ++row) {
         for (int column = 0; column < width; ++column) {
             image->pixels[x + column + row * image->width] = color;
@@ -19,21 +20,72 @@ static void paintRect(Image *image, int x, int y, int width, int height, unsigne
     }
 }
 
-static void clearTopWall(Image *image, XY pos, int wallWidth, int cellWidth, unsigned char value = BG_COLOR) {
+static void clearTopWall(Image *image, XY pos, int wallWidth, int cellWidth, RGBA color = BG_COLOR) {
     int stride = cellWidth + wallWidth;
-    paintRect(image, wallWidth + pos.x * stride, pos.y * stride, cellWidth, wallWidth, value);
+    paintRect(image, wallWidth + pos.x * stride, pos.y * stride, cellWidth, wallWidth, color);
 }
 
-static void clearLeftWall(Image *image, XY pos, int wallWidth, int cellWidth, unsigned char value = BG_COLOR) {
+static void clearLeftWall(Image *image, XY pos, int wallWidth, int cellWidth, RGBA color = BG_COLOR) {
     int stride = cellWidth + wallWidth;
-    paintRect(image, pos.x * stride, wallWidth + pos.y * stride, wallWidth, cellWidth, value);
+    paintRect(image, pos.x * stride, wallWidth + pos.y * stride, wallWidth, cellWidth, color);
 }
 
-static void indicateStartEnd(Image *image, Maze const *maze, XY pos, int wallWidth, int cellWidth, unsigned char value = PATH_COLOR) {
+static void paintUpArrow(Image *image, XY pos, int wallWidth, int cellWidth, bool entering, RGBA color = START_COLOR) {
     int stride = cellWidth + wallWidth;
-    int inset = std::max(0, std::min(2, (cellWidth - 1) / 2));
+    int yOffset = entering ? 0 : (cellWidth / 2 + 1 + wallWidth * 2);
+    for (int inset = 0; inset <= cellWidth / 2; ++inset) {
+        paintRect(image,
+                  wallWidth + pos.x * stride + inset + 1,
+                  wallWidth + (pos.y + 1) * stride - inset - 1 - yOffset,
+                  cellWidth - inset * 2 - 2,
+                  1,
+                  color);
+    }
+}
+
+static void paintDownArrow(Image *image, XY pos, int wallWidth, int cellWidth, bool entering, RGBA color = START_COLOR) {
+    int stride = cellWidth + wallWidth;
+    int yOffset = entering ? 0 : (cellWidth / 2 + 1 + wallWidth * 2);
+    for (int inset = 0; inset <= cellWidth / 2; ++inset) {
+        paintRect(image,
+                  wallWidth + pos.x * stride + inset + 1,
+                  pos.y * stride + inset + yOffset,
+                  cellWidth - inset * 2 - 2,
+                  1,
+                  color);
+    }
+}
+
+static void paintRightArrow(Image *image, XY pos, int wallWidth, int cellWidth, bool entering, RGBA color = START_COLOR) {
+    int stride = cellWidth + wallWidth;
+    int xOffset = entering ? 0 : (cellWidth / 2 + 1 + wallWidth * 2);
+    for (int inset = 0; inset <= cellWidth / 2; ++inset) {
+        paintRect(image,
+                  pos.x * stride + inset + xOffset,
+                  wallWidth + pos.y * stride + inset + 1,
+                  1,
+                  cellWidth - inset * 2 - 2,
+                  color);
+    }
+}
+static void paintLeftArrow(Image *image, XY pos, int wallWidth, int cellWidth, bool entering, RGBA color = START_COLOR) {
+    int stride = cellWidth + wallWidth;
+    int xOffset = entering ? 0 : (cellWidth / 2 + 1 + wallWidth * 2);
+    for (int inset = 0; inset <= cellWidth / 2; ++inset) {
+        paintRect(image,
+                  wallWidth + (pos.x + 1) * stride - inset - 1 - xOffset,
+                  wallWidth + pos.y * stride + inset + 1,
+                  1,
+                  cellWidth - inset * 2 - 2,
+                  color);
+    }
+}
+
+static void indicateStartEnd(Image *image, Maze const *maze, XY pos, int wallWidth, int cellWidth, RGBA color = PATH_COLOR) {
+    int stride = cellWidth + wallWidth;
     
-    // TODO: indicate the start in some special way
+    bool isStart = (pos == maze->getStart());
+    RGBA endpointIndicatorColor = isStart ? START_COLOR : FINISH_COLOR;
 
     if (pos.x == 0) {
         clearLeftWall(image, pos, wallWidth, cellWidth, BG_COLOR);
@@ -42,7 +94,12 @@ static void indicateStartEnd(Image *image, Maze const *maze, XY pos, int wallWid
                   stride / 2 + pos.y * stride,
                   stride / 2,
                   wallWidth,
-                  value);
+                  color);
+        if (isStart) {
+            paintRightArrow(image, pos, wallWidth, cellWidth, true, endpointIndicatorColor);
+        } else {
+            paintLeftArrow(image, pos, wallWidth, cellWidth, false, endpointIndicatorColor);
+        }
     } else if (pos.x == maze->getWidth() - 1) {
         clearLeftWall(image, XY(pos.x + 1, pos.y), wallWidth, cellWidth, BG_COLOR);
         paintRect(image,
@@ -50,7 +107,12 @@ static void indicateStartEnd(Image *image, Maze const *maze, XY pos, int wallWid
                   stride / 2 + pos.y * stride,
                   stride / 2,
                   wallWidth,
-                  value);
+                  color);
+        if (isStart) {
+            paintLeftArrow(image, pos, wallWidth, cellWidth, true, endpointIndicatorColor);
+        } else {
+            paintRightArrow(image, pos, wallWidth, cellWidth, false, endpointIndicatorColor);
+        }
     } else if (pos.y == 0) {
         clearTopWall(image, pos, wallWidth, cellWidth, BG_COLOR);
         paintRect(image,
@@ -58,7 +120,12 @@ static void indicateStartEnd(Image *image, Maze const *maze, XY pos, int wallWid
                   pos.y * stride,
                   wallWidth,
                   stride / 2,
-                  value);
+                  color);
+        if (isStart) {
+            paintDownArrow(image, pos, wallWidth, cellWidth, true, endpointIndicatorColor);
+        } else {
+            paintUpArrow(image, pos, wallWidth, cellWidth, false, endpointIndicatorColor);
+        }
     } else if (pos.y == maze->getHeight() - 1) {
         clearTopWall(image, XY(pos.x, pos.y + 1), wallWidth, cellWidth, BG_COLOR);
         paintRect(image,
@@ -66,15 +133,21 @@ static void indicateStartEnd(Image *image, Maze const *maze, XY pos, int wallWid
                   wallWidth + (pos.y + 1) * stride - stride / 2,
                   wallWidth,
                   stride / 2,
-                  value);
+                  color);
+        if (isStart) {
+            paintUpArrow(image, pos, wallWidth, cellWidth, true, endpointIndicatorColor);
+        } else {
+            paintDownArrow(image, pos, wallWidth, cellWidth, false, endpointIndicatorColor);
+        }
     } else {
         // Draw a square to indicate that this is an endpoint.
+        int inset = std::max(0, ((cellWidth - 1) * 2) / 5);
         paintRect(image,
                   wallWidth + pos.x * stride + inset,
                   wallWidth + pos.y * stride + inset,
                   cellWidth - inset * 2,
                   cellWidth - inset * 2,
-                  PATH_COLOR);
+                  endpointIndicatorColor);
     }
 }
 
@@ -105,7 +178,7 @@ std::unique_ptr<Image> convertToImage(Maze const *maze, int wallWidth, int cellW
     }
     
     // Start and end definition
-    unsigned char pathColor = shortestPath.empty() ? BG_COLOR : PATH_COLOR;
+    auto pathColor = shortestPath.empty() ? BG_COLOR : PATH_COLOR;
     indicateStartEnd(image.get(), maze, maze->getStart(), wallWidth, cellWidth, pathColor);
     indicateStartEnd(image.get(), maze, maze->getFinish(), wallWidth, cellWidth, pathColor);
     
