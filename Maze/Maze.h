@@ -52,6 +52,9 @@ public:
     
     // Returns true if there is no wall between the adjacent points p1 and p2.
     bool canTraverse(XY p1, XY p2) const;
+    
+    // If the given points are adjacent, clears the wall between them.
+    void makeTraversable(XY p1, XY p2);
 };
 
 

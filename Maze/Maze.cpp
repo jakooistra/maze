@@ -67,3 +67,19 @@ bool Maze::canTraverse(XY p1, XY p2) const {
         return false;
     }
 }
+
+void Maze::makeTraversable(XY p1, XY p2) {
+    if (!p1.isAdjacent(p2) || !contains(p1) || !contains(p2)) {
+        return;
+    }
+    
+    if (p1.x < p2.x) {
+        cell[p2.x][p2.y].leftWall = false;
+    } else if (p1.y < p2.y) {
+        cell[p2.x][p2.y].topWall = false;
+    } else if (p2.x < p1.x) {
+        cell[p1.x][p1.y].leftWall = false;
+    } else if (p2.y < p1.y) {
+        cell[p1.x][p1.y].topWall = false;
+    }
+}
