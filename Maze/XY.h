@@ -28,6 +28,10 @@ struct XY {
         return y < other.y || (y == other.y && x < other.x);
     }
     
+    XY operator-(const XY &other) const {
+        return XY(x - other.x, y - other.y);
+    }
+    
     XY left() const { return XY(x - 1, y); }
     XY right() const { return XY(x + 1, y); }
     XY up() const { return XY(x, y - 1); }
@@ -44,6 +48,7 @@ struct XY {
     
     int manhattanDistance() const { return abs(x) + abs(y); }
     int area() const { return abs(x * y); }
+    int lengthSquared() const { return x * x + y * y; }
 };
 
 #endif /* XY_h */
