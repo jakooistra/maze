@@ -73,15 +73,17 @@ void Stats::print(std::string const &title) const {
         std::cout << "  " << percentSolvable << "% solvable" << std::endl;
     }
     
-    int percentSingular = (100 * numSingular + numSolvable / 2) / numSolvable;
-    std::cout << "  " << percentSingular << "% of solvable mazes have singular solutions" << std::endl;
-    
-    int averageLength = (totalSolvablePathLength + numSolvable / 2) / numSolvable;
-    std::cout << "  " << averageLength << " average path length" << std::endl;
-    
-    if (numDegenerate > 0) {
-        int percentDegenerate = (100 * numDegenerate + numSolvable / 2) / numSolvable;
-        std::cout << "  " << percentDegenerate << "% of solvable mazes are trivial" << std::endl;
+    if (numSolvable > 0) {
+        int percentSingular = (100 * numSingular + numSolvable / 2) / numSolvable;
+        std::cout << "  " << percentSingular << "% of solvable mazes have singular solutions" << std::endl;
+        
+        int averageLength = (totalSolvablePathLength + numSolvable / 2) / numSolvable;
+        std::cout << "  " << averageLength << " average path length" << std::endl;
+        
+        if (numDegenerate > 0) {
+            int percentDegenerate = (100 * numDegenerate + numSolvable / 2) / numSolvable;
+            std::cout << "  " << percentDegenerate << "% of solvable mazes are trivial" << std::endl;
+        }
     }
     
     if (totalUnreachable > 0) {
@@ -100,30 +102,32 @@ void Stats::print(std::string const &title) const {
         std::cout << " average degenerate corners per maze" << std::endl;
     }
     
-    int averageDeadEnds = (numDeadEnds + count / 2) / count;
-    std::cout << "  " << averageDeadEnds << " dead ends per solvable maze on average" << std::endl;
-    
-    int largestBucketCount = 0;
-    for (auto deadEndCount : deadEndLength) {
-        largestBucketCount = std::max(largestBucketCount, deadEndCount.second);
-    }
-    if (!deadEndLength.empty()) {
-        int normalizedLength = std::min(64, largestBucketCount);
-        int lastBucket = deadEndLength.rbegin()->first;
-        std::stringstream lastbucketStream;
-        lastbucketStream << lastBucket / 2 + 1 << "-" << lastBucket;
-        int bucketPadLength = (int)lastbucketStream.str().size();
-        for (int bucket = deadEndLength.rbegin()->first; bucket >= deadEndLength.begin()->first; bucket /= 2) {
-            std::stringstream bucketText;
-            if (bucket > 2) {
-                bucketText << bucket / 2 + 1 << "-";
+    if (numSolvable > 0) {
+        int averageDeadEnds = (numDeadEnds + count / 2) / count;
+        std::cout << "  " << averageDeadEnds << " dead ends per solvable maze on average" << std::endl;
+        
+        int largestBucketCount = 0;
+        for (auto deadEndCount : deadEndLength) {
+            largestBucketCount = std::max(largestBucketCount, deadEndCount.second);
+        }
+        if (!deadEndLength.empty()) {
+            int normalizedLength = std::min(64, largestBucketCount);
+            int lastBucket = deadEndLength.rbegin()->first;
+            std::stringstream lastbucketStream;
+            lastbucketStream << lastBucket / 2 + 1 << "-" << lastBucket;
+            int bucketPadLength = (int)lastbucketStream.str().size();
+            for (int bucket = deadEndLength.rbegin()->first; bucket >= deadEndLength.begin()->first; bucket /= 2) {
+                std::stringstream bucketText;
+                if (bucket > 2) {
+                    bucketText << bucket / 2 + 1 << "-";
+                }
+                bucketText << bucket;
+                std::cout << "    " << std::setw(bucketPadLength) << std::setfill(' ') << bucketText.str() << ": ";
+                auto tuple = deadEndLength.find(bucket);
+                int length = ((tuple == deadEndLength.end() ? 0 : tuple->second) * normalizedLength + largestBucketCount - 1) / largestBucketCount;
+                std::cout << std::setw(length) << std::setfill('X') << "";
+                std::cout << std::endl;
             }
-            bucketText << bucket;
-            std::cout << "    " << std::setw(bucketPadLength) << std::setfill(' ') << bucketText.str() << ": ";
-            auto tuple = deadEndLength.find(bucket);
-            int length = ((tuple == deadEndLength.end() ? 0 : tuple->second) * normalizedLength + largestBucketCount - 1) / largestBucketCount;
-            std::cout << std::setw(length) << std::setfill('X') << "";
-            std::cout << std::endl;
         }
     }
 }
