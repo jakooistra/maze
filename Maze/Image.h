@@ -10,11 +10,22 @@
 
 #include <vector>
 
-// A grayscale image definition.
+struct RGBA {
+    uint8_t r { 0 };
+    uint8_t g { 0 };
+    uint8_t b { 0 };
+    uint8_t a { 255 };
+    
+    static RGBA gray(uint8_t value) {
+        return { value, value, value, 255 };
+    }
+};
+
+// An RGBA image definition.
 struct Image {
     int width { 0 };
     int height { 0 };
-    std::vector<uint8_t> data;
+    std::vector<RGBA> pixels;
     
     bool encodeRGBA(std::vector<unsigned char> &out) const;
     unsigned int encodePNG(std::vector<unsigned char> &out) const;

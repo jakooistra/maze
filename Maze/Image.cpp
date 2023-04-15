@@ -10,7 +10,7 @@
 #include "Image.h"
 
 bool Image::encodeRGBA(std::vector<unsigned char> &out) const {
-    if (width <= 0 || height <= 0 || data.size() < width * height) {
+    if (width <= 0 || height <= 0 || pixels.size() < width * height) {
         return false;
     }
     
@@ -19,11 +19,11 @@ bool Image::encodeRGBA(std::vector<unsigned char> &out) const {
     int index = 0;
     for (int y = 0; y < height; ++y) {
         for (int x = 0; x < width; ++x) {
-            unsigned char grayValue = data[index++];
-            out.push_back(grayValue);
-            out.push_back(grayValue);
-            out.push_back(grayValue);
-            out.push_back(255);
+            auto color = pixels[index++];
+            out.push_back(color.r);
+            out.push_back(color.g);
+            out.push_back(color.b);
+            out.push_back(color.a);
         }
     }
     

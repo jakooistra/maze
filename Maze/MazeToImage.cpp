@@ -11,8 +11,11 @@ constexpr int PATH_COLOR = 204;
 constexpr int BG_COLOR = 255;
 
 static void paintRect(Image *image, int x, int y, int width, int height, unsigned char value = BG_COLOR) {
+    RGBA color = { value, value, value, 255 };
     for (int row = y; row < y + height; ++row) {
-        memset(&image->data[x + row * image->width], value, width);
+        for (int column = 0; column < width; ++column) {
+            image->pixels[x + column + row * image->width] = color;
+        }
     }
 }
 
@@ -29,6 +32,8 @@ static void clearLeftWall(Image *image, XY pos, int wallWidth, int cellWidth, un
 static void indicateStartEnd(Image *image, Maze const *maze, XY pos, int wallWidth, int cellWidth, unsigned char value = PATH_COLOR) {
     int stride = cellWidth + wallWidth;
     int inset = std::max(0, std::min(2, (cellWidth - 1) / 2));
+    
+    // TODO: indicate the start in some special way
 
     if (pos.x == 0) {
         clearLeftWall(image, pos, wallWidth, cellWidth, BG_COLOR);
@@ -77,10 +82,10 @@ std::unique_ptr<Image> convertToImage(Maze const *maze, int wallWidth, int cellW
     auto image = std::make_unique<Image>();
     image->width = wallWidth + ((wallWidth + cellWidth) * maze->getWidth());
     image->height = wallWidth + ((wallWidth + cellWidth) * maze->getHeight());
+    image->pixels.resize(image->width * image->height);
     
     const int stride = wallWidth + cellWidth;
     
-    image->data.resize(image->width * image->height);
     for (int cx = 0; cx < maze->getWidth(); ++ cx) {
         for (int cy = 0; cy < maze->getHeight(); ++ cy) {
             XY xy(cx, cy);
