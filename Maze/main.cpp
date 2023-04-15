@@ -25,6 +25,12 @@ static void writeMazeImageFile(std::string const &fileName, FullAssessment const
 }
 
 int main(int argc, const char * argv[]) {
+    // TODO: use command line parameters to determine what to do
+    // TODO: single maze analysis
+    // TODO: output of maze collections
+    // TODO: analysis of best mazes given heuristics
+    // TODO: output with and without solution
+    
     int wallWidth = 1;
     int cellSize = 9;
     
@@ -54,6 +60,7 @@ int main(int argc, const char * argv[]) {
         }
         stats.print(typeName);
         
+        // TODO: determine why maze output isn't always deterministic
         writeMazeImageFile(typeName + " (Best).png", *bestMazes.rbegin(), wallWidth, cellSize);
         writeMazeImageFile(typeName + " (Worst).png", *worstMazes.begin(), wallWidth, cellSize);
     }
