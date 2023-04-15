@@ -33,6 +33,7 @@ int main(int argc, const char * argv[]) {
     int numMazesToGenerateForStats = 250;
     
     std::vector<MazeType> types = {
+        MazeType::ChainBurst,
         MazeType::RemoveRandomWalls,
         MazeType::VerticalPathBreaks,
     };
