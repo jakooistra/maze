@@ -14,6 +14,7 @@
 		DB4D385229E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D385029E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp */; };
 		DB4D385529E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D385329E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp */; };
 		DB4D385829E9E9A7007ACBDF /* Assessment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D385629E9E9A7007ACBDF /* Assessment.cpp */; };
+		DB4D385C29EA05DA007ACBDF /* ChainBurstGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D385A29EA05DA007ACBDF /* ChainBurstGenerator.cpp */; };
 		DBB26BC129E8C56400C14D5B /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BC029E8C56400C14D5B /* main.cpp */; };
 		DBB26BCA29E8C6A100C14D5B /* lodepng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BC929E8C6A100C14D5B /* lodepng.cpp */; };
 		DBB26BCE29E8C86100C14D5B /* Maze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BCC29E8C86100C14D5B /* Maze.cpp */; };
@@ -34,6 +35,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DB4A736729EA34CF00E3336A /* Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		DB4D383929E904FA007ACBDF /* Analysis.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Analysis.cpp; sourceTree = "<group>"; };
 		DB4D383A29E904FA007ACBDF /* Analysis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Analysis.h; sourceTree = "<group>"; };
 		DB4D383C29E90505007ACBDF /* Stats.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Stats.cpp; sourceTree = "<group>"; };
@@ -51,6 +53,8 @@
 		DB4D385429E994AD007ACBDF /* VerticalPathBreaksGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VerticalPathBreaksGenerator.h; sourceTree = "<group>"; };
 		DB4D385629E9E9A7007ACBDF /* Assessment.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Assessment.cpp; sourceTree = "<group>"; };
 		DB4D385729E9E9A7007ACBDF /* Assessment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Assessment.h; sourceTree = "<group>"; };
+		DB4D385A29EA05DA007ACBDF /* ChainBurstGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ChainBurstGenerator.cpp; sourceTree = "<group>"; };
+		DB4D385B29EA05DA007ACBDF /* ChainBurstGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChainBurstGenerator.h; sourceTree = "<group>"; };
 		DBB26BBD29E8C56400C14D5B /* Maze */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Maze; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBB26BC029E8C56400C14D5B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		DBB26BC829E8C69A00C14D5B /* lodepng.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lodepng.h; sourceTree = "<group>"; };
@@ -77,6 +81,8 @@
 		DB4D384B29E984D2007ACBDF /* generators */ = {
 			isa = PBXGroup;
 			children = (
+				DB4D385A29EA05DA007ACBDF /* ChainBurstGenerator.cpp */,
+				DB4D385B29EA05DA007ACBDF /* ChainBurstGenerator.h */,
 				DB4D385029E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp */,
 				DB4D385129E986A1007ACBDF /* RemoveRandomWallsGenerator.h */,
 				DB4D385329E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp */,
@@ -126,6 +132,7 @@
 				DB4D384329E905CE007ACBDF /* Solver.h */,
 				DB4D383C29E90505007ACBDF /* Stats.cpp */,
 				DB4D383D29E90505007ACBDF /* Stats.h */,
+				DB4A736729EA34CF00E3336A /* Utility.h */,
 				DB4D384029E90565007ACBDF /* XY.h */,
 			);
 			path = Maze;
@@ -199,6 +206,7 @@
 				DB4D385229E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp in Sources */,
 				DB4D384429E905CE007ACBDF /* Solver.cpp in Sources */,
 				DB4D385529E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp in Sources */,
+				DB4D385C29EA05DA007ACBDF /* ChainBurstGenerator.cpp in Sources */,
 				DBB26BD429E8CCB700C14D5B /* MazeToImage.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
