@@ -7,7 +7,7 @@
 
 #include "MazeToImage.h"
 
-constexpr RGBA PATH_COLOR = { 192, 212, 255, 255 };
+constexpr RGBA PATH_COLOR = { 140, 160, 230, 255 };
 constexpr RGBA BG_COLOR = { 255, 255, 255, 255 };
 constexpr RGBA START_COLOR = { 0, 204, 0, 255 };
 constexpr RGBA FINISH_COLOR = { 255, 0, 0, 255 };
@@ -33,7 +33,8 @@ static void clearLeftWall(Image *image, XY pos, int wallWidth, int cellWidth, RG
 static void paintUpArrow(Image *image, XY pos, int wallWidth, int cellWidth, bool entering, RGBA color = START_COLOR) {
     int stride = cellWidth + wallWidth;
     int yOffset = entering ? 0 : (cellWidth / 2 + 1 + wallWidth * 2);
-    for (int inset = 0; inset <= cellWidth / 2; ++inset) {
+    int startInset = (entering || cellWidth < 3) ? 0 : 1;
+    for (int inset = startInset; inset <= cellWidth / 2; ++inset) {
         paintRect(image,
                   wallWidth + pos.x * stride + inset + 1,
                   wallWidth + (pos.y + 1) * stride - inset - 1 - yOffset,
@@ -46,7 +47,8 @@ static void paintUpArrow(Image *image, XY pos, int wallWidth, int cellWidth, boo
 static void paintDownArrow(Image *image, XY pos, int wallWidth, int cellWidth, bool entering, RGBA color = START_COLOR) {
     int stride = cellWidth + wallWidth;
     int yOffset = entering ? 0 : (cellWidth / 2 + 1 + wallWidth * 2);
-    for (int inset = 0; inset <= cellWidth / 2; ++inset) {
+    int startInset = (entering || cellWidth < 3) ? 0 : 1;
+    for (int inset = startInset; inset <= cellWidth / 2; ++inset) {
         paintRect(image,
                   wallWidth + pos.x * stride + inset + 1,
                   pos.y * stride + inset + yOffset,
@@ -59,7 +61,8 @@ static void paintDownArrow(Image *image, XY pos, int wallWidth, int cellWidth, b
 static void paintRightArrow(Image *image, XY pos, int wallWidth, int cellWidth, bool entering, RGBA color = START_COLOR) {
     int stride = cellWidth + wallWidth;
     int xOffset = entering ? 0 : (cellWidth / 2 + 1 + wallWidth * 2);
-    for (int inset = 0; inset <= cellWidth / 2; ++inset) {
+    int startInset = (entering || cellWidth < 3) ? 0 : 1;
+    for (int inset = startInset; inset <= cellWidth / 2; ++inset) {
         paintRect(image,
                   pos.x * stride + inset + xOffset,
                   wallWidth + pos.y * stride + inset + 1,
@@ -71,7 +74,8 @@ static void paintRightArrow(Image *image, XY pos, int wallWidth, int cellWidth, 
 static void paintLeftArrow(Image *image, XY pos, int wallWidth, int cellWidth, bool entering, RGBA color = START_COLOR) {
     int stride = cellWidth + wallWidth;
     int xOffset = entering ? 0 : (cellWidth / 2 + 1 + wallWidth * 2);
-    for (int inset = 0; inset <= cellWidth / 2; ++inset) {
+    int startInset = (entering || cellWidth < 3) ? 0 : 1;
+    for (int inset = startInset; inset <= cellWidth / 2; ++inset) {
         paintRect(image,
                   wallWidth + (pos.x + 1) * stride - inset - 1 - xOffset,
                   wallWidth + pos.y * stride + inset + 1,
