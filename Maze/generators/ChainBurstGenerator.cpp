@@ -183,24 +183,30 @@ std::unique_ptr<Maze> ChainBurstGenerator::generate(int width, int height, int s
             // The best burst point is the furthest visited cell from the
             // start position that is reachable from the finish position.
             std::optional<XY> best;
-            int bestMetric = 0;
+            XY bestMetric { 0, 0 };
             std::queue<XY> bfs;
             bfs.push(finish);
-            cells[finish.x][finish.y].index = -currentBurstIndex;
+            auto &finishCell = cells[finish.x][finish.y];
+            finishCell.index = -currentBurstIndex;
+            int bfsIteration = 1;
             while (!bfs.empty()) {
+                bfsIteration++;
                 XY check = bfs.front();
                 bfs.pop();
                 for (auto adjacent : check.allAdjacent()) {
                     auto &adjacentCell = cells[adjacent.x][adjacent.y];
                     if (maze->contains(adjacent)) {
                         if (adjacentCell.visited()) {
-                            int metric = adjacentCell.distanceFromStart;
-                            if (!best.has_value() || metric > bestMetric) {
+                            // The metric mazimizes distance from start, then disambiguates using
+                            // relative distance from finish. The distance from the finish is
+                            // relative, using the iteration count in the breadth first search.
+                            XY metric(bfsIteration, adjacentCell.distanceFromStart);
+                            if (!best.has_value() || bestMetric < metric ) {
                                 bestMetric = metric;
                                 best = adjacent;
                             }
-                        } else if (adjacentCell.index != -currentBurstIndex) {
-                            adjacentCell.index = -currentBurstIndex;
+                        } else if (adjacentCell.index != finishCell.index) {
+                            adjacentCell.index = finishCell.index;
                             bfs.push(adjacent);
                         }
                     }

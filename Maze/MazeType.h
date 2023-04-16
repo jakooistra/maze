@@ -14,6 +14,8 @@ enum class MazeType {
     ChainBurst,
     RemoveRandomWalls,
     VerticalPathBreaks,
+    
+    // TODO: random perturbation generator as described briefly in the interview
 };
 
 inline std::string getMazeTypeName(MazeType type) {
