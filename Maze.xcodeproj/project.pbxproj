@@ -20,6 +20,7 @@
 		DBB26BCE29E8C86100C14D5B /* Maze.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BCC29E8C86100C14D5B /* Maze.cpp */; };
 		DBB26BD429E8CCB700C14D5B /* MazeToImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BD229E8CCB700C14D5B /* MazeToImage.cpp */; };
 		DBB26BD729E8CD2D00C14D5B /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BD529E8CD2D00C14D5B /* Image.cpp */; };
+		DBE7964E29EC89360049956A /* ThreadPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBE7964C29EC89320049956A /* ThreadPool.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -65,6 +66,9 @@
 		DBB26BD329E8CCB700C14D5B /* MazeToImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeToImage.h; sourceTree = "<group>"; };
 		DBB26BD529E8CD2D00C14D5B /* Image.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Image.cpp; sourceTree = "<group>"; };
 		DBB26BD629E8CD2D00C14D5B /* Image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Image.h; sourceTree = "<group>"; };
+		DBE7964C29EC89320049956A /* ThreadPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadPool.cpp; sourceTree = "<group>"; };
+		DBE7964D29EC89320049956A /* ThreadPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadPool.h; sourceTree = "<group>"; };
+		DBE7965029EC8D190049956A /* ThreadUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadUtility.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -132,6 +136,9 @@
 				DB4D384329E905CE007ACBDF /* Solver.h */,
 				DB4D383C29E90505007ACBDF /* Stats.cpp */,
 				DB4D383D29E90505007ACBDF /* Stats.h */,
+				DBE7964C29EC89320049956A /* ThreadPool.cpp */,
+				DBE7964D29EC89320049956A /* ThreadPool.h */,
+				DBE7965029EC8D190049956A /* ThreadUtility.h */,
 				DB4A736729EA34CF00E3336A /* Utility.h */,
 				DB4D384029E90565007ACBDF /* XY.h */,
 			);
@@ -206,6 +213,7 @@
 				DB4D385229E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp in Sources */,
 				DB4D384429E905CE007ACBDF /* Solver.cpp in Sources */,
 				DB4D385529E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp in Sources */,
+				DBE7964E29EC89360049956A /* ThreadPool.cpp in Sources */,
 				DB4D385C29EA05DA007ACBDF /* ChainBurstGenerator.cpp in Sources */,
 				DBB26BD429E8CCB700C14D5B /* MazeToImage.cpp in Sources */,
 			);
