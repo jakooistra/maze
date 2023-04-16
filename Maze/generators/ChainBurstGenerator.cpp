@@ -47,7 +47,8 @@ static std::function<bool(XY,XY)> furthestFrom(XY point) {
 };
 
 // Returns the location expanded to if it exists, or nullopt otherwise.
-static std::optional<XY> expandFrom(XY checkPoint, Maze *maze, std::vector<std::vector<ChainBurstCell>> &cells, std::mt19937 &rng) {
+template<typename random_generator>
+static std::optional<XY> expandFrom(XY checkPoint, Maze *maze, std::vector<std::vector<ChainBurstCell>> &cells, random_generator &rng) {
     auto const &checkCell = cells[checkPoint.x][checkPoint.y];
     auto finish = maze->getFinish();
     
@@ -76,7 +77,8 @@ static std::optional<XY> expandFrom(XY checkPoint, Maze *maze, std::vector<std::
     return std::nullopt;
 }
 
-static std::vector<XY> burst(Maze *maze, std::vector<std::vector<ChainBurstCell>> &cells, XY start, std::mt19937 &rng) {
+template<typename random_generator>
+static std::vector<XY> burst(Maze *maze, std::vector<std::vector<ChainBurstCell>> &cells, XY start, random_generator &rng) {
     auto finish = maze->getFinish();
     
     // If this pathway is constrained, expand it in the one way it can be
