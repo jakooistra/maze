@@ -17,7 +17,7 @@ struct FullAssessment {
     std::shared_ptr<Maze const> maze;
     
     bool operator<(FullAssessment const &other) const {
-        return value < other.value || (value == other.value && maze < other.maze);
+        return value < other.value;
     }
 };
 
