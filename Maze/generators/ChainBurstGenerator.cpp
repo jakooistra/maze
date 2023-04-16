@@ -8,6 +8,7 @@
 #include <deque>
 #include <set>
 #include <queue>
+#include <random>
 #include <optional>
 
 #include "ChainBurstGenerator.h"
@@ -46,7 +47,7 @@ static std::function<bool(XY,XY)> furthestFrom(XY point) {
 };
 
 // Returns the location expanded to if it exists, or nullopt otherwise.
-static std::optional<XY> expandFrom(XY checkPoint, Maze *maze, std::vector<std::vector<ChainBurstCell>> &cells) {
+static std::optional<XY> expandFrom(XY checkPoint, Maze *maze, std::vector<std::vector<ChainBurstCell>> &cells, std::mt19937 &rng) {
     auto const &checkCell = cells[checkPoint.x][checkPoint.y];
     auto finish = maze->getFinish();
     
@@ -56,11 +57,11 @@ static std::optional<XY> expandFrom(XY checkPoint, Maze *maze, std::vector<std::
     std::sort(checkNext.begin(), checkNext.end(), furthestFrom(finish));
     // If we're sufficiently far away, add some randomness.
     int manhattanDistanceFromFinish = (checkNext.back() - finish).manhattanDistance();
-    if (manhattanDistanceFromFinish > 4 && rand() % 3 == 0) {
-        std::swap(checkNext[0], checkNext[1 + rand() % 3]);
+    if (manhattanDistanceFromFinish > 4 && rng() % 3 == 0) {
+        std::swap(checkNext[0], checkNext[1 + rng() % 3]);
     }
-    if (manhattanDistanceFromFinish > 7 && rand() % 3 == 0) {
-        std::swap(checkNext[1], checkNext[2 + rand() % 2]);
+    if (manhattanDistanceFromFinish > 7 && rng() % 3 == 0) {
+        std::swap(checkNext[1], checkNext[2 + rng() % 2]);
     }
     // Determine if it's possible to expand into adjacent locations,
     // and pick only one direction to extend the path.
@@ -75,7 +76,7 @@ static std::optional<XY> expandFrom(XY checkPoint, Maze *maze, std::vector<std::
     return std::nullopt;
 }
 
-static std::vector<XY> burst(Maze *maze, std::vector<std::vector<ChainBurstCell>> &cells, XY start) {
+static std::vector<XY> burst(Maze *maze, std::vector<std::vector<ChainBurstCell>> &cells, XY start, std::mt19937 &rng) {
     auto finish = maze->getFinish();
     
     // If this pathway is constrained, expand it in the one way it can be
@@ -95,7 +96,7 @@ static std::vector<XY> burst(Maze *maze, std::vector<std::vector<ChainBurstCell>
                 // Exit early, no expansion is possible.
                 return {};
             } else {
-                auto next = expandFrom(start, maze, cells);
+                auto next = expandFrom(start, maze, cells, rng);
                 start = next.value();
             }
         }
@@ -127,7 +128,7 @@ static std::vector<XY> burst(Maze *maze, std::vector<std::vector<ChainBurstCell>
         // Expand each check point by one cell.
         std::vector<XY> nextExpansion;
         for (auto checkPoint : checkExpansion) {
-            auto next = expandFrom(checkPoint, maze, cells);
+            auto next = expandFrom(checkPoint, maze, cells, rng);
             if (next.has_value()) {
                 nextExpansion.push_back(next.value());
             }
@@ -147,13 +148,9 @@ static std::vector<XY> burst(Maze *maze, std::vector<std::vector<ChainBurstCell>
 
 std::unique_ptr<Maze> ChainBurstGenerator::generate(int width, int height, int seed) {
     auto maze = std::make_unique<Maze>(width, height);
+    std::mt19937 rng(seed);
     
-    srand(seed);
-    maze->setStart(randomEdgePoint(width, height));
-    maze->setFinish(randomEdgePoint(width, height));
-    while (maze->getStart() == maze->getFinish() || maze->getStart().isAdjacent(maze->getFinish())) {
-        maze->setFinish(randomEdgePoint(width, height));
-    }
+    setRandomStartAndFinish(maze.get(), width, height, rng);
     
     // Values above zero indicate a visited cell.
     // Values below zero are used to track
@@ -169,14 +166,14 @@ std::unique_ptr<Maze> ChainBurstGenerator::generate(int width, int height, int s
     while (nextBurst != finish && !cells[finish.x][finish.y].visited()) {
         currentBurstIndex++;
         cells[nextBurst.x][nextBurst.y].index = ++currentBurstIndex;
-        auto ends = burst(maze.get(), cells, nextBurst);
+        auto ends = burst(maze.get(), cells, nextBurst, rng);
         
         if (cells[finish.x][finish.y].visited()) {
             // If the finish cell has been visited, exit. The maze is solvable.
             break;
         } else if (!ends.empty()) {
             // If the last burst was successful, pick a random endpoint and burst from it.
-            nextBurst = ends[rand() % ends.size()];
+            nextBurst = ends[rng() % ends.size()];
         } else {
             // If the last burst was not successful, do a search from the
             // finish point to determine the best place to burst from.
@@ -258,7 +255,7 @@ std::unique_ptr<Maze> ChainBurstGenerator::generate(int width, int height, int s
                     
                     std::optional<XY> expandLocation = adjacent;
                     for (int i = 0; i < 7 && expandLocation.has_value(); ++i) {
-                        expandLocation = expandFrom(expandLocation.value(), maze.get(), cells);
+                        expandLocation = expandFrom(expandLocation.value(), maze.get(), cells, rng);
                     }
                 }
                 
