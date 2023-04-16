@@ -68,4 +68,14 @@ inline void setRandomStartAndFinish(Maze *maze, int width, int height, random_ge
     maze->setFinish(startAndFinish.finish);
 }
 
+inline std::vector<int> consecutiveNumbers(int start, int end) {
+    end = std::max(start, end);
+    std::vector<int> numbers;
+    numbers.reserve(end - start + 1);
+    for (int i = start; i <= end; ++i) {
+        numbers.push_back(i);
+    }
+    return numbers;
+}
+
 #endif /* Utility_h */
