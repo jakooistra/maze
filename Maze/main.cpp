@@ -48,21 +48,19 @@ int main(int argc, const char * argv[]) {
         auto generator = createGenerator(type);
         auto typeName = getMazeTypeName(generator->getType());
         
-        std::set<FullAssessment> bestMazes;
-        std::set<FullAssessment> worstMazes;
+        // Mazes in order from worst to best.
+        std::set<FullAssessment> sortedMazes;
         
         Stats stats;
         for (int i = 0; i < numMazesToGenerateForStats; ++i) {
             auto assessment = assessValue(generator->generate(width, height, i));
-            bestMazes.insert(assessment);
-            worstMazes.insert(assessment);
+            sortedMazes.insert(assessment);
             stats.accumulate(assessment.analysis.get());
         }
         stats.print(typeName);
         
-        // TODO: determine why maze output isn't always deterministic
-        writeMazeImageFile(typeName + " (Best).png", *bestMazes.rbegin(), wallWidth, cellSize);
-        writeMazeImageFile(typeName + " (Worst).png", *worstMazes.begin(), wallWidth, cellSize);
+        writeMazeImageFile(typeName + " (Best).png", *sortedMazes.rbegin(), wallWidth, cellSize);
+        writeMazeImageFile(typeName + " (Worst).png", *sortedMazes.begin(), wallWidth, cellSize);
     }
     
     return 0;
