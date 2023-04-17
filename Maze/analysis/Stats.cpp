@@ -11,10 +11,12 @@
 
 #include "Stats.h"
 
-void Stats::accumulate(Analysis const *analysis) {
+void Stats::accumulate(Analysis const *analysis, int seed) {
     if (count == 0) {
         smallest = analysis->size;
         largest = analysis->size;
+        smallestSeed = seed;
+        largestSeed = seed;
     } else {
         int manhattan = analysis->size.manhattanDistance();
         if (manhattan < smallest.manhattanDistance()) {
@@ -23,6 +25,8 @@ void Stats::accumulate(Analysis const *analysis) {
         if (manhattan > largest.manhattanDistance()) {
             largest = analysis->size;
         }
+        smallestSeed = std::min(smallestSeed, seed);
+        largestSeed = std::max(largestSeed, seed);
     }
     
     count++;
@@ -61,28 +65,48 @@ void Stats::print(std::string const &title) const {
         std::cout << "  No analyses accumulated." << std::endl;
         return;
     } else {
-        std::cout << "  " << count << " mazes analyzed, " << smallest.x << "x" << smallest.y;
-        if (smallest != largest) {
-            std::cout << "-" << largest.x << "x" << largest.y;
+        if (count == 1) {
+            std::cout << "  Analysis for maze size " << smallest.x << "x" << smallest.y << ", seed " << smallestSeed;
+        } else {
+            std::cout << "  " << count << " mazes analyzed, " << smallest.x << "x" << smallest.y;
+            if (smallest != largest) {
+                std::cout << "-" << largest.x << "x" << largest.y;
+            }
         }
         std::cout << std::endl;
     }
     
     if (numSolvable < count) {
-        int percentSolvable = (100 * numSolvable + count / 2) / count;
-        std::cout << "  " << percentSolvable << "% solvable" << std::endl;
+        if (count == 1) {
+            std::cout << "  The maze has no solution." << std::endl;
+        } else {
+            int percentSolvable = (100 * numSolvable + count / 2) / count;
+            std::cout << "  " << percentSolvable << "% solvable" << std::endl;
+        }
     }
     
     if (numSolvable > 0) {
-        int percentSingular = (100 * numSingular + numSolvable / 2) / numSolvable;
-        std::cout << "  " << percentSingular << "% of solvable mazes have singular solutions" << std::endl;
+        if (numSolvable == 1) {
+            std::cout << "  The solution " << (numSingular == 0 ? "is not" : "is") << " singular" << std::endl;
+        } else {
+            int percentSingular = (100 * numSingular + numSolvable / 2) / numSolvable;
+            std::cout << "  " << percentSingular << "% of solvable mazes have singular solutions" << std::endl;
+        }
         
         int averageLength = (totalSolvablePathLength + numSolvable / 2) / numSolvable;
-        std::cout << "  " << averageLength << " average path length" << std::endl;
+        if (numSolvable == 1) {
+            std::cout << "  " << averageLength << " path length" << std::endl;
+        } else {
+            std::cout << "  " << averageLength << " average path length" << std::endl;
+        }
         
         if (numDegenerate > 0) {
-            int percentDegenerate = (100 * numDegenerate + numSolvable / 2) / numSolvable;
-            std::cout << "  " << percentDegenerate << "% of solvable mazes are trivial" << std::endl;
+            if (numSolvable == 1) {
+                std::cout << "  The solution is trivial" << std::endl;
+            } else {
+                int percentDegenerate = (100 * numDegenerate + numSolvable / 2) / numSolvable;
+                std::cout << "  " << percentDegenerate << "% of solvable mazes are trivial" << std::endl;
+            }
         }
     }
     
@@ -99,12 +123,20 @@ void Stats::print(std::string const &title) const {
         } else {
             std::cout << "  " << averageDegenerateCorners;
         }
-        std::cout << " average degenerate corners per maze" << std::endl;
+        if (count == 1) {
+            std::cout << " degenerate corners" << std::endl;
+        } else {
+            std::cout << " average degenerate corners per maze" << std::endl;
+        }
     }
     
     if (numSolvable > 0) {
-        int averageDeadEnds = (numDeadEnds + count / 2) / count;
-        std::cout << "  " << averageDeadEnds << " dead ends per solvable maze on average" << std::endl;
+        int averageDeadEnds = (numDeadEnds + numSolvable / 2) / numSolvable;
+        if (numSolvable == 1) {
+            std::cout << "  " << averageDeadEnds << " dead ends" << std::endl;
+        } else {
+            std::cout << "  " << averageDeadEnds << " dead ends per solvable maze on average" << std::endl;
+        }
         
         int largestBucketCount = 0;
         for (auto deadEndCount : deadEndLength) {

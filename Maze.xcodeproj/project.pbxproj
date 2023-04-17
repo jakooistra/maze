@@ -23,6 +23,7 @@
 		DBE7964E29EC89360049956A /* ThreadPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBE7964C29EC89320049956A /* ThreadPool.cpp */; };
 		DBE7965429ECD3C40049956A /* FiftyFiftyGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBE7965229ECD3C40049956A /* FiftyFiftyGenerator.cpp */; };
 		DBE7965C29ECDAF10049956A /* UtilityTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = DBE7965B29ECDAF10049956A /* UtilityTests.mm */; };
+		DBE7966D29ED5D470049956A /* CommandParser.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBE7966B29ED5D470049956A /* CommandParser.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -76,6 +77,10 @@
 		DBE7965329ECD3C40049956A /* FiftyFiftyGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FiftyFiftyGenerator.h; sourceTree = "<group>"; };
 		DBE7965929ECDAF10049956A /* MazeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MazeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBE7965B29ECDAF10049956A /* UtilityTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = UtilityTests.mm; sourceTree = "<group>"; };
+		DBE7966629ED5ACC0049956A /* Command.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Command.h; sourceTree = "<group>"; };
+		DBE7966929ED5CDE0049956A /* CommandDefinition.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommandDefinition.h; sourceTree = "<group>"; };
+		DBE7966B29ED5D470049956A /* CommandParser.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = CommandParser.cpp; sourceTree = "<group>"; };
+		DBE7966C29ED5D470049956A /* CommandParser.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommandParser.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				DBE7966029ED59820049956A /* analysis */,
+				DBE7966429ED5A810049956A /* commandline */,
 				DBE7966229ED5A250049956A /* data */,
 				DB4D384B29E984D2007ACBDF /* generation */,
 				DBE7966329ED5A3D0049956A /* threading */,
@@ -202,6 +208,17 @@
 				DBE7965029EC8D190049956A /* ThreadUtility.h */,
 			);
 			path = threading;
+			sourceTree = "<group>";
+		};
+		DBE7966429ED5A810049956A /* commandline */ = {
+			isa = PBXGroup;
+			children = (
+				DBE7966629ED5ACC0049956A /* Command.h */,
+				DBE7966929ED5CDE0049956A /* CommandDefinition.h */,
+				DBE7966B29ED5D470049956A /* CommandParser.cpp */,
+				DBE7966C29ED5D470049956A /* CommandParser.h */,
+			);
+			path = commandline;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -301,6 +318,7 @@
 				DBB26BCE29E8C86100C14D5B /* Maze.cpp in Sources */,
 				DB4D384E29E9852C007ACBDF /* GeneratorFactory.cpp in Sources */,
 				DBE7965429ECD3C40049956A /* FiftyFiftyGenerator.cpp in Sources */,
+				DBE7966D29ED5D470049956A /* CommandParser.cpp in Sources */,
 				DB4D385229E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp in Sources */,
 				DB4D384429E905CE007ACBDF /* Solver.cpp in Sources */,
 				DB4D385529E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp in Sources */,

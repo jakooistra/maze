@@ -112,6 +112,6 @@ CommandParserResult CommandParser::parse(std::vector<std::string> const &args) c
 
 void CommandParser::printUsage() const {
     std::cout << "Usage: " << std::endl;
-    // TODO
+    // TODO: print usage given the command names and descriptions specified.
 }
 

@@ -33,6 +33,8 @@ inline std::vector<Output> threadedTransform(std::vector<Input> const &input, st
     // Wait for this cohort of jobs to complete, guaranteeing that all output has been collected.
     pool.waitForCompletion();
     
+    // TODO: output a message at timed intervals while processing to give progress indication.
+    
     return output;
 }
 

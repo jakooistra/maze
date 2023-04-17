@@ -13,6 +13,9 @@
 #include "Analysis.h"
 
 struct Stats {
+    int smallestSeed { 0 };
+    int largestSeed { 0 };
+    
     XY smallest { 0, 0 };
     XY largest { 0, 0 };
     
@@ -38,7 +41,7 @@ struct Stats {
     // Example: lengths of (5, 7, 10) would map to { 8:2, 16:1 }
     std::map<int, int> deadEndLength;
     
-    void accumulate(Analysis const *analysis);
+    void accumulate(Analysis const *analysis, int seed);
     void print(std::string const &title) const;
 };
 
