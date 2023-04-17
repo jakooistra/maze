@@ -9,21 +9,21 @@
 #define Assessment_h
 
 #include "Analysis.h"
-#include "Maze.h"
+#include "GeneratedMaze.h"
 
 struct FullAssessment {
     int value;
+    GeneratedMaze maze;
     std::shared_ptr<Analysis const> analysis;
-    std::shared_ptr<Maze const> maze;
     
     bool operator<(FullAssessment const &other) const {
-        return value < other.value;
+        return value < other.value || (value == other.value && maze.seed < other.maze.seed);
     }
 };
 
 // Returns a singular metric for the relative value of a given maze.
 // Higher is better.
-FullAssessment assessValue(std::shared_ptr<Maze const> maze);
+FullAssessment assessValue(GeneratedMaze const &maze);
 
 // Returns a singular metric for the relative value of a maze, given its analysis.
 // Higher is better.

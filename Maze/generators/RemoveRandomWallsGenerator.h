@@ -36,7 +36,8 @@ public:
     RemoveRandomWallsGenerator() : MazeGenerator(MazeType::RemoveRandomWalls) {}
     virtual ~RemoveRandomWallsGenerator() {}
     
-    virtual std::unique_ptr<Maze> generate(int width, int height, int seed);
+protected:
+    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed);
 };
 
 #endif /* RemoveRandomWallsGenerator_h */

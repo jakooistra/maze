@@ -10,6 +10,7 @@
 
 #include <memory>
 
+#include "GeneratedMaze.h"
 #include "Maze.h"
 #include "MazeType.h"
 
@@ -23,7 +24,16 @@ public:
     
     MazeType getType() const { return type; }
     
-    virtual std::unique_ptr<Maze> generate(int width, int height, int seed) = 0;
+    GeneratedMaze generate(int width, int height, int seed) {
+        return {
+            getType(),
+            seed,
+            generateInternal(width, height, seed),
+        };
+    }
+    
+protected:
+    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed) = 0;
 };
 
 #endif /* MazeGenerator_h */

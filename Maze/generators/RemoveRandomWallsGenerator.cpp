@@ -10,7 +10,7 @@
 #include "RemoveRandomWallsGenerator.h"
 #include "Utility.h"
 
-std::unique_ptr<Maze> RemoveRandomWallsGenerator::generate(int width, int height, int seed) {
+std::unique_ptr<Maze> RemoveRandomWallsGenerator::generateInternal(int width, int height, int seed) {
     auto maze = std::make_unique<Maze>(width, height);
     auto rng = std::bind(std::uniform_int_distribution<>(0, INT_MAX), std::mt19937(seed));
     

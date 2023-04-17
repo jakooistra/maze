@@ -22,7 +22,7 @@
 using namespace std::chrono;
 
 static void writeMazeImageFile(std::string const &fileName, FullAssessment const &assessment, int wallWidth, int cellSize) {
-    auto image = convertToImage(assessment.maze.get(), wallWidth, cellSize,
+    auto image = convertToImage(assessment.maze.maze.get(), wallWidth, cellSize,
                                 assessment.analysis->shortestPath);
     std::vector<unsigned char> rgba;
     image->encodeRGBA(rgba);
@@ -50,7 +50,7 @@ int main(int argc, const char * argv[]) {
     };
     
     // TODO: is there a better way to express this? assessValue as a function has the same signature, can I not just pass it directly?
-    std::function<FullAssessment(std::shared_ptr<Maze const>)> assess = [](std::shared_ptr<Maze const> maze){
+    std::function<FullAssessment(GeneratedMaze)> assess = [](GeneratedMaze maze){
         return assessValue(maze);
     };
     
@@ -59,7 +59,7 @@ int main(int argc, const char * argv[]) {
         auto typeName = getMazeTypeName(generator->getType());
         std::cout << "Generating " << numMazesToGenerateForStats << " " << typeName << " mazes..." <<std::endl;
         
-        std::function<std::shared_ptr<Maze const>(int)> generate = [width, height, &generator](int seed){
+        std::function<GeneratedMaze(int)> generate = [width, height, &generator](int seed){
             return generator->generate(width, height, seed);
         };
         
@@ -68,7 +68,7 @@ int main(int argc, const char * argv[]) {
         
         auto startTime = high_resolution_clock::now();
         std::vector<int> seedsToGenerate = consecutiveNumbers(0, numMazesToGenerateForStats-1);
-        std::vector<std::shared_ptr<Maze const>> mazes = threadedTransform(seedsToGenerate, generate);
+        std::vector<GeneratedMaze> mazes = threadedTransform(seedsToGenerate, generate);
         auto generateTime = high_resolution_clock::now();
         
         Stats stats;

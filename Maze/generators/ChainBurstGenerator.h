@@ -33,7 +33,8 @@ public:
     ChainBurstGenerator() : MazeGenerator(MazeType::ChainBurst) {}
     virtual ~ChainBurstGenerator() {}
     
-    virtual std::unique_ptr<Maze> generate(int width, int height, int seed);
+protected:
+    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed);
 };
 
 #endif /* ChainBurstGenerator_h */

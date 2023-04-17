@@ -30,7 +30,8 @@ public:
     VerticalPathBreaksGenerator() : MazeGenerator(MazeType::VerticalPathBreaks) {}
     virtual ~VerticalPathBreaksGenerator() {}
     
-    virtual std::unique_ptr<Maze> generate(int width, int height, int seed);
+protected:
+    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed);
 };
 
 #endif /* VerticalPathBreaksGenerator_h */

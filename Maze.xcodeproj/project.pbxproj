@@ -69,6 +69,7 @@
 		DBE7964C29EC89320049956A /* ThreadPool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ThreadPool.cpp; sourceTree = "<group>"; };
 		DBE7964D29EC89320049956A /* ThreadPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadPool.h; sourceTree = "<group>"; };
 		DBE7965029EC8D190049956A /* ThreadUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadUtility.h; sourceTree = "<group>"; };
+		DBE7965129ECCAF80049956A /* GeneratedMaze.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedMaze.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,7 +120,7 @@
 				DB4D383A29E904FA007ACBDF /* Analysis.h */,
 				DB4D385629E9E9A7007ACBDF /* Assessment.cpp */,
 				DB4D385729E9E9A7007ACBDF /* Assessment.h */,
-				DB4D384929E91A0F007ACBDF /* MazeGenerator.h */,
+				DBE7965129ECCAF80049956A /* GeneratedMaze.h */,
 				DB4D384C29E9852C007ACBDF /* GeneratorFactory.cpp */,
 				DB4D384D29E9852C007ACBDF /* GeneratorFactory.h */,
 				DBB26BD529E8CD2D00C14D5B /* Image.cpp */,
@@ -129,6 +130,7 @@
 				DBB26BC029E8C56400C14D5B /* main.cpp */,
 				DBB26BCC29E8C86100C14D5B /* Maze.cpp */,
 				DBB26BCD29E8C86100C14D5B /* Maze.h */,
+				DB4D384929E91A0F007ACBDF /* MazeGenerator.h */,
 				DBB26BD229E8CCB700C14D5B /* MazeToImage.cpp */,
 				DBB26BD329E8CCB700C14D5B /* MazeToImage.h */,
 				DB4D384F29E98583007ACBDF /* MazeType.h */,

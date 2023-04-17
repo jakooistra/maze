@@ -8,10 +8,10 @@
 #include "Assessment.h"
 #include "Solver.h"
 
-FullAssessment assessValue(std::shared_ptr<Maze const> maze) {
+FullAssessment assessValue(GeneratedMaze const &maze) {
     FullAssessment assessment;
     auto analysis = std::make_shared<Analysis>();
-    solve(maze.get(), *analysis);
+    solve(maze.maze.get(), *analysis);
     
     assessment.maze = maze;
     assessment.analysis = analysis;

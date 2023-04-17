@@ -8,5 +8,15 @@
 #ifndef GeneratedMaze_h
 #define GeneratedMaze_h
 
+#include <memory>
+
+#include "Maze.h"
+#include "MazeType.h"
+
+struct GeneratedMaze {
+    MazeType type;
+    int seed;
+    std::shared_ptr<Maze const> maze;
+};
 
 #endif /* GeneratedMaze_h */
