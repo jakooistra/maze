@@ -58,6 +58,8 @@ public:
     // Waits for all jobs to be completed.
     void waitForCompletion();
     
+    int getThreadCount() const;
+    
     // Return the shared instance of ThreadPool. Unless jobs need to be
     // isolated, it is preferable to use the shared ThreadPool.
     static ThreadPool &shared();

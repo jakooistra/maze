@@ -71,6 +71,10 @@ void ThreadPool::waitForCompletion() {
     }
 }
 
+int ThreadPool::getThreadCount() const {
+    return (int)threads.size();
+}
+
 ThreadPool &ThreadPool::shared() {
     static ThreadPool s_sharedThreadPool;
     return s_sharedThreadPool;
