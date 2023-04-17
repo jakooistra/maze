@@ -45,6 +45,7 @@ int main(int argc, const char * argv[]) {
     
     std::vector<MazeType> types = {
         MazeType::ChainBurst,
+        MazeType::FiftyFifty,
         MazeType::RemoveRandomWalls,
         MazeType::VerticalPathBreaks,
     };

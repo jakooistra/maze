@@ -21,6 +21,7 @@
 		DBB26BD429E8CCB700C14D5B /* MazeToImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BD229E8CCB700C14D5B /* MazeToImage.cpp */; };
 		DBB26BD729E8CD2D00C14D5B /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BD529E8CD2D00C14D5B /* Image.cpp */; };
 		DBE7964E29EC89360049956A /* ThreadPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBE7964C29EC89320049956A /* ThreadPool.cpp */; };
+		DBE7965429ECD3C40049956A /* FiftyFiftyGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBE7965229ECD3C40049956A /* FiftyFiftyGenerator.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -70,6 +71,8 @@
 		DBE7964D29EC89320049956A /* ThreadPool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadPool.h; sourceTree = "<group>"; };
 		DBE7965029EC8D190049956A /* ThreadUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadUtility.h; sourceTree = "<group>"; };
 		DBE7965129ECCAF80049956A /* GeneratedMaze.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedMaze.h; sourceTree = "<group>"; };
+		DBE7965229ECD3C40049956A /* FiftyFiftyGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FiftyFiftyGenerator.cpp; sourceTree = "<group>"; };
+		DBE7965329ECD3C40049956A /* FiftyFiftyGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FiftyFiftyGenerator.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +91,8 @@
 			children = (
 				DB4D385A29EA05DA007ACBDF /* ChainBurstGenerator.cpp */,
 				DB4D385B29EA05DA007ACBDF /* ChainBurstGenerator.h */,
+				DBE7965229ECD3C40049956A /* FiftyFiftyGenerator.cpp */,
+				DBE7965329ECD3C40049956A /* FiftyFiftyGenerator.h */,
 				DB4D385029E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp */,
 				DB4D385129E986A1007ACBDF /* RemoveRandomWallsGenerator.h */,
 				DB4D385329E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp */,
@@ -212,6 +217,7 @@
 				DB4D385829E9E9A7007ACBDF /* Assessment.cpp in Sources */,
 				DBB26BCE29E8C86100C14D5B /* Maze.cpp in Sources */,
 				DB4D384E29E9852C007ACBDF /* GeneratorFactory.cpp in Sources */,
+				DBE7965429ECD3C40049956A /* FiftyFiftyGenerator.cpp in Sources */,
 				DB4D385229E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp in Sources */,
 				DB4D384429E905CE007ACBDF /* Solver.cpp in Sources */,
 				DB4D385529E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp in Sources */,

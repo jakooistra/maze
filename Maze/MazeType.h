@@ -12,6 +12,7 @@
 
 enum class MazeType {
     ChainBurst,
+    FiftyFifty,
     RemoveRandomWalls,
     VerticalPathBreaks,
     
@@ -22,6 +23,8 @@ inline std::string getMazeTypeName(MazeType type) {
     switch (type) {
         case MazeType::ChainBurst:
             return "Chain Burst";
+        case MazeType::FiftyFifty:
+            return "Fifty Fifty";
         case MazeType::RemoveRandomWalls:
             return "Remove Random Walls";
         case MazeType::VerticalPathBreaks:

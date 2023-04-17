@@ -16,15 +16,6 @@ std::unique_ptr<Maze> RemoveRandomWallsGenerator::generateInternal(int width, in
     
     setRandomStartAndFinish(maze.get(), width, height, rng);
     
-    // TODO: maze type "fifty fifty"
-//    for (int x = 0; x < width; ++x) {
-//        for (int y = 0; y < height; ++y) {
-//            bool leftWall = (rng() % 2) == 1;
-//            bool topWall = (rng() % 2) == 1;
-//            maze->setCell(x, y, Cell(leftWall, topWall));
-//        }
-//    }
-    
     int numWallsToRemove = (width * height * 3) / 2;
     for (int i = 0; i < numWallsToRemove; ++i) {
         XY pos { rng() % width, rng() % height };
