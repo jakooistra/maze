@@ -96,19 +96,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DB4D384B29E984D2007ACBDF /* generators */ = {
+		DB4D384B29E984D2007ACBDF /* generation */ = {
 			isa = PBXGroup;
 			children = (
 				DB4D385A29EA05DA007ACBDF /* ChainBurstGenerator.cpp */,
 				DB4D385B29EA05DA007ACBDF /* ChainBurstGenerator.h */,
 				DBE7965229ECD3C40049956A /* FiftyFiftyGenerator.cpp */,
 				DBE7965329ECD3C40049956A /* FiftyFiftyGenerator.h */,
+				DBE7965129ECCAF80049956A /* GeneratedMaze.h */,
+				DB4D384C29E9852C007ACBDF /* GeneratorFactory.cpp */,
+				DB4D384D29E9852C007ACBDF /* GeneratorFactory.h */,
+				DB4D384929E91A0F007ACBDF /* MazeGenerator.h */,
 				DB4D385029E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp */,
 				DB4D385129E986A1007ACBDF /* RemoveRandomWallsGenerator.h */,
 				DB4D385329E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp */,
 				DB4D385429E994AD007ACBDF /* VerticalPathBreaksGenerator.h */,
 			);
-			path = generators;
+			path = generation;
 			sourceTree = "<group>";
 		};
 		DBB26BB429E8C56400C14D5B = {
@@ -132,34 +136,13 @@
 		DBB26BBF29E8C56400C14D5B /* Maze */ = {
 			isa = PBXGroup;
 			children = (
-				DB4D384B29E984D2007ACBDF /* generators */,
-				DB4D383929E904FA007ACBDF /* Analysis.cpp */,
-				DB4D383A29E904FA007ACBDF /* Analysis.h */,
-				DB4D385629E9E9A7007ACBDF /* Assessment.cpp */,
-				DB4D385729E9E9A7007ACBDF /* Assessment.h */,
-				DBE7965129ECCAF80049956A /* GeneratedMaze.h */,
-				DB4D384C29E9852C007ACBDF /* GeneratorFactory.cpp */,
-				DB4D384D29E9852C007ACBDF /* GeneratorFactory.h */,
-				DBB26BD529E8CD2D00C14D5B /* Image.cpp */,
-				DBB26BD629E8CD2D00C14D5B /* Image.h */,
-				DBB26BC829E8C69A00C14D5B /* lodepng.h */,
-				DBB26BC929E8C6A100C14D5B /* lodepng.cpp */,
+				DBE7966029ED59820049956A /* analysis */,
+				DBE7966229ED5A250049956A /* data */,
+				DB4D384B29E984D2007ACBDF /* generation */,
+				DBE7966329ED5A3D0049956A /* threading */,
+				DBE7966129ED59CE0049956A /* visualization */,
 				DBB26BC029E8C56400C14D5B /* main.cpp */,
-				DBB26BCC29E8C86100C14D5B /* Maze.cpp */,
-				DBB26BCD29E8C86100C14D5B /* Maze.h */,
-				DB4D384929E91A0F007ACBDF /* MazeGenerator.h */,
-				DBB26BD229E8CCB700C14D5B /* MazeToImage.cpp */,
-				DBB26BD329E8CCB700C14D5B /* MazeToImage.h */,
-				DB4D384F29E98583007ACBDF /* MazeType.h */,
-				DB4D384229E905CE007ACBDF /* Solver.cpp */,
-				DB4D384329E905CE007ACBDF /* Solver.h */,
-				DB4D383C29E90505007ACBDF /* Stats.cpp */,
-				DB4D383D29E90505007ACBDF /* Stats.h */,
-				DBE7964C29EC89320049956A /* ThreadPool.cpp */,
-				DBE7964D29EC89320049956A /* ThreadPool.h */,
-				DBE7965029EC8D190049956A /* ThreadUtility.h */,
 				DB4A736729EA34CF00E3336A /* Utility.h */,
-				DB4D384029E90565007ACBDF /* XY.h */,
 			);
 			path = Maze;
 			sourceTree = "<group>";
@@ -170,6 +153,55 @@
 				DBE7965B29ECDAF10049956A /* UtilityTests.mm */,
 			);
 			path = MazeTests;
+			sourceTree = "<group>";
+		};
+		DBE7966029ED59820049956A /* analysis */ = {
+			isa = PBXGroup;
+			children = (
+				DB4D383929E904FA007ACBDF /* Analysis.cpp */,
+				DB4D383A29E904FA007ACBDF /* Analysis.h */,
+				DB4D385629E9E9A7007ACBDF /* Assessment.cpp */,
+				DB4D385729E9E9A7007ACBDF /* Assessment.h */,
+				DB4D384229E905CE007ACBDF /* Solver.cpp */,
+				DB4D384329E905CE007ACBDF /* Solver.h */,
+				DB4D383C29E90505007ACBDF /* Stats.cpp */,
+				DB4D383D29E90505007ACBDF /* Stats.h */,
+			);
+			path = analysis;
+			sourceTree = "<group>";
+		};
+		DBE7966129ED59CE0049956A /* visualization */ = {
+			isa = PBXGroup;
+			children = (
+				DBB26BD529E8CD2D00C14D5B /* Image.cpp */,
+				DBB26BD629E8CD2D00C14D5B /* Image.h */,
+				DBB26BC829E8C69A00C14D5B /* lodepng.h */,
+				DBB26BC929E8C6A100C14D5B /* lodepng.cpp */,
+				DBB26BD229E8CCB700C14D5B /* MazeToImage.cpp */,
+				DBB26BD329E8CCB700C14D5B /* MazeToImage.h */,
+			);
+			path = visualization;
+			sourceTree = "<group>";
+		};
+		DBE7966229ED5A250049956A /* data */ = {
+			isa = PBXGroup;
+			children = (
+				DBB26BCC29E8C86100C14D5B /* Maze.cpp */,
+				DBB26BCD29E8C86100C14D5B /* Maze.h */,
+				DB4D384F29E98583007ACBDF /* MazeType.h */,
+				DB4D384029E90565007ACBDF /* XY.h */,
+			);
+			path = data;
+			sourceTree = "<group>";
+		};
+		DBE7966329ED5A3D0049956A /* threading */ = {
+			isa = PBXGroup;
+			children = (
+				DBE7964C29EC89320049956A /* ThreadPool.cpp */,
+				DBE7964D29EC89320049956A /* ThreadPool.h */,
+				DBE7965029EC8D190049956A /* ThreadUtility.h */,
+			);
+			path = threading;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
