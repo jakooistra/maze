@@ -8,9 +8,17 @@
 #ifndef GeneratorFactory_h
 #define GeneratorFactory_h
 
+#include <vector>
+
 #include "MazeGenerator.h"
 #include "MazeType.h"
 
-std::unique_ptr<MazeGenerator> createGenerator(MazeType type);
+namespace GeneratorFactory {
+    std::unique_ptr<MazeGenerator> create(MazeType type);
+
+    std::vector<MazeType> allTypes();
+    std::vector<MazeType> trivialTypes();
+    std::vector<MazeType> complexTypes();
+}
 
 #endif /* GeneratorFactory_h */

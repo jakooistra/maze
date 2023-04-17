@@ -43,12 +43,7 @@ int main(int argc, const char * argv[]) {
     int height = 16;
     int numMazesToGenerateForStats = 250;
     
-    std::vector<MazeType> types = {
-        MazeType::ChainBurst,
-        MazeType::FiftyFifty,
-        MazeType::RemoveRandomWalls,
-        MazeType::VerticalPathBreaks,
-    };
+    std::vector<MazeType> types = GeneratorFactory::complexTypes();
     
     // TODO: is there a better way to express this? assessValue as a function has the same signature, can I not just pass it directly?
     std::function<FullAssessment(GeneratedMaze)> assess = [](GeneratedMaze maze){
@@ -56,7 +51,7 @@ int main(int argc, const char * argv[]) {
     };
     
     for (auto type : types) {
-        auto generator = createGenerator(type);
+        auto generator = GeneratorFactory::create(type);
         auto typeName = getMazeTypeName(generator->getType());
         std::cout << "Generating " << numMazesToGenerateForStats << " " << typeName << " mazes..." <<std::endl;
         

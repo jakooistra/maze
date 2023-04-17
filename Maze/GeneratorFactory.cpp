@@ -11,7 +11,7 @@
 #include "RemoveRandomWallsGenerator.h"
 #include "VerticalPathBreaksGenerator.h"
 
-std::unique_ptr<MazeGenerator> createGenerator(MazeType type) {
+std::unique_ptr<MazeGenerator> GeneratorFactory::create(MazeType type) {
     switch (type) {
         case MazeType::ChainBurst:
             return std::make_unique<ChainBurstGenerator>();
@@ -23,4 +23,27 @@ std::unique_ptr<MazeGenerator> createGenerator(MazeType type) {
             return std::make_unique<VerticalPathBreaksGenerator>();
     }
     return nullptr;
+}
+
+std::vector<MazeType> GeneratorFactory::allTypes() {
+    return {
+        MazeType::ChainBurst,
+        MazeType::FiftyFifty,
+        MazeType::RemoveRandomWalls,
+        MazeType::VerticalPathBreaks,
+    };
+}
+
+std::vector<MazeType> GeneratorFactory::trivialTypes() {
+    return {
+        MazeType::FiftyFifty,
+        MazeType::RemoveRandomWalls,
+        MazeType::VerticalPathBreaks,
+    };
+}
+
+std::vector<MazeType> GeneratorFactory::complexTypes() {
+    return {
+        MazeType::ChainBurst,
+    };
 }
