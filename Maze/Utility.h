@@ -53,7 +53,7 @@ inline StartAndFinish randomStartAndFinish(int width, int height, random_generat
     int finishDistance = rng() % (circumference - exlusionZone * 2);
     int distance = std::abs((startDistance - finishDistance + circumference + circumference / 2) % circumference - circumference / 2);
     if (distance < exlusionZone) {
-        finishDistance = circumference - exlusionZone;
+        finishDistance = (finishDistance + exlusionZone * 2) % circumference;
     }
     return {
         getEdgePoint(width, height, startDistance),
