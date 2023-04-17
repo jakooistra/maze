@@ -21,7 +21,12 @@ struct SolverCell {
     }
 };
 
-// TODO: some aspect of this solver is N^2 with respect to cell count, we should be able to do linear time analysis or at least NlogN.
+// Run a breadth-first search on the cells in the maze, marking all cells in
+// startingLocations as distance 0. Returns a grid of cells where all visited
+// cells have a shortestLink pointing backward to the nearest starting location
+// and a minimized distance value tracking how far the search iterated to get
+// there. Finally, each cell has somethingPointsToThis=true if there is another
+// cell for which its shortestLink specifies the cell in question.
 static std::vector<std::vector<SolverCell>> runBreadthFirstPathing(Maze const *maze, std::vector<XY> const &startingLocations) {
     std::vector<std::vector<SolverCell>> solverCells;
     solverCells.resize(maze->getWidth());
@@ -72,9 +77,9 @@ void solve(Maze const *maze, Analysis &analysis) {
     analysis = Analysis();
     analysis.size = maze->getSize();
     
-    auto solverCells = runBreadthFirstPathing(maze, {maze->getStart()});
+    auto solverCells = runBreadthFirstPathing(maze, { maze->getStart() });
     
-    // Record the solution if it exists.
+    // Record the solution if it exists by tracing backwards from the finish.
     auto finish = maze->getFinish();
     auto finishCell = solverCells[finish.x][finish.y];
     if (finishCell.visited()) {
@@ -89,7 +94,7 @@ void solve(Maze const *maze, Analysis &analysis) {
     // Check reachable areas.
     for (int x = 0; x < maze->getWidth(); ++x) {
         for (int y = 0; y < maze->getHeight(); ++y) {
-            auto cell = solverCells[x][y];
+            auto const &cell = solverCells[x][y];
             if (cell.visited()) {
                 analysis.reachableCells++;
             } else {
@@ -98,66 +103,63 @@ void solve(Maze const *maze, Analysis &analysis) {
         }
     }
     
-    // Determine if the solution is singular.
-    analysis.singularPath = true;
-    for (XY path : analysis.shortestPath) {
-        auto cell = solverCells[path.x][path.y];
-        for (auto adjacent : path.allAdjacent()) {
-            if (maze->contains(adjacent) && maze->canTraverse(path, adjacent)) {
-                auto adjacentCell = solverCells[adjacent.x][adjacent.y];
-                if (adjacent != cell.shortestLink) {
-                    if (adjacentCell.distanceToStart < cell.distanceToStart) {
-                        analysis.singularPath = false;
-                        break;
-                    }
-                    
-                    // Traverse this branch. If a descent gradient is found, it will separately lead back to the start.
-                    std::queue<XY> searchLocations;
-                    searchLocations.push(adjacent);
-                    while (!searchLocations.empty()) {
-                        XY search = searchLocations.front();
-                        auto searchCell = solverCells[search.x][search.y];
-                        searchLocations.pop();
-                        for (auto searchNext : search.allAdjacent()) {
-                            if ((searchNext != path) &&
-                                (searchNext != searchCell.shortestLink) &&
-                                maze->canTraverse(search, searchNext))
-                            {
-                                auto searchNextCell = solverCells[searchNext.x][searchNext.y];
-                                if (searchNextCell.distanceToStart > searchCell.distanceToStart) {
-                                    searchLocations.push(searchNext);
-                                } else {
-                                    analysis.singularPath = false;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        if (!analysis.singularPath) {
-            break;
-        }
-    }
-    
+    analysis.singularPath = false;
     if (analysis.isSolvable()) {
+        // Run breadth-first pathing on the maze again, with the start position
+        // as every cell on the shortest path. This way, all dead ends will end
+        // up having the "distance from start" metric equal to the distance
+        // from the shortest path.
         solverCells = runBreadthFirstPathing(maze, analysis.shortestPath);
         
-        // Find all branch endpoints.
+        // Find all branch endpoints by checking every cell.
         for (int x = 0; x < maze->getWidth(); ++x) {
             for (int y = 0; y < maze->getHeight(); ++y) {
                 const XY position(x, y);
                 if (position != finish) {
-                    auto cell = solverCells[x][y];
+                    auto const &cell = solverCells[x][y];
                     if (!cell.somethingPointsToThis && cell.visited()) {
                         analysis.branches.push_back({position, cell.distanceToStart});
                     }
                 }
             }
         }
+        
+        // Determine if the solution is singular.
+        // Search iteratively from the shortest path. If any cell has multiple
+        // adjacent cells with distance-to-shortest-path less than or equal to
+        // the checked cell, the path is not singular. One way to check this is
+        // if any one adjacent cell is not the shortestLink for that cell and
+        // has a distance metric less than or equal to the checked cell.
+        analysis.singularPath = true;
+        std::queue<XY> checkPoints;
+        for (auto check : analysis.shortestPath) {
+            checkPoints.push(check);
+        }
+        while (analysis.singularPath && !checkPoints.empty()) {
+            XY check = checkPoints.front();
+            checkPoints.pop();
+            auto const &checkCell = solverCells[check.x][check.y];
+            
+            for (auto adjacent : check.allAdjacent()) {
+                if (maze->contains(adjacent) &&
+                    checkCell.shortestLink != adjacent &&
+                    maze->canTraverse(check, adjacent))
+                {
+                    auto const &adjacentCell = solverCells[adjacent.x][adjacent.y];
+                    if (adjacentCell.distanceToStart <= checkCell.distanceToStart) {
+                        if (checkCell.distanceToStart > 0) {
+                            analysis.singularPath = false;
+                            break;
+                        }
+                    } else {
+                        checkPoints.push(adjacent);
+                    }
+                }
+            }
+        }
     }
     
+    // Check local 2x2 connectivity for tight loops.
     for (int x = 1; x < maze->getWidth(); ++x) {
         for (int y = 1; y < maze->getHeight(); ++y) {
             if (!(*maze)[{x, y}].leftWall &&
