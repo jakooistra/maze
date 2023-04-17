@@ -21,23 +21,26 @@ FullAssessment assessValue(GeneratedMaze const &maze) {
 }
 
 int assessValue(Analysis const *analysis) {
+    constexpr int kSingleMetricLargeReward = 1000;
+    constexpr int kSingleMetricSmallReward = 500;
+    
     // Reward longer paths
-    int value = (int)analysis->shortestPath.size();
+    int value = (kSingleMetricLargeReward * (int)analysis->shortestPath.size()) / analysis->size.area();
     
     // Reward singular paths (debatable)
     if (analysis->singularPath) {
-        value += 10;
+        value += kSingleMetricSmallReward;
     }
     
     if (analysis->isDegenerate()) {
-        value -= 10;
+        value -= kSingleMetricSmallReward;
     }
     if (!analysis->isSolvable()) {
-        value -= 10;
+        value -= kSingleMetricLargeReward;
     }
     
     // Punish unreachable cells
-    value -= (analysis->unreachableCells * 50) / analysis->totalCellCount();
+    value -= (analysis->unreachableCells * kSingleMetricLargeReward * 5) / analysis->totalCellCount();
     
     return value;
 }
