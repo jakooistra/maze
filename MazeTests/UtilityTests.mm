@@ -50,4 +50,30 @@
     XCTAssertEqual(getEdgePoint(3, 3, 7).y, 1);
 }
 
+- (void)testGetEdgePoint4x3 {
+    XCTAssertEqual(getEdgePoint(4, 3, 0).x, 0);
+    XCTAssertEqual(getEdgePoint(4, 3, 0).y, 0);
+    XCTAssertEqual(getEdgePoint(4, 3, 1).x, 1);
+    XCTAssertEqual(getEdgePoint(4, 3, 1).y, 0);
+    XCTAssertEqual(getEdgePoint(4, 3, 2).x, 2);
+    XCTAssertEqual(getEdgePoint(4, 3, 2).y, 0);
+    
+    XCTAssertEqual(getEdgePoint(4, 3, 3).x, 3);
+    XCTAssertEqual(getEdgePoint(4, 3, 3).y, 0);
+    XCTAssertEqual(getEdgePoint(4, 3, 4).x, 3);
+    XCTAssertEqual(getEdgePoint(4, 3, 4).y, 1);
+    
+    XCTAssertEqual(getEdgePoint(4, 3, 5).x, 3);
+    XCTAssertEqual(getEdgePoint(4, 3, 5).y, 2);
+    XCTAssertEqual(getEdgePoint(4, 3, 6).x, 2);
+    XCTAssertEqual(getEdgePoint(4, 3, 6).y, 2);
+    XCTAssertEqual(getEdgePoint(4, 3, 7).x, 1);
+    XCTAssertEqual(getEdgePoint(4, 3, 7).y, 2);
+    
+    XCTAssertEqual(getEdgePoint(4, 3, 8).x, 0);
+    XCTAssertEqual(getEdgePoint(4, 3, 8).y, 2);
+    XCTAssertEqual(getEdgePoint(4, 3, 9).x, 0);
+    XCTAssertEqual(getEdgePoint(4, 3, 9).y, 1);
+}
+
 @end
