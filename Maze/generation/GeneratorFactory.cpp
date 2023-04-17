@@ -25,6 +25,10 @@ std::unique_ptr<MazeGenerator> GeneratorFactory::create(MazeType type) {
     return nullptr;
 }
 
+MazeType GeneratorFactory::defaultType() {
+    return MazeType::ChainBurst;
+}
+
 std::vector<MazeType> GeneratorFactory::allTypes() {
     return {
         MazeType::ChainBurst,

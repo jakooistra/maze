@@ -16,6 +16,7 @@
 namespace GeneratorFactory {
     std::unique_ptr<MazeGenerator> create(MazeType type);
 
+    MazeType defaultType();
     std::vector<MazeType> allTypes();
     std::vector<MazeType> trivialTypes();
     std::vector<MazeType> complexTypes();
