@@ -150,7 +150,7 @@ static std::vector<XY> burst(Maze *maze, std::vector<std::vector<ChainBurstCell>
 
 std::unique_ptr<Maze> ChainBurstGenerator::generate(int width, int height, int seed) {
     auto maze = std::make_unique<Maze>(width, height);
-    std::mt19937 rng(seed);
+    auto rng = std::bind(std::uniform_int_distribution<>(0, INT_MAX), std::mt19937(seed));
     
     setRandomStartAndFinish(maze.get(), width, height, rng);
     

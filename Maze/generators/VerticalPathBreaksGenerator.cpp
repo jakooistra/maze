@@ -11,7 +11,7 @@
 
 std::unique_ptr<Maze> VerticalPathBreaksGenerator::generate(int width, int height, int seed) {
     auto maze = std::make_unique<Maze>(width, height);
-    std::mt19937 rng(seed);
+    auto rng = std::bind(std::uniform_int_distribution<>(0, INT_MAX), std::mt19937(seed));
     
     maze->setStart({0, (int)(rng() % height)});
     maze->setFinish({width-1, (int)(rng() % height)});
