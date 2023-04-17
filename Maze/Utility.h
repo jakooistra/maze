@@ -25,15 +25,24 @@ inline int uniqueEdgePointCount(int width, int height) {
 // range [0, (width + height - 2) * 2), since that is the number of unique
 // edge points in a grid of size {width, height}.
 inline XY getEdgePoint(int width, int height, int circumnavigationDistance) {
-    if (circumnavigationDistance < width) {
-        return XY(circumnavigationDistance, 0);
-    } else if (circumnavigationDistance < width * 2) {
-        return XY(circumnavigationDistance - width, height - 1);
-    } else if (circumnavigationDistance < width * 2 + height - 2) {
-        return XY(0, circumnavigationDistance - width * 2 + 1);
-    } else {
-        return XY(width - 1, circumnavigationDistance - width * 2 - height + 3);
+    int distance = circumnavigationDistance % uniqueEdgePointCount(width, height);
+    if (distance < width) {
+        // Left to right along the top edge.
+        return XY(distance, 0);
     }
+    distance -= (width - 1);
+    if (distance < height) {
+        // Top to bottom along the right edge.
+        return XY(width - 1, distance);
+    }
+    distance -= height;
+    if (distance < width - 1) {
+        // Right to left along the bottom edge.
+        return XY(width - 2 - distance, height - 1);
+    }
+    distance -= (width - 1);
+    // Bottom to top along the left edge.
+    return XY(0, height - 2 - distance);
 }
 
 template<typename random_generator>
@@ -47,14 +56,10 @@ inline StartAndFinish randomStartAndFinish(int width, int height, random_generat
     if (circumference <= 1) {
         return { XY(0, 0), XY(0, 0) };
     }
-    // Ensure that start/finish are unique and outside of a reasonable exclusion zone.
-    int exlusionZone = std::min(10, (circumference - 1) / 2);
+    // Ensure that start/finish are unique and guaranteed not to be too close to each other.
+    int exlusionZone = circumference / 6;
     int startDistance = rng() % circumference;
-    int finishDistance = rng() % (circumference - exlusionZone * 2);
-    int distance = std::abs((startDistance - finishDistance + circumference + circumference / 2) % circumference - circumference / 2);
-    if (distance < exlusionZone) {
-        finishDistance = (finishDistance + exlusionZone * 2) % circumference;
-    }
+    int finishDistance = (startDistance + exlusionZone + (rng() % (circumference - exlusionZone * 2))) % circumference;
     return {
         getEdgePoint(width, height, startDistance),
         getEdgePoint(width, height, finishDistance),

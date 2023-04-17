@@ -22,6 +22,7 @@
 		DBB26BD729E8CD2D00C14D5B /* Image.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBB26BD529E8CD2D00C14D5B /* Image.cpp */; };
 		DBE7964E29EC89360049956A /* ThreadPool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBE7964C29EC89320049956A /* ThreadPool.cpp */; };
 		DBE7965429ECD3C40049956A /* FiftyFiftyGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DBE7965229ECD3C40049956A /* FiftyFiftyGenerator.cpp */; };
+		DBE7965C29ECDAF10049956A /* UtilityTests.mm in Sources */ = {isa = PBXBuildFile; fileRef = DBE7965B29ECDAF10049956A /* UtilityTests.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -73,10 +74,19 @@
 		DBE7965129ECCAF80049956A /* GeneratedMaze.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedMaze.h; sourceTree = "<group>"; };
 		DBE7965229ECD3C40049956A /* FiftyFiftyGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FiftyFiftyGenerator.cpp; sourceTree = "<group>"; };
 		DBE7965329ECD3C40049956A /* FiftyFiftyGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FiftyFiftyGenerator.h; sourceTree = "<group>"; };
+		DBE7965929ECDAF10049956A /* MazeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MazeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		DBE7965B29ECDAF10049956A /* UtilityTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = UtilityTests.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		DBB26BBA29E8C56400C14D5B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBE7965629ECDAF10049956A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -105,6 +115,7 @@
 			isa = PBXGroup;
 			children = (
 				DBB26BBF29E8C56400C14D5B /* Maze */,
+				DBE7965A29ECDAF10049956A /* MazeTests */,
 				DBB26BBE29E8C56400C14D5B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -113,6 +124,7 @@
 			isa = PBXGroup;
 			children = (
 				DBB26BBD29E8C56400C14D5B /* maze */,
+				DBE7965929ECDAF10049956A /* MazeTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -152,6 +164,14 @@
 			path = Maze;
 			sourceTree = "<group>";
 		};
+		DBE7965A29ECDAF10049956A /* MazeTests */ = {
+			isa = PBXGroup;
+			children = (
+				DBE7965B29ECDAF10049956A /* UtilityTests.mm */,
+			);
+			path = MazeTests;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -172,6 +192,23 @@
 			productReference = DBB26BBD29E8C56400C14D5B /* maze */;
 			productType = "com.apple.product-type.tool";
 		};
+		DBE7965829ECDAF10049956A /* MazeTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = DBE7965D29ECDAF10049956A /* Build configuration list for PBXNativeTarget "MazeTests" */;
+			buildPhases = (
+				DBE7965529ECDAF10049956A /* Sources */,
+				DBE7965629ECDAF10049956A /* Frameworks */,
+				DBE7965729ECDAF10049956A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MazeTests;
+			productName = MazeTests;
+			productReference = DBE7965929ECDAF10049956A /* MazeTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -182,6 +219,9 @@
 				LastUpgradeCheck = 1420;
 				TargetAttributes = {
 					DBB26BBC29E8C56400C14D5B = {
+						CreatedOnToolsVersion = 14.2;
+					};
+					DBE7965829ECDAF10049956A = {
 						CreatedOnToolsVersion = 14.2;
 					};
 				};
@@ -200,9 +240,20 @@
 			projectRoot = "";
 			targets = (
 				DBB26BBC29E8C56400C14D5B /* maze */,
+				DBE7965829ECDAF10049956A /* MazeTests */,
 			);
 		};
 /* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		DBE7965729ECDAF10049956A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		DBB26BB929E8C56400C14D5B /* Sources */ = {
@@ -224,6 +275,14 @@
 				DBE7964E29EC89360049956A /* ThreadPool.cpp in Sources */,
 				DB4D385C29EA05DA007ACBDF /* ChainBurstGenerator.cpp in Sources */,
 				DBB26BD429E8CCB700C14D5B /* MazeToImage.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DBE7965529ECDAF10049956A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				DBE7965C29ECDAF10049956A /* UtilityTests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -363,6 +422,34 @@
 			};
 			name = Release;
 		};
+		DBE7965E29ECDAF10049956A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F9S72MW8RJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.catinabox.MazeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Debug;
+		};
+		DBE7965F29ECDAF10049956A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = F9S72MW8RJ;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.catinabox.MazeTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -380,6 +467,15 @@
 			buildConfigurations = (
 				DBB26BC529E8C56400C14D5B /* Debug */,
 				DBB26BC629E8C56400C14D5B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		DBE7965D29ECDAF10049956A /* Build configuration list for PBXNativeTarget "MazeTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				DBE7965E29ECDAF10049956A /* Debug */,
+				DBE7965F29ECDAF10049956A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
