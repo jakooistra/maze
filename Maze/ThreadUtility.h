@@ -21,7 +21,7 @@ inline std::vector<Output> threadedTransform(std::vector<Input> const &input, st
     
     // Executes as many transform operations as possible in parallel on all input data.
     for (auto data : input) {
-        pool.enqueue([&data, &transform, &outputMutex, &output]{
+        pool.enqueue([data, &transform, &outputMutex, &output]{
             auto transformedData = transform(data);
             
             // Lock the output vector when outputting data.
