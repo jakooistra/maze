@@ -21,6 +21,7 @@ struct SolverCell {
     }
 };
 
+// TODO: some aspect of this solver is N^2 with respect to cell count, we should be able to do linear time analysis or at least NlogN.
 static std::vector<std::vector<SolverCell>> runBreadthFirstPathing(Maze const *maze, std::vector<XY> const &startingLocations) {
     std::vector<std::vector<SolverCell>> solverCells;
     solverCells.resize(maze->getWidth());

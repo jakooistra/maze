@@ -5,6 +5,7 @@
 //  Created by John Kooistra on 2023-04-13.
 //
 
+#include <chrono>
 #include <iostream>
 #include <set>
 
@@ -15,6 +16,10 @@
 #include "Maze.h"
 #include "MazeToImage.h"
 #include "Stats.h"
+#include "ThreadUtility.h"
+#include "Utility.h"
+
+using namespace std::chrono;
 
 static void writeMazeImageFile(std::string const &fileName, FullAssessment const &assessment, int wallWidth, int cellSize) {
     auto image = convertToImage(assessment.maze.get(), wallWidth, cellSize,
@@ -44,23 +49,44 @@ int main(int argc, const char * argv[]) {
         MazeType::VerticalPathBreaks,
     };
     
+    // TODO: is there a better way to express this? assessValue as a function has the same signature, can I not just pass it directly?
+    std::function<FullAssessment(std::shared_ptr<Maze const>)> assess = [](std::shared_ptr<Maze const> maze){
+        return assessValue(maze);
+    };
+    
     for (auto type : types) {
         auto generator = createGenerator(type);
         auto typeName = getMazeTypeName(generator->getType());
+        std::cout << "Generating " << numMazesToGenerateForStats << " " << typeName << " mazes..." <<std::endl;
+        
+        std::function<std::shared_ptr<Maze const>(int)> generate = [width, height, &generator](int seed){
+            return generator->generate(width, height, seed);
+        };
         
         // Mazes in order from worst to best.
         std::set<FullAssessment> sortedMazes;
         
+        auto startTime = high_resolution_clock::now();
+        std::vector<int> seedsToGenerate = consecutiveNumbers(0, numMazesToGenerateForStats-1);
+        std::vector<std::shared_ptr<Maze const>> mazes = threadedTransform(seedsToGenerate, generate);
+        auto generateTime = high_resolution_clock::now();
+        
         Stats stats;
-        for (int i = 0; i < numMazesToGenerateForStats; ++i) {
-            auto assessment = assessValue(generator->generate(width, height, i));
+        std::vector<FullAssessment> assessments = threadedTransform(mazes, assess);
+        for (auto assessment : assessments) {
             sortedMazes.insert(assessment);
             stats.accumulate(assessment.analysis.get());
         }
+        auto finishTime = high_resolution_clock::now();
+        
+        std::cout << "  Generation time: " << duration_cast<milliseconds>(generateTime - startTime).count() << "ms" << std::endl;
+        std::cout << "  Assessment time: " << duration_cast<milliseconds>(finishTime - generateTime).count() << "ms" << std::endl;
         stats.print(typeName);
         
-        writeMazeImageFile(typeName + " (Best).png", *sortedMazes.rbegin(), wallWidth, cellSize);
-        writeMazeImageFile(typeName + " (Worst).png", *sortedMazes.begin(), wallWidth, cellSize);
+        if (!sortedMazes.empty()) {
+            writeMazeImageFile(typeName + " (Best).png", *sortedMazes.rbegin(), wallWidth, cellSize);
+            writeMazeImageFile(typeName + " (Worst).png", *sortedMazes.begin(), wallWidth, cellSize);
+        }
     }
     
     return 0;
