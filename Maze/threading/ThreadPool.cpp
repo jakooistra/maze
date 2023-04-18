@@ -5,6 +5,7 @@
 //  Created by John Kooistra on 2023-04-16.
 //
 
+#include <chrono>
 #include <optional>
 
 #include "ThreadPool.h"
@@ -42,32 +43,54 @@ ThreadPool::~ThreadPool() {
 
 void ThreadPool::enqueue(std::function<void()> job) {
     std::lock_guard guard(jobMutex);
-    if (currentCohort->outstandingJobCount == 0) {
-        currentCohort->activeMutex.lock();
-    }
-    currentCohort->outstandingJobCount++;
+    currentCohort->increment();
     jobs.push({job, currentCohort});
     jobAvailableSignal.release();
 }
 
-void ThreadPool::waitForCompletion() {
+void ThreadPool::waitForCompletion(int periodMillis, std::function<void(int)> periodicWaitFunction) {
     jobMutex.lock();
     std::shared_ptr<JobCohort> waitCohort;
-    if (currentCohort->outstandingJobCount > 0) {
+    if (currentCohort->getJobCount() > 0) {
         waitCohort = currentCohort;
         currentCohort = std::make_shared<JobCohort>();
         
         // Make sure the new cohort waits for the previous cohort to finish, at the very least.
         // This ensures that concurrent calls to waitForCompletion are deterministic.
         enqueue([waitCohort]{
-            std::lock_guard wait(waitCohort->activeMutex);
+            waitCohort->wait();
         });
     }
     jobMutex.unlock();
     
     if (waitCohort != nullptr) {
-        // The mutex will be unlocked when all jobs are done.
-        std::lock_guard wait(waitCohort->activeMutex);
+        // If there are jobs to be waited on, and the periodMillis value is > 0,
+        // the caller expects to have a function called periodically. Set up a
+        // thread to do this, only if necessary.
+        std::optional<std::thread> periodicCallbackThread;
+        std::shared_ptr<bool> waiting;
+        if (periodMillis > 0) {
+            waiting = std::make_shared<bool>(true);
+            periodicCallbackThread = std::thread([waitCohort, waiting, periodMillis, periodicWaitFunction](){
+                while (*waiting) {
+                    std::this_thread::sleep_for(std::chrono::milliseconds(periodMillis));
+                    if (*waiting) {
+                        periodicWaitFunction(waitCohort->getJobCount());
+                    }
+                }
+            });
+        }
+        
+        // Block and wait until the job cohort has finished executing.
+        waitCohort->wait();
+        
+        // If the callback thread was created, signal it to stop, and detach
+        // the thread so that we can return immediately and let the thread
+        // clean itself up when it's ready. No need to wait/join.
+        if (periodicCallbackThread.has_value()) {
+            *waiting = false;
+            periodicCallbackThread->detach();
+        }
     }
 }
 
@@ -99,13 +122,30 @@ void ThreadPool::threadFunction() {
             
             // Check and possibly release the cohort
             jobMutex.lock();
-            job->cohort->outstandingJobCount--;
-            if (job->cohort->outstandingJobCount == 0) {
-                job->cohort->activeMutex.unlock();
-            }
+            job->cohort->decrement();
             jobMutex.unlock();
         }
     }
     
     exitSignal.release();
+}
+
+
+void JobCohort::increment() {
+    if (outstandingJobCount == 0) {
+        activeMutex.lock();
+    }
+    outstandingJobCount++;
+}
+
+void JobCohort::decrement() {
+    outstandingJobCount--;
+    if (outstandingJobCount == 0) {
+        activeMutex.unlock();
+    }
+}
+
+void JobCohort::wait() {
+    // The mutex will be unlocked when all jobs are done.
+    std::lock_guard wait(activeMutex);
 }

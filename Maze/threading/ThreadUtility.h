@@ -15,7 +15,7 @@
 #include "ThreadPool.h"
 
 template<typename Input, typename Output>
-inline std::vector<Output> threadedTransform(std::vector<Input> const &input, std::function<Output(Input)> transform, ThreadPool &pool = ThreadPool::shared()) {
+inline std::vector<Output> threadedTransform(std::vector<Input> const &input, std::function<Output(Input)> transform, std::string const &message = "Transform", ThreadPool &pool = ThreadPool::shared()) {
     std::mutex outputMutex;
     std::vector<Output> output;
     
@@ -31,9 +31,11 @@ inline std::vector<Output> threadedTransform(std::vector<Input> const &input, st
     }
     
     // Wait for this cohort of jobs to complete, guaranteeing that all output has been collected.
-    pool.waitForCompletion();
-    
-    // TODO: output a message at timed intervals while processing to give progress indication.
+    // If processing takes longer than a second, print periodic progress on the command line.
+    int inputSize = (int)input.size();
+    pool.waitForCompletion(1000, [message, inputSize](int jobsRemaining){
+        std::cout << "  " << message << " (" << std::max(0, inputSize - jobsRemaining) << "/" << inputSize << ")" << std::endl;
+    });
     
     return output;
 }

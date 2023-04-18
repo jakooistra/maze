@@ -10,17 +10,32 @@
 
 #include <functional>
 #include <mutex>
-#include <thread>
 #include <queue>
 #include <semaphore>
+#include <thread>
 #include <vector>
 
-struct JobCohort {
+class JobCohort {
+private:
     // When a job is enqueued, this is incremented, and when it is finished it will be decremented.
     int outstandingJobCount { 0 };
     
     // Will be locked as soon as outstandingJobCount > 0, unlocked when outstandingJobCount = 0.
     std::mutex activeMutex;
+    
+public:
+    virtual ~JobCohort() {}
+    
+    // Signal that a job has been added.
+    void increment();
+    
+    // Signal that a job has been completed.
+    void decrement();
+    
+    // Block and wait until the outstanding job count is 0.
+    void wait();
+    
+    inline int getJobCount() const { return outstandingJobCount; }
 };
 
 struct JobWithCohort {
@@ -56,7 +71,10 @@ public:
     void enqueue(std::function<void()> job);
     
     // Waits for all jobs to be completed.
-    void waitForCompletion();
+    // Every periodMillis interval, call periodicWaitFunction with the number of jobs remaining.
+    // If periodMillis < 0, the function is not called.
+    void waitForCompletion(int periodMillis, std::function<void(int)> periodicWaitFunction);
+    void waitForCompletion() { waitForCompletion(-1, {}); }
     
     int getThreadCount() const;
     

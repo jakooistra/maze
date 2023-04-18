@@ -136,7 +136,7 @@ int main(int argc, const char * argv[]) {
         if (types.size() > 1) {
             std::cout << "  (" << typeCount << "/" << types.size() << ") ";
         }
-        std::cout << "Generating x" << count << " " << typeName << "..." << std::endl;
+        std::cout << "Generating x" << count << " " << typeName << " " << width << "x" << height << "..." << std::endl;
         
         std::function<GeneratedMaze(int)> generate = [width, height, &generator](int seed){
             return generator->generate(width, height, seed);
@@ -151,10 +151,11 @@ int main(int argc, const char * argv[]) {
         } else {
             seedsToGenerate = consecutiveNumbers(0, count-1);
         }
-        std::vector<GeneratedMaze> mazes = threadedTransform(seedsToGenerate, generate);
+        std::vector<GeneratedMaze> mazes = threadedTransform(seedsToGenerate, generate, "Generate");
         
+        std::cout << "Analyzing x" << count << " " << typeName << "..." << std::endl;
         Stats stats;
-        std::vector<FullAssessment> assessments = threadedTransform(mazes, assess);
+        std::vector<FullAssessment> assessments = threadedTransform(mazes, assess, "Analyze");
         for (auto assessment : assessments) {
             sortedMazes.insert(assessment);
             stats.accumulate(assessment.analysis.get(), assessment.maze.seed);

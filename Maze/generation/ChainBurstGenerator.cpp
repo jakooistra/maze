@@ -177,6 +177,8 @@ std::unique_ptr<Maze> ChainBurstGenerator::generateInternal(int width, int heigh
             // If the last burst was successful, pick a random endpoint and burst from it.
             nextBurst = ends[rng() % ends.size()];
         } else {
+            // TODO: somehow cache search from the endpoint? This phase takes longer than it needs to, and blows out the runtime order for larger chain burst generation sizes.
+            
             // If the last burst was not successful, do a search from the
             // finish point to determine the best place to burst from.
             // The best burst point is the furthest visited cell from the
