@@ -23,10 +23,10 @@ struct FullAssessment {
 
 // Returns a singular metric for the relative value of a given maze.
 // Higher is better.
-FullAssessment assessValue(GeneratedMaze const &maze);
+FullAssessment valueOfMaze(GeneratedMaze const &maze);
 
 // Returns a singular metric for the relative value of a maze, given its analysis.
 // Higher is better.
-int assessValue(Analysis const *analysis);
+int valueOfAnalysis(Analysis const *analysis);
 
 #endif /* Assessment_h */

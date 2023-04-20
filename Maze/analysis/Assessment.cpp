@@ -8,19 +8,19 @@
 #include "Assessment.h"
 #include "Solver.h"
 
-FullAssessment assessValue(GeneratedMaze const &maze) {
+FullAssessment valueOfMaze(GeneratedMaze const &maze) {
     FullAssessment assessment;
     auto analysis = std::make_shared<Analysis>();
     solve(maze.maze.get(), *analysis);
     
     assessment.maze = maze;
     assessment.analysis = analysis;
-    assessment.value = assessValue(analysis.get());
+    assessment.value = valueOfAnalysis(analysis.get());
     
     return assessment;
 }
 
-int assessValue(Analysis const *analysis) {
+int valueOfAnalysis(Analysis const *analysis) {
     constexpr int kSingleMetricLargeReward = 1000;
     constexpr int kSingleMetricSmallReward = 500;
     

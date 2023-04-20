@@ -40,4 +40,10 @@ inline std::vector<Output> threadedTransform(std::vector<Input> const &input, st
     return output;
 }
 
+template<typename Input, typename Output>
+inline std::vector<Output> threadedTransform(std::vector<Input> const &input, std::function<Output(Input const &)> transform, std::string const &message = "Transform", ThreadPool &pool = ThreadPool::shared()) {
+    std::function<Output(Input)> concreteTransform = [transform](Input input){ return transform(input); };
+    return threadedTransform(input, concreteTransform, message, pool);
+}
+
 #endif /* ThreadUtility_h */

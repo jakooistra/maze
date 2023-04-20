@@ -120,11 +120,6 @@ int main(int argc, const char * argv[]) {
         std::cout << "Running on " << ThreadPool::shared().getThreadCount() << " threads." << std::endl;
     }
     
-    // TODO: is there a better way to express this? assessValue as a function has the same signature, can I not just pass it directly?
-    std::function<FullAssessment(GeneratedMaze)> assess = [](GeneratedMaze maze){
-        return assessValue(maze);
-    };
-    
     if (types.size() > 1) {
         std::cout << "Generating " << types.size() << " maze types x" << count << "..." <<std::endl;
     }
@@ -155,7 +150,8 @@ int main(int argc, const char * argv[]) {
         
         std::cout << "Analyzing x" << count << " " << typeName << "..." << std::endl;
         Stats stats;
-        std::vector<FullAssessment> assessments = threadedTransform(mazes, assess, "Analyze");
+        std::function<FullAssessment(GeneratedMaze const &)> assessmentFunction = valueOfMaze;
+        std::vector<FullAssessment> assessments = threadedTransform(mazes, assessmentFunction, "Analyze");
         for (auto assessment : assessments) {
             sortedMazes.insert(assessment);
             stats.accumulate(assessment.analysis.get(), assessment.maze.seed);
