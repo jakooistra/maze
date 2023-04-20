@@ -5,8 +5,10 @@
 //  Created by John Kooistra on 2023-04-17.
 //
 
+#include <iomanip>
 #include <iostream>
 #include <optional>
+#include <sstream>
 
 #include "CommandParser.h"
 
@@ -20,22 +22,8 @@ CommandDefinition CommandParser::add(CommandDefinition const &definition) {
     return definition;
 }
 
-CommandDefinition CommandParser::add(std::string const &name, std::string const &description) {
-    return add({
-        name,
-        CommandArgument::None,
-        "",
-        description
-    });
-}
-
-CommandDefinition CommandParser::add(std::string const &name, CommandArgument type, std::string const &typeName, std::string const &description) {
-    return add({
-        name,
-        type,
-        typeName,
-        description
-    });
+CommandDefinitionBuilder CommandParser::add(std::string const &name, std::string const &description) {
+    return CommandDefinitionBuilder(shared_from_this(), name, description);
 }
 
 CommandParserResult CommandParser::parse(int argc, const char * argv[]) const {
@@ -55,19 +43,17 @@ CommandParserResult CommandParser::parse(std::vector<std::string> const &args) c
                 case CommandArgument::String:
                 case CommandArgument::OptionalString:
                     if (isRequired(expectedType) || token.empty() || token[0] != '-') {
-                        partialCommand->stringValue = token;
-                        partialCommand->hasValue = true;
+                        partialCommand->value = token;
                     }
                     break;
                 case CommandArgument::Int:
                 case CommandArgument::OptionalInt:
                     if (isRequired(expectedType) || token.empty() || token[0] != '-') {
-                        partialCommand->intValue = std::stoi(token);
-                        partialCommand->hasValue = true;
+                        partialCommand->value = std::stoi(token);
                     }
                     break;
             }
-            bool consumedToken = partialCommand->hasValue;
+            bool consumedToken = partialCommand->has_value();
             result.commands.push_back(*partialCommand);
             partialCommand.reset();
             if (consumedToken) {
@@ -110,8 +96,51 @@ CommandParserResult CommandParser::parse(std::vector<std::string> const &args) c
     return result;
 }
 
-void CommandParser::printUsage() const {
-    std::cout << "Usage: " << std::endl;
+void CommandParser::printUsage(std::string const &programName) const {
+    std::cout << "Usage:" << std::endl;
+    std::cout << "  " << getFullCommand(programName, true) << std::endl;
+    std::cout << "  " << getFullCommand(programName, false) << std::endl;
+    printDetailedArguments();
     // TODO: print usage given the command names and descriptions specified.
 }
 
+std::string CommandParser::getFullCommand(std::string const &programName, bool commonArgumentsOnly) const {
+    std::stringstream stream;
+    stream << programName;
+    for (auto command : commands) {
+        if (!commonArgumentsOnly || command.common) {
+            stream << " [" << command.usageArgument() << "]";
+        }
+    }
+    return stream.str();
+}
+
+void CommandParser::printDetailedArguments() const {
+    std::cout << "Arguments:" << std::endl;
+    int commandNameWidths = 0;
+    for (auto command : commands) {
+        commandNameWidths = std::max(commandNameWidths, (int)command.usageArgument().length());
+    }
+    commandNameWidths += 1;
+    for (auto command : commands) {
+        std::vector<std::string> messages = { command.description };
+        if (command.argumentDefault.has_value()) {
+            std::stringstream message;
+            message << "  (" << command.argumentDefault->str() << ") if unspecified.";
+            messages.push_back(message.str());
+        }
+        for (auto &message : command.messages) {
+            messages.push_back("  " + message);
+        }
+        for (int i = 0; i < messages.size(); ++i) {
+            std::string prefix = (i == 0) ? command.usageArgument() : "";
+            std::cout
+                << "  "
+                << std::left
+                << std::setw(commandNameWidths)
+                << prefix
+                << messages[i]
+                << std::endl;
+        }
+    }
+}

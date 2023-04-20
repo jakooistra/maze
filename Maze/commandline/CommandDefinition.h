@@ -9,6 +9,9 @@
 #define CommandDefinition_h
 
 #include <string>
+#include <vector>
+
+#include "CommandValue.h"
 
 enum class CommandArgument {
     None,
@@ -18,11 +21,25 @@ enum class CommandArgument {
     OptionalString,
 };
 
+// TODO: add multiple-argument expectation to definition
+// TODO: add default value to command parameter, read it from main.cpp
 struct CommandDefinition {
     std::string name;
-    CommandArgument argumentType;
-    std::string argumentName;
     std::string description;
+    
+    CommandArgument argumentType { CommandArgument::None };
+    std::string argumentName;
+    std::optional<CommandValue> argumentDefault;
+    
+    std::vector<std::string> messages;
+    
+    // True if this parameter is expected to be defined more often.
+    // Used when printing usage instructions.
+    bool common { false };
+    
+    CommandDefinition(std::string const &name, std::string const &description);
+    
+    std::string usageArgument() const;
 };
 
 inline bool isRequired(CommandArgument type) {
