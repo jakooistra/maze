@@ -27,7 +27,7 @@
 //       1: XXXXXXXXXXXXXXXXXXXXXXXXXXX
 class VerticalPathBreaksGenerator : public MazeGenerator {
 public:
-    VerticalPathBreaksGenerator() : MazeGenerator(MazeType::VerticalPathBreaks) {}
+    VerticalPathBreaksGenerator() : MazeGenerator(MazeType::VerticalPathBreaks, "Full height paths with one random opening between each.") {}
     virtual ~VerticalPathBreaksGenerator() {}
     
 protected:

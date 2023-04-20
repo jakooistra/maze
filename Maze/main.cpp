@@ -38,6 +38,9 @@ int main(int argc, const char * argv[]) {
         return 0;
     }
     
+    // If processing takes a long time, it's good to output warnings before generating mazes.
+    args->printWarnings();
+    
     if (args->count > 1) {
         std::cout << "Running on " << ThreadPool::shared().getThreadCount() << " threads." << std::endl;
     }
@@ -70,7 +73,9 @@ int main(int argc, const char * argv[]) {
         }
         std::vector<GeneratedMaze> mazes = threadedTransform(seedsToGenerate, generate, "Generate");
         
-        std::cout << "Analyzing x" << args->count << " " << typeName << "..." << std::endl;
+        if (args->showAnalysis) {
+            std::cout << "Analyzing x" << args->count << " " << typeName << "..." << std::endl;
+        }
         Stats stats;
         std::function<FullAssessment(GeneratedMaze const &)> assessmentFunction = valueOfMaze;
         std::vector<FullAssessment> assessments = threadedTransform(mazes, assessmentFunction, "Analyze");

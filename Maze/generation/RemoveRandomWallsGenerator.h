@@ -33,7 +33,7 @@
 //        1: XXXXXXXXXXXXXXXXXXXXX
 class RemoveRandomWallsGenerator : public MazeGenerator {
 public:
-    RemoveRandomWallsGenerator() : MazeGenerator(MazeType::RemoveRandomWalls) {}
+    RemoveRandomWallsGenerator() : MazeGenerator(MazeType::RemoveRandomWalls, "Random walls are iteratively removed.") {}
     virtual ~RemoveRandomWallsGenerator() {}
     
 protected:

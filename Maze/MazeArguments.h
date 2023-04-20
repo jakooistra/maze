@@ -11,7 +11,6 @@
 #include <optional>
 #include <set>
 #include <string>
-#include <vector>
 
 #include "MazeType.h"
 
@@ -25,11 +24,13 @@ struct MazeArguments {
     bool showPath = false; // TODO: add command for this visual output argument
     std::optional<int> specifiedSeed;
     std::optional<std::string> baseFileName;
-    std::vector<MazeType> types;  // TODO: add a command to modify this list
+    std::set<MazeType> types;
     std::set<int> rankedOutput;
     std::set<int> percentileOutput;
     
     static std::optional<MazeArguments> parse(int argc, const char * argv[]);
+    
+    void printWarnings();
 };
 
 #endif /* MazeArguments_h */

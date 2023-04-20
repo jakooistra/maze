@@ -9,6 +9,7 @@
 #define MazeType_h
 
 #include <string>
+#include <vector>
 
 enum class MazeType {
     ChainBurst,
@@ -18,6 +19,15 @@ enum class MazeType {
     
     // TODO: random perturbation generator as described briefly in the interview
 };
+
+inline std::vector<MazeType> allMazeTypes() {
+    return {
+        MazeType::ChainBurst,
+        MazeType::FiftyFifty,
+        MazeType::RemoveRandomWalls,
+        MazeType::VerticalPathBreaks,
+    };
+}
 
 inline std::string getMazeTypeName(MazeType type) {
     switch (type) {

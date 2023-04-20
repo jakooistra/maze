@@ -5,13 +5,18 @@
 //  Created by John Kooistra on 2023-04-20.
 //
 
+#include <algorithm>
 #include <iostream>
 #include <filesystem>
+#include <map>
 #include <memory>
 #include <sstream>
+#include <vector>
 
 #include "CommandParser.h"
+#include "GeneratorFactory.h"
 #include "MazeArguments.h"
+#include "MazeTypeParsing.h"
 
 std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[]) {
     MazeArguments args;
@@ -19,8 +24,36 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     std::filesystem::path programPath(argv[0]);
     std::string programName = programPath.filename();
     
-    // Build the command line parser object.
+    std::map<std::string, std::vector<MazeType>> mazeTypeLists;
+    mazeTypeLists["all"] = allMazeTypes();
+    mazeTypeLists["complex"] = GeneratorFactory::complexTypes();
+    mazeTypeLists["trivial"] = GeneratorFactory::trivialTypes();
+    
+    // Build all command line parameter definitions.
     auto parser = std::make_shared<CommandParser>();
+    std::optional<CommandDefinitionBuilder> cmdBuilderType = (*parser)
+        .add("t", "Add a maze type to generate. Valid type arguments are:")
+        .stringArgument("type");
+    for (auto type : allMazeTypes()) {
+        std::stringstream message;
+        message
+            << "'" << getMazeArgumentName(type) << "' " << getMazeTypeName(type)
+            << " - " << GeneratorFactory::create(type)->getDescription();
+        cmdBuilderType->addMessage(message.str());
+    }
+    for (auto tuple : mazeTypeLists) {
+        std::stringstream message;
+        message << "'" << tuple.first << "' - (";
+        for (auto iter = tuple.second.begin(); iter != tuple.second.end(); ++iter) {
+            if (iter != tuple.second.begin()) {
+                message << ", ";
+            }
+            message << getMazeArgumentName(*iter);
+        }
+        message << ")";
+        cmdBuilderType->addMessage(message.str());
+    }
+    auto cmdType = cmdBuilderType->build();
     auto cmdWidth = (*parser)
         .add("w", "The width of the maze.")
         .intArgument("width", args.width)
@@ -79,7 +112,21 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     }
     
     for (auto command : parserResult.commands) {
-        if (command.name == cmdWidth.name) {
+        if (command.name == cmdType.name) {
+            auto type = getMazeTypeFromArgument(command.value->string);
+            auto list = mazeTypeLists.find(command.value->string);
+            if (type.has_value()) {
+                args.types.insert(*type);
+            } else if (list != mazeTypeLists.end()) {
+                for (auto type : list->second) {
+                    args.types.insert(type);
+                }
+            } else {
+                std::cout << "ERROR: '" << command.value->str() << "' is not a valid maze type." << std::endl;
+                parser->printUsage(programName);
+                return std::nullopt;
+            }
+        } else if (command.name == cmdWidth.name) {
             args.width = std::max(1, command.value->integer);
         } else if (command.name == cmdHeight.name) {
             args.height = std::max(1, command.value->integer);
@@ -134,4 +181,12 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     }
     
     return args;
+}
+
+void MazeArguments::printWarnings() {
+    if (rankedOutput.empty()) {
+        std::cout << "No output specified." << std::endl;
+        std::cout << "  Use -o or -op to specify which maze(s) to output." << std::endl;
+        std::cout << "  Use -f to specify a file name only the best maze is desired." << std::endl;
+    }
 }

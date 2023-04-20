@@ -30,12 +30,7 @@ MazeType GeneratorFactory::defaultType() {
 }
 
 std::vector<MazeType> GeneratorFactory::allTypes() {
-    return {
-        MazeType::ChainBurst,
-        MazeType::FiftyFifty,
-        MazeType::RemoveRandomWalls,
-        MazeType::VerticalPathBreaks,
-    };
+    return allMazeTypes();
 }
 
 std::vector<MazeType> GeneratorFactory::trivialTypes() {

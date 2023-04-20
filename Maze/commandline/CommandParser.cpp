@@ -101,7 +101,6 @@ void CommandParser::printUsage(std::string const &programName) const {
     std::cout << "  " << getFullCommand(programName, true) << std::endl;
     std::cout << "  " << getFullCommand(programName, false) << std::endl;
     printDetailedArguments();
-    // TODO: print usage given the command names and descriptions specified.
 }
 
 std::string CommandParser::getFullCommand(std::string const &programName, bool commonArgumentsOnly) const {

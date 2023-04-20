@@ -30,7 +30,7 @@
 //        1: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 class ChainBurstGenerator : public MazeGenerator {
 public:
-    ChainBurstGenerator() : MazeGenerator(MazeType::ChainBurst) {}
+    ChainBurstGenerator() : MazeGenerator(MazeType::ChainBurst, "Sequentially picks a recently filled location and splits the path.") {}
     virtual ~ChainBurstGenerator() {}
     
 protected:

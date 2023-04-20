@@ -24,7 +24,7 @@ private:
     
 public:
     CommandDefinitionBuilder(std::shared_ptr<CommandDefinitionCollector> sink, std::string const &name, std::string const &description);
-    virtual ~CommandDefinitionBuilder();
+    virtual ~CommandDefinitionBuilder() {}
     
     CommandDefinitionBuilder &intArgument(std::string const &argName, std::optional<int> defaultValue = std::nullopt);
     CommandDefinitionBuilder &stringArgument(std::string const &argName, std::optional<std::string> defaultValue = std::nullopt);

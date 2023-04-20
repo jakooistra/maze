@@ -16,7 +16,7 @@
 // unreachable areas, very quick to generate.
 class FiftyFiftyGenerator : public MazeGenerator {
 public:
-    FiftyFiftyGenerator() : MazeGenerator(MazeType::FiftyFifty) {}
+    FiftyFiftyGenerator() : MazeGenerator(MazeType::FiftyFifty, "Every wall has a 50% chance to exist.") {}
     virtual ~FiftyFiftyGenerator() {}
     
 protected:

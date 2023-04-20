@@ -22,7 +22,6 @@ enum class CommandArgument {
 };
 
 // TODO: add multiple-argument expectation to definition
-// TODO: add default value to command parameter, read it from main.cpp
 struct CommandDefinition {
     std::string name;
     std::string description;

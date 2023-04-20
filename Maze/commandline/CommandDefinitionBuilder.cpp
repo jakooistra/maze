@@ -14,13 +14,6 @@ CommandDefinitionBuilder::CommandDefinitionBuilder(std::shared_ptr<CommandDefini
     definition.common = true;
 }
 
-CommandDefinitionBuilder::~CommandDefinitionBuilder() {
-    // If the builder falls out of scope, make sure the command definition gets built.
-    if (sink != nullptr) {
-        build();
-    }
-}
-
 CommandDefinitionBuilder &CommandDefinitionBuilder::intArgument(std::string const &argName, std::optional<int> defaultValue) {
     baseArgumentType = CommandArgument::Int;
     definition.argumentName = argName;
@@ -71,7 +64,7 @@ void CommandDefinitionBuilder::setArgumentType() {
             break;
         case CommandArgument::String:
         case CommandArgument::OptionalString:
-            definition.argumentType = optional ? CommandArgument::OptionalInt : CommandArgument::Int;
+            definition.argumentType = optional ? CommandArgument::OptionalString : CommandArgument::String;
             break;
         case CommandArgument::None:
             break;
