@@ -8,10 +8,10 @@
 #ifndef GeneratorFactory_h
 #define GeneratorFactory_h
 
+#include <string>
 #include <vector>
 
 #include "MazeGenerator.h"
-#include "MazeType.h"
 
 namespace GeneratorFactory {
     // TODO: rename "argument" to "type", change function to "get"

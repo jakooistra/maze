@@ -17,8 +17,7 @@
 class FiftyFiftyGenerator : public MazeGenerator {
 public:
     FiftyFiftyGenerator()
-    :   MazeGenerator(MazeType::FiftyFifty,
-                      "ff",
+    :   MazeGenerator("ff",
                       "Fifty Fifty",
                       "Every wall has a 50% chance to exist.",
                       MazeQuality::Trivial) {}

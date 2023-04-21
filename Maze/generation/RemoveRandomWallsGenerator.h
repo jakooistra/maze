@@ -34,8 +34,7 @@
 class RemoveRandomWallsGenerator : public MazeGenerator {
 public:
     RemoveRandomWallsGenerator()
-    :   MazeGenerator(MazeType::RemoveRandomWalls,
-                      "rr",
+    :   MazeGenerator("rr",
                       "Remove Random Walls",
                       "Random walls are iteratively removed.",
                       MazeQuality::Trivial) {}

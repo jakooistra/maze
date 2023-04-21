@@ -31,8 +31,7 @@
 class ChainBurstGenerator : public MazeGenerator {
 public:
     ChainBurstGenerator()
-    :   MazeGenerator(MazeType::ChainBurst,
-                      "cb",
+    :   MazeGenerator("cb",
                       "Chain Burst",
                       "Sequentially picks a recently filled location and splits the path.",
                       MazeQuality::Complex) {}

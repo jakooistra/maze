@@ -28,8 +28,7 @@
 class VerticalPathBreaksGenerator : public MazeGenerator {
 public:
     VerticalPathBreaksGenerator()
-    :   MazeGenerator(MazeType::VerticalPathBreaks,
-                      "vp",
+    :   MazeGenerator("vp",
                       "Vertical Path Breaks",
                       "Full height paths with one random opening between each.",
                       MazeQuality::Trivial) {}

@@ -13,21 +13,17 @@
 #include "GeneratedMaze.h"
 #include "Maze.h"
 #include "MazeQuality.h"
-#include "MazeType.h"
 
 class MazeGenerator {
 private:
-    // TODO: remove type?
-    MazeType type;
     std::string argument;
     std::string name;
     std::string description;
     MazeQuality quality;
     
 public:
-    MazeGenerator(MazeType type, std::string const &argument, std::string const &name, std::string const &description, MazeQuality quality)
-    :   type(type)
-    ,   argument(argument)
+    MazeGenerator(std::string const &argument, std::string const &name, std::string const &description, MazeQuality quality)
+    :   argument(argument)
     ,   name(name)
     ,   description(description)
     ,   quality(quality)

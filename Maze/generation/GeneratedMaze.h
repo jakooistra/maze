@@ -9,9 +9,9 @@
 #define GeneratedMaze_h
 
 #include <memory>
+#include <string>
 
 #include "Maze.h"
-#include "MazeType.h"
 
 struct GeneratedMaze {
     std::string typeArgument;

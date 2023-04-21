@@ -61,7 +61,6 @@
 		DB4D384929E91A0F007ACBDF /* MazeGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeGenerator.h; sourceTree = "<group>"; };
 		DB4D384C29E9852C007ACBDF /* GeneratorFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GeneratorFactory.cpp; sourceTree = "<group>"; };
 		DB4D384D29E9852C007ACBDF /* GeneratorFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratorFactory.h; sourceTree = "<group>"; };
-		DB4D384F29E98583007ACBDF /* MazeType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeType.h; sourceTree = "<group>"; };
 		DB4D385029E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RemoveRandomWallsGenerator.cpp; sourceTree = "<group>"; };
 		DB4D385129E986A1007ACBDF /* RemoveRandomWallsGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoveRandomWallsGenerator.h; sourceTree = "<group>"; };
 		DB4D385329E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalPathBreaksGenerator.cpp; sourceTree = "<group>"; };
@@ -207,7 +206,6 @@
 			children = (
 				DBB26BCC29E8C86100C14D5B /* Maze.cpp */,
 				DBB26BCD29E8C86100C14D5B /* Maze.h */,
-				DB4D384F29E98583007ACBDF /* MazeType.h */,
 				DB04DBE929F200FA007C7819 /* MazeQuality.h */,
 				DB4D384029E90565007ACBDF /* XY.h */,
 			);
