@@ -41,15 +41,22 @@ std::shared_ptr<MazeGenerator const> MazeGenerator::registerGenerator(std::share
     auto registry = getRegistry();
     std::lock_guard guard(registry->mutex);
     
-    // TODO: validation error if the type name has spaces in it.
-    
-    if (registry->generatorByType.find(generator->type) == registry->generatorByType.end()) {
-        registry->generatorByType[generator->type] = generator;
-        registry->generatorTypeByQuality[generator->quality].insert(generator->type);
-    } else {
-        std::cerr << "ERROR: a maze generator with type " << generator->type << " was already specified." << std::endl;
+    auto type = generator->type;
+    if (std::any_of(type.begin(), type.end(), [](auto ch) { return std::isspace(ch); })) {
+        std::cerr << "ERROR: the type string must not contain spaces: '" << type << "', please fix the definnition for " << generator->name << std::endl;
+        return nullptr;
     }
     
+    //  Validate that the registry is unique. If it already exists, return the existing generator.
+    auto generatorIter = registry->generatorByType.find(type);
+    if (generatorIter != registry->generatorByType.end()) {
+        std::cerr << "ERROR: the type " << type << " is being used by both " << generatorIter->second->name << " and " << generator->name << "." << std::endl;
+        std::cerr << "NOTE: the generator named " << generatorIter->second->name << " will be used for the type " << type << "." << std::endl;
+        return generatorIter->second;
+    }
+    
+    registry->generatorByType[type] = generator;
+    registry->generatorTypeByQuality[generator->quality].insert(type);
     return generator;
 }
 
