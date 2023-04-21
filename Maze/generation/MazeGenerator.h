@@ -16,14 +16,21 @@
 
 class MazeGenerator {
 private:
-    std::string argument;
+    // Lower case short string with no spaces identifying this generator type. Used on the command line.
+    std::string type;
+    
+    // The human-readable name of this generator.
     std::string name;
+    
+    // A short description of what this generator does, used on the command line.
     std::string description;
+    
+    // A rough quality type of this generator: trivial, complex, or any other defined value.
     MazeQuality quality;
     
 public:
-    MazeGenerator(std::string const &argument, std::string const &name, std::string const &description, MazeQuality quality)
-    :   argument(argument)
+    MazeGenerator(std::string const &type, std::string const &name, std::string const &description, MazeQuality quality)
+    :   type(type)
     ,   name(name)
     ,   description(description)
     ,   quality(quality)
@@ -31,14 +38,14 @@ public:
     
     virtual ~MazeGenerator() {}
     
+    std::string const &getType() const { return type; }
     std::string const &getName() const { return name; }
     std::string const &getDescription() const { return description; }
-    std::string const &getArgumentName() const { return argument; }
     MazeQuality getQuality() const { return quality; }
     
     GeneratedMaze generate(int width, int height, int seed) const {
         return {
-            getArgumentName(),
+            getType(),
             seed,
             generateInternal(width, height, seed),
         };

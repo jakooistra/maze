@@ -45,15 +45,16 @@ int main(int argc, const char * argv[]) {
         std::cout << "Running on " << ThreadPool::shared().getThreadCount() << " threads." << std::endl;
     }
     
-    if (args->generators.size() > 1) {
-        std::cout << "Generating " << args->generators.size() << " maze types x" << args->count << "..." <<std::endl;
+    if (args->types.size() > 1) {
+        std::cout << "Generating " << args->types.size() << " maze types x" << args->count << "..." <<std::endl;
     }
     int typeCount = 0;
-    for (auto generator : args->generators) {
+    for (auto type : args->types) {
+        auto generator = GeneratorFactory::get(type);
         auto typeName = generator->getName();
         typeCount++;
-        if (args->generators.size() > 1) {
-            std::cout << "  (" << typeCount << "/" << args->generators.size() << ") ";
+        if (args->types.size() > 1) {
+            std::cout << "  (" << typeCount << "/" << args->types.size() << ") ";
         }
         std::cout << "Generating x" << args->count << " " << typeName << " " << args->width << "x" << args->height << "..." << std::endl;
         

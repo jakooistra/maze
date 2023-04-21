@@ -14,8 +14,7 @@
 #include "MazeGenerator.h"
 
 namespace GeneratorFactory {
-    // TODO: rename "argument" to "type", change function to "get"
-    std::shared_ptr<MazeGenerator const> getFromArgument(std::string const &argument);
+    std::shared_ptr<MazeGenerator const> get(std::string const &type);
 
     std::vector<std::shared_ptr<MazeGenerator const>> all();
     std::vector<std::shared_ptr<MazeGenerator const>> allOfQuality(MazeQuality quality);

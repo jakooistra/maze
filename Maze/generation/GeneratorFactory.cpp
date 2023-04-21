@@ -14,14 +14,14 @@
 #include "RemoveRandomWallsGenerator.h"
 #include "VerticalPathBreaksGenerator.h"
 
-std::shared_ptr<MazeGenerator const> GeneratorFactory::getFromArgument(std::string const &argument) {
-    static std::unordered_map<std::string,std::shared_ptr<MazeGenerator const>> s_cachedArgumentMap;
-    if (s_cachedArgumentMap.empty()) {
+std::shared_ptr<MazeGenerator const> GeneratorFactory::get(std::string const &type) {
+    static std::unordered_map<std::string,std::shared_ptr<MazeGenerator const>> s_cachedTypeMap;
+    if (s_cachedTypeMap.empty()) {
         for (auto generator : all()) {
-            s_cachedArgumentMap[generator->getArgumentName()] = generator;
+            s_cachedTypeMap[generator->getType()] = generator;
         }
     }
-    return s_cachedArgumentMap[argument];
+    return s_cachedTypeMap[type];
 }
 
 std::vector<std::shared_ptr<MazeGenerator const>> GeneratorFactory::all() {
