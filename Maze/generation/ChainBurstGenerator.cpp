@@ -11,7 +11,7 @@
 #include <random>
 #include <optional>
 
-#include "ChainBurstGenerator.h"
+#include "MazeGenerator.h"
 #include "Utility.h"
 
 struct ChainBurstCell {
@@ -148,129 +148,149 @@ static std::vector<XY> burst(Maze *maze, std::vector<std::vector<ChainBurstCell>
     return checkExpansion;
 }
 
-std::unique_ptr<Maze> ChainBurstGenerator::generateInternal(int width, int height, int seed) const {
-    auto maze = std::make_unique<Maze>(width, height);
-    auto rng = std::bind(std::uniform_int_distribution<>(0, INT_MAX), std::mt19937(seed));
-    
-    setRandomStartAndFinish(maze.get(), width, height, rng);
-    
-    // Values above zero indicate a visited cell.
-    // Values below zero are used to track
-    std::vector<std::vector<ChainBurstCell>> cells;
-    cells.resize(width);
-    for (int x = 0; x < width; ++x) {
-        cells[x].resize(height);
+// Generates a maze by iteratively "bursting", branching paths from a single
+// end point on the last burst. Burst length is ~7. Burst expansions are random
+// but tend to go away from the finish point.
+//
+// Properties: guaranteed singular solutions, long average path length, if
+// progress is being made the player is guaranteed not to have to back track.
+class ChainBurstGenerator : public MazeGenerator {
+public:
+    ChainBurstGenerator()
+    :   MazeGenerator("cb",
+                      "Chain Burst",
+                      "Sequentially picks a recently filled location and splits the path.",
+                      MazeQuality::Complex)
+    {
     }
     
-    XY finish = maze->getFinish();
-    XY nextBurst = maze->getStart();
-    int currentBurstIndex = 0;
-    while (nextBurst != finish && !cells[finish.x][finish.y].visited()) {
-        currentBurstIndex++;
-        cells[nextBurst.x][nextBurst.y].index = ++currentBurstIndex;
-        auto ends = burst(maze.get(), cells, nextBurst, rng);
+    virtual ~ChainBurstGenerator() {}
+    
+protected:
+    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed) const {
+        auto maze = std::make_unique<Maze>(width, height);
+        auto rng = std::bind(std::uniform_int_distribution<>(0, INT_MAX), std::mt19937(seed));
         
-        if (cells[finish.x][finish.y].visited()) {
-            // If the finish cell has been visited, exit. The maze is solvable.
-            break;
-        } else if (!ends.empty()) {
-            // If the last burst was successful, pick a random endpoint and burst from it.
-            nextBurst = ends[rng() % ends.size()];
-        } else {
-            // TODO: somehow cache search from the endpoint? This phase takes longer than it needs to, and blows out the runtime order for larger chain burst generation sizes.
+        setRandomStartAndFinish(maze.get(), width, height, rng);
+        
+        // Values above zero indicate a visited cell.
+        // Values below zero are used to track
+        std::vector<std::vector<ChainBurstCell>> cells;
+        cells.resize(width);
+        for (int x = 0; x < width; ++x) {
+            cells[x].resize(height);
+        }
+        
+        XY finish = maze->getFinish();
+        XY nextBurst = maze->getStart();
+        int currentBurstIndex = 0;
+        while (nextBurst != finish && !cells[finish.x][finish.y].visited()) {
+            currentBurstIndex++;
+            cells[nextBurst.x][nextBurst.y].index = ++currentBurstIndex;
+            auto ends = burst(maze.get(), cells, nextBurst, rng);
             
-            // If the last burst was not successful, do a search from the
-            // finish point to determine the best place to burst from.
-            // The best burst point is the furthest visited cell from the
-            // start position that is reachable from the finish position.
-            std::optional<XY> best;
-            XY bestMetric { 0, 0 };
-            std::queue<XY> bfs;
-            bfs.push(finish);
-            auto &finishCell = cells[finish.x][finish.y];
-            finishCell.index = -currentBurstIndex;
-            int bfsIteration = 1;
-            while (!bfs.empty()) {
-                bfsIteration++;
-                XY check = bfs.front();
-                bfs.pop();
-                for (auto adjacent : check.allAdjacent()) {
-                    auto &adjacentCell = cells[adjacent.x][adjacent.y];
-                    if (maze->contains(adjacent)) {
-                        if (adjacentCell.visited()) {
-                            // The metric mazimizes distance from start, then disambiguates using
-                            // relative distance from finish. The distance from the finish is
-                            // relative, using the iteration count in the breadth first search.
-                            XY metric(bfsIteration, adjacentCell.distanceFromStart);
-                            if (!best.has_value() || bestMetric < metric ) {
-                                bestMetric = metric;
-                                best = adjacent;
+            if (cells[finish.x][finish.y].visited()) {
+                // If the finish cell has been visited, exit. The maze is solvable.
+                break;
+            } else if (!ends.empty()) {
+                // If the last burst was successful, pick a random endpoint and burst from it.
+                nextBurst = ends[rng() % ends.size()];
+            } else {
+                // TODO: somehow cache search from the endpoint? This phase takes longer than it needs to, and blows out the runtime order for larger chain burst generation sizes.
+                
+                // If the last burst was not successful, do a search from the
+                // finish point to determine the best place to burst from.
+                // The best burst point is the furthest visited cell from the
+                // start position that is reachable from the finish position.
+                std::optional<XY> best;
+                XY bestMetric { 0, 0 };
+                std::queue<XY> bfs;
+                bfs.push(finish);
+                auto &finishCell = cells[finish.x][finish.y];
+                finishCell.index = -currentBurstIndex;
+                int bfsIteration = 1;
+                while (!bfs.empty()) {
+                    bfsIteration++;
+                    XY check = bfs.front();
+                    bfs.pop();
+                    for (auto adjacent : check.allAdjacent()) {
+                        auto &adjacentCell = cells[adjacent.x][adjacent.y];
+                        if (maze->contains(adjacent)) {
+                            if (adjacentCell.visited()) {
+                                // The metric mazimizes distance from start, then disambiguates using
+                                // relative distance from finish. The distance from the finish is
+                                // relative, using the iteration count in the breadth first search.
+                                XY metric(bfsIteration, adjacentCell.distanceFromStart);
+                                if (!best.has_value() || bestMetric < metric ) {
+                                    bestMetric = metric;
+                                    best = adjacent;
+                                }
+                            } else if (adjacentCell.index != finishCell.index) {
+                                adjacentCell.index = finishCell.index;
+                                bfs.push(adjacent);
                             }
-                        } else if (adjacentCell.index != finishCell.index) {
-                            adjacentCell.index = finishCell.index;
-                            bfs.push(adjacent);
                         }
                     }
                 }
+                if (best.has_value()) {
+                    nextBurst = best.value();
+                } else {
+                    break;
+                }
             }
-            if (best.has_value()) {
-                nextBurst = best.value();
+        }
+        
+        // Fill in remaining unreachable areas. First, search for unreachable
+        // areas that are just off the main solution path, then expand outward
+        // from the main path. This way, new dead ends are created near where
+        // a player might be traversing.
+        std::deque<XY> checkPoints;
+        checkPoints.push_front(maze->getFinish());
+        while (checkPoints.front() != maze->getStart()) {
+            auto check = checkPoints.front();
+            auto &pathCell = cells[check.x][check.y];
+            if (pathCell.visited() && pathCell.link != check) {
+                checkPoints.push_front(pathCell.link);
             } else {
                 break;
             }
         }
-    }
-    
-    // Fill in remaining unreachable areas. First, search for unreachable
-    // areas that are just off the main solution path, then expand outward
-    // from the main path. This way, new dead ends are created near where
-    // a player might be traversing.
-    std::deque<XY> checkPoints;
-    checkPoints.push_front(maze->getFinish());
-    while (checkPoints.front() != maze->getStart()) {
-        auto check = checkPoints.front();
-        auto &pathCell = cells[check.x][check.y];
-        if (pathCell.visited() && pathCell.link != check) {
-            checkPoints.push_front(pathCell.link);
-        } else {
-            break;
-        }
-    }
-    // Don't test cells twice. This check could be more optimal using a hash
-    // map or even a property in ChainBurstCell, but this works for now.
-    std::set<XY> testedCells;
-    while (!checkPoints.empty()) {
-        auto check = checkPoints.front();
-        checkPoints.pop_front();
-        if (testedCells.contains(check)) {
-            continue;
-        }
-        testedCells.insert(check);
-        
-        auto &checkCell = cells[check.x][check.y];
-        for (auto adjacent : check.allAdjacent()) {
-            if (maze->contains(adjacent)) {
-                auto &adjacentCell = cells[adjacent.x][adjacent.y];
-                
-                // Expand to this cell and beyond if it hasn't been visited.
-                if (!adjacentCell.visited()) {
-                    maze->makeTraversable(check, adjacent);
-                    adjacentCell.visit(check, checkCell);
+        // Don't test cells twice. This check could be more optimal using a hash
+        // map or even a property in ChainBurstCell, but this works for now.
+        std::set<XY> testedCells;
+        while (!checkPoints.empty()) {
+            auto check = checkPoints.front();
+            checkPoints.pop_front();
+            if (testedCells.contains(check)) {
+                continue;
+            }
+            testedCells.insert(check);
+            
+            auto &checkCell = cells[check.x][check.y];
+            for (auto adjacent : check.allAdjacent()) {
+                if (maze->contains(adjacent)) {
+                    auto &adjacentCell = cells[adjacent.x][adjacent.y];
                     
-                    std::optional<XY> expandLocation = adjacent;
-                    for (int i = 0; i < 7 && expandLocation.has_value(); ++i) {
-                        expandLocation = expandFrom(expandLocation.value(), maze.get(), cells, rng);
+                    // Expand to this cell and beyond if it hasn't been visited.
+                    if (!adjacentCell.visited()) {
+                        maze->makeTraversable(check, adjacent);
+                        adjacentCell.visit(check, checkCell);
+                        
+                        std::optional<XY> expandLocation = adjacent;
+                        for (int i = 0; i < 7 && expandLocation.has_value(); ++i) {
+                            expandLocation = expandFrom(expandLocation.value(), maze.get(), cells, rng);
+                        }
                     }
-                }
-                
-                if (adjacentCell.distanceFromStart > checkCell.distanceFromStart) {
-                    checkPoints.push_back(adjacent);
+                    
+                    if (adjacentCell.distanceFromStart > checkCell.distanceFromStart) {
+                        checkPoints.push_back(adjacent);
+                    }
                 }
             }
         }
+        
+        return maze;
     }
-    
-    return maze;
-}
+};
 
 REGISTER_AND_STORE_GENERATOR(ChainBurstGenerator);

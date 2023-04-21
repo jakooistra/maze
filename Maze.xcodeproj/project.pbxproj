@@ -61,13 +61,10 @@
 		DB4D384329E905CE007ACBDF /* Solver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Solver.h; sourceTree = "<group>"; };
 		DB4D384929E91A0F007ACBDF /* MazeGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeGenerator.h; sourceTree = "<group>"; };
 		DB4D385029E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RemoveRandomWallsGenerator.cpp; sourceTree = "<group>"; };
-		DB4D385129E986A1007ACBDF /* RemoveRandomWallsGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoveRandomWallsGenerator.h; sourceTree = "<group>"; };
 		DB4D385329E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalPathBreaksGenerator.cpp; sourceTree = "<group>"; };
-		DB4D385429E994AD007ACBDF /* VerticalPathBreaksGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VerticalPathBreaksGenerator.h; sourceTree = "<group>"; };
 		DB4D385629E9E9A7007ACBDF /* Assessment.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Assessment.cpp; sourceTree = "<group>"; };
 		DB4D385729E9E9A7007ACBDF /* Assessment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Assessment.h; sourceTree = "<group>"; };
 		DB4D385A29EA05DA007ACBDF /* ChainBurstGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ChainBurstGenerator.cpp; sourceTree = "<group>"; };
-		DB4D385B29EA05DA007ACBDF /* ChainBurstGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ChainBurstGenerator.h; sourceTree = "<group>"; };
 		DBB26BBD29E8C56400C14D5B /* maze */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = maze; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBB26BC029E8C56400C14D5B /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		DBB26BC829E8C69A00C14D5B /* lodepng.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = lodepng.h; sourceTree = "<group>"; };
@@ -83,7 +80,6 @@
 		DBE7965029EC8D190049956A /* ThreadUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ThreadUtility.h; sourceTree = "<group>"; };
 		DBE7965129ECCAF80049956A /* GeneratedMaze.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratedMaze.h; sourceTree = "<group>"; };
 		DBE7965229ECD3C40049956A /* FiftyFiftyGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = FiftyFiftyGenerator.cpp; sourceTree = "<group>"; };
-		DBE7965329ECD3C40049956A /* FiftyFiftyGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = FiftyFiftyGenerator.h; sourceTree = "<group>"; };
 		DBE7965929ECDAF10049956A /* MazeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MazeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBE7965B29ECDAF10049956A /* UtilityTests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = UtilityTests.mm; sourceTree = "<group>"; };
 		DBE7966629ED5ACC0049956A /* Command.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Command.h; sourceTree = "<group>"; };
@@ -114,16 +110,12 @@
 			isa = PBXGroup;
 			children = (
 				DB4D385A29EA05DA007ACBDF /* ChainBurstGenerator.cpp */,
-				DB4D385B29EA05DA007ACBDF /* ChainBurstGenerator.h */,
 				DBE7965229ECD3C40049956A /* FiftyFiftyGenerator.cpp */,
-				DBE7965329ECD3C40049956A /* FiftyFiftyGenerator.h */,
 				DBE7965129ECCAF80049956A /* GeneratedMaze.h */,
 				DB04DBEA29F2B57A007C7819 /* MazeGenerator.cpp */,
 				DB4D384929E91A0F007ACBDF /* MazeGenerator.h */,
 				DB4D385029E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp */,
-				DB4D385129E986A1007ACBDF /* RemoveRandomWallsGenerator.h */,
 				DB4D385329E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp */,
-				DB4D385429E994AD007ACBDF /* VerticalPathBreaksGenerator.h */,
 			);
 			path = generation;
 			sourceTree = "<group>";
