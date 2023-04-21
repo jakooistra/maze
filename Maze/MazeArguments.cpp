@@ -113,6 +113,10 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         .add("usage", "Ignores other commands, and outputs detailed usage notes.")
         .setUncommon()
         .build();
+    auto cmdPerformance = (*parser)
+        .add("perf", "Measures maze generation speed for all specified types.")
+        .setUncommon()
+        .build();
     
     // Print usage and exit early if the input is invalid.
     auto parserResult = parser->parse(argc, argv);
@@ -161,6 +165,8 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
             args.percentileOutput.insert(command.has_value() ? command.value->integer : 1);
         } else if (command.name == cmdOnlyUsage.name) {
             onlyPrintUsage = true;
+        } else if (command.name == cmdPerformance.name) {
+            args.measurePerformance = true;
         }
     }
     
@@ -204,7 +210,7 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
 }
 
 void MazeArguments::printWarnings() {
-    if (rankedOutput.empty()) {
+    if (rankedOutput.empty() && !measurePerformance) {
         std::cout << "No output specified." << std::endl;
         std::cout << "  Use -o or -op to specify which maze(s) to output." << std::endl;
         if (types.size() <= 1) {

@@ -21,6 +21,7 @@ struct MazeArguments {
     int cellSize = 9;
     int count = 1;
     bool showAnalysis = false;
+    bool measurePerformance = false;
     bool showPath = false;
     std::optional<int> specifiedSeed;
     std::optional<std::string> baseFileName;
