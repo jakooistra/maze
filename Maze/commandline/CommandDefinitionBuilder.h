@@ -30,6 +30,7 @@ public:
     CommandDefinitionBuilder &stringArgument(std::string const &argName, std::optional<std::string> defaultValue = std::nullopt);
     CommandDefinitionBuilder &setOptional();
     CommandDefinitionBuilder &setUncommon();
+    CommandDefinitionBuilder &setMultiple();
     CommandDefinitionBuilder &addMessage(std::string const &message);
     
     CommandDefinition build();

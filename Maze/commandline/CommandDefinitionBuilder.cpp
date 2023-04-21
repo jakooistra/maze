@@ -41,6 +41,11 @@ CommandDefinitionBuilder &CommandDefinitionBuilder::setUncommon() {
     return *this;
 }
 
+CommandDefinitionBuilder &CommandDefinitionBuilder::setMultiple() {
+    definition.singleArgument = false;
+    return *this;
+}
+
 CommandDefinitionBuilder &CommandDefinitionBuilder::addMessage(std::string const &message) {
     definition.messages.push_back(message);
     return *this;

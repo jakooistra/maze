@@ -15,16 +15,26 @@ CommandDefinition::CommandDefinition(std::string const &name, std::string const 
 {
 }
 
-std::string CommandDefinition::usageArgument() const {
+std::string CommandDefinition::commandUsage() const {
+    if (singleArgument) {
+        return singleCommandUsage();
+    } else {
+        std::stringstream stream;
+        stream << singleCommandUsage() << " [" << singleCommandUsage(false) << "] ...";
+        return stream.str();
+    }
+}
+
+std::string CommandDefinition::singleCommandUsage(bool showOptionalityOfArgument) const {
     std::stringstream stream;
     stream << "-" << name;
     if (argumentType != CommandArgument::None) {
         stream << " ";
-        if (!isRequired(argumentType)) {
+        if (showOptionalityOfArgument && !isRequired(argumentType)) {
             stream << "[";
         }
         stream << argumentName;
-        if (!isRequired(argumentType)) {
+        if (showOptionalityOfArgument && !isRequired(argumentType)) {
             stream << "]";
         }
     }

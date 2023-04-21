@@ -21,15 +21,21 @@ enum class CommandArgument {
     OptionalString,
 };
 
-// TODO: add multiple-argument expectation to definition
 struct CommandDefinition {
+    // The command line argument for the command. If this string is "w" the command would be "-w" when passed.
     std::string name;
-    std::string description;
+    
+    // If false, the command can be usefully passed multiple times.
+    bool singleArgument { true };
     
     CommandArgument argumentType { CommandArgument::None };
     std::string argumentName;
     std::optional<CommandValue> argumentDefault;
     
+    // The main description of the command, shown when printing usage.
+    std::string description;
+    
+    // Sub-messages shown when printing usage.
     std::vector<std::string> messages;
     
     // True if this parameter is expected to be defined more often.
@@ -38,7 +44,8 @@ struct CommandDefinition {
     
     CommandDefinition(std::string const &name, std::string const &description);
     
-    std::string usageArgument() const;
+    std::string commandUsage() const;
+    std::string singleCommandUsage(bool showOptionalityOfArgument = true) const;
 };
 
 inline bool isRequired(CommandArgument type) {

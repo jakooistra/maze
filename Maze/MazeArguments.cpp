@@ -31,8 +31,9 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     // Build all command line parameter definitions.
     auto parser = std::make_shared<CommandParser>();
     std::optional<CommandDefinitionBuilder> cmdBuilderType = (*parser)
-        .add("t", "Add a maze type to generate. Valid type arguments are:")
-        .stringArgument("type");
+        .add("t", "Add a maze type to generate.")
+        .stringArgument("type")
+        .setMultiple();
     for (auto generator : MazeGenerator::all()) {
         std::stringstream message;
         message
@@ -65,10 +66,11 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         .add("n", "The number of each maze type to generate.")
         .intArgument("count", args.count)
         .build();
-    auto cmdSeed = (*parser)
+    auto cmdSeed = (*parser) // TODO: allow specification of multiple seeds?
         .add("s", "The seed used to generate the maze.")
         .intArgument("seed", args.specifiedSeed)
         .addMessage("Only valid when generating a single maze")
+        .setUncommon()
         .build();
     auto cmdAnalyze = (*parser)
         .add("a", "Analyze the generated mazes and output statistics.")
@@ -98,13 +100,14 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         .add("o", "Creates an image of the nth best maze of the ones generated (1-n).")
         .stringArgument("rank")
         .setOptional()
-        .setUncommon()
+        .setMultiple()
         .addMessage("If 'rank' is unspecified, outputs the best maze (1).")
         .build();
     auto cmdOutputPercentile = (*parser)
         .add("op", "Creates an image of the best maze in the given percentile (1-100).")
         .intArgument("percentile")
         .setUncommon()
+        .setMultiple()
         .build();
     
     // Print usage and exit early if the input is invalid.

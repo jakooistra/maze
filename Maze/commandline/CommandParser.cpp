@@ -113,7 +113,7 @@ std::string CommandParser::getFullCommand(std::string const &programName, bool c
     stream << programName;
     for (auto command : commands) {
         if (!commonArgumentsOnly || command.common) {
-            stream << " [" << command.usageArgument() << "]";
+            stream << " [" << command.commandUsage() << "]";
         }
     }
     return stream.str();
@@ -123,7 +123,7 @@ void CommandParser::printDetailedArguments() const {
     std::cout << "Arguments:" << std::endl;
     int commandNameWidths = 0;
     for (auto command : commands) {
-        commandNameWidths = std::max(commandNameWidths, (int)command.usageArgument().length());
+        commandNameWidths = std::max(commandNameWidths, (int)command.singleCommandUsage().length());
     }
     commandNameWidths += 1;
     for (auto command : commands) {
@@ -136,8 +136,11 @@ void CommandParser::printDetailedArguments() const {
         for (auto &message : command.messages) {
             messages.push_back("  " + message);
         }
+        if (!command.singleArgument) {
+            messages.push_back("  Can be specified multiple times.");
+        }
         for (int i = 0; i < messages.size(); ++i) {
-            std::string prefix = (i == 0) ? command.usageArgument() : "";
+            std::string prefix = (i == 0) ? command.singleCommandUsage() : "";
             std::cout
                 << "  "
                 << std::left
