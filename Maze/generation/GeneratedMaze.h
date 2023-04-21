@@ -14,7 +14,7 @@
 #include "MazeType.h"
 
 struct GeneratedMaze {
-    MazeType type;
+    std::string typeArgument;
     int seed;
     std::shared_ptr<Maze const> maze;
 };

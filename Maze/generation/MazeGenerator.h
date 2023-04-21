@@ -12,30 +12,44 @@
 
 #include "GeneratedMaze.h"
 #include "Maze.h"
+#include "MazeQuality.h"
 #include "MazeType.h"
 
 class MazeGenerator {
 private:
+    // TODO: remove type?
     MazeType type;
+    std::string argument;
+    std::string name;
     std::string description;
+    MazeQuality quality;
     
 public:
-    MazeGenerator(MazeType _type, std::string const &_description) : type(_type), description(_description) {}
+    MazeGenerator(MazeType type, std::string const &argument, std::string const &name, std::string const &description, MazeQuality quality)
+    :   type(type)
+    ,   argument(argument)
+    ,   name(name)
+    ,   description(description)
+    ,   quality(quality)
+    {}
+    
     virtual ~MazeGenerator() {}
     
-    MazeType getType() const { return type; }
-    std::string getDescription() const { return description; }
+    std::string const &getName() const { return name; }
+    std::string const &getDescription() const { return description; }
+    std::string const &getArgumentName() const { return argument; }
+    MazeQuality getQuality() const { return quality; }
     
-    GeneratedMaze generate(int width, int height, int seed) {
+    GeneratedMaze generate(int width, int height, int seed) const {
         return {
-            getType(),
+            getArgumentName(),
             seed,
             generateInternal(width, height, seed),
         };
     }
     
 protected:
-    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed) = 0;
+    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed) const = 0;
 };
 
 #endif /* MazeGenerator_h */

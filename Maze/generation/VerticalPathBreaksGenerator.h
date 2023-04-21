@@ -27,11 +27,17 @@
 //       1: XXXXXXXXXXXXXXXXXXXXXXXXXXX
 class VerticalPathBreaksGenerator : public MazeGenerator {
 public:
-    VerticalPathBreaksGenerator() : MazeGenerator(MazeType::VerticalPathBreaks, "Full height paths with one random opening between each.") {}
+    VerticalPathBreaksGenerator()
+    :   MazeGenerator(MazeType::VerticalPathBreaks,
+                      "vp",
+                      "Vertical Path Breaks",
+                      "Full height paths with one random opening between each.",
+                      MazeQuality::Trivial) {}
+    
     virtual ~VerticalPathBreaksGenerator() {}
     
 protected:
-    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed);
+    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed) const;
 };
 
 #endif /* VerticalPathBreaksGenerator_h */

@@ -16,11 +16,17 @@
 // unreachable areas, very quick to generate.
 class FiftyFiftyGenerator : public MazeGenerator {
 public:
-    FiftyFiftyGenerator() : MazeGenerator(MazeType::FiftyFifty, "Every wall has a 50% chance to exist.") {}
+    FiftyFiftyGenerator()
+    :   MazeGenerator(MazeType::FiftyFifty,
+                      "ff",
+                      "Fifty Fifty",
+                      "Every wall has a 50% chance to exist.",
+                      MazeQuality::Trivial) {}
+    
     virtual ~FiftyFiftyGenerator() {}
     
 protected:
-    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed);
+    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed) const;
 };
 
 #endif /* FiftyFiftyGenerator_h */

@@ -30,11 +30,17 @@
 //        1: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 class ChainBurstGenerator : public MazeGenerator {
 public:
-    ChainBurstGenerator() : MazeGenerator(MazeType::ChainBurst, "Sequentially picks a recently filled location and splits the path.") {}
+    ChainBurstGenerator()
+    :   MazeGenerator(MazeType::ChainBurst,
+                      "cb",
+                      "Chain Burst",
+                      "Sequentially picks a recently filled location and splits the path.",
+                      MazeQuality::Complex) {}
+    
     virtual ~ChainBurstGenerator() {}
     
 protected:
-    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed);
+    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed) const;
 };
 
 #endif /* ChainBurstGenerator_h */

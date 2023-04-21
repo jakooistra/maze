@@ -16,7 +16,6 @@
 #include "CommandParser.h"
 #include "GeneratorFactory.h"
 #include "MazeArguments.h"
-#include "MazeTypeParsing.h"
 
 std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[]) {
     MazeArguments args;
@@ -24,8 +23,8 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     std::filesystem::path programPath(argv[0]);
     std::string programName = programPath.filename();
     
-    std::map<std::string, std::vector<MazeType>> mazeTypeLists;
-    mazeTypeLists["all"] = allMazeTypes();
+    std::map<std::string, std::vector<std::shared_ptr<MazeGenerator const>>> mazeTypeLists;
+    mazeTypeLists["all"] = GeneratorFactory::all();
     mazeTypeLists["complex"] = GeneratorFactory::complexTypes();
     mazeTypeLists["trivial"] = GeneratorFactory::trivialTypes();
     
@@ -34,21 +33,21 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     std::optional<CommandDefinitionBuilder> cmdBuilderType = (*parser)
         .add("t", "Add a maze type to generate. Valid type arguments are:")
         .stringArgument("type");
-    for (auto type : allMazeTypes()) {
+    for (auto generator : GeneratorFactory::all()) {
         std::stringstream message;
         message
-            << "'" << getMazeArgumentName(type) << "' " << getMazeTypeName(type)
-            << " - " << GeneratorFactory::create(type)->getDescription();
+            << "'" << generator->getArgumentName() << "' "
+            << generator->getName() << " - " << generator->getDescription();
         cmdBuilderType->addMessage(message.str());
     }
     for (auto tuple : mazeTypeLists) {
         std::stringstream message;
         message << "'" << tuple.first << "' - (";
-        for (auto iter = tuple.second.begin(); iter != tuple.second.end(); ++iter) {
-            if (iter != tuple.second.begin()) {
+        for (auto generator : tuple.second) {
+            if (generator != tuple.second.front()) {
                 message << ", ";
             }
-            message << getMazeArgumentName(*iter);
+            message << generator->getArgumentName();
         }
         message << ")";
         cmdBuilderType->addMessage(message.str());
@@ -113,13 +112,13 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     
     for (auto command : parserResult.commands) {
         if (command.name == cmdType.name) {
-            auto type = getMazeTypeFromArgument(command.value->string);
+            auto generator = GeneratorFactory::getFromArgument(command.value->string);
             auto list = mazeTypeLists.find(command.value->string);
-            if (type.has_value()) {
-                args.types.insert(*type);
+            if (generator) {
+                args.generators.insert(generator);
             } else if (list != mazeTypeLists.end()) {
-                for (auto type : list->second) {
-                    args.types.insert(type);
+                for (auto generator : list->second) {
+                    args.generators.insert(generator);
                 }
             } else {
                 std::cout << "ERROR: '" << command.value->str() << "' is not a valid maze type." << std::endl;
@@ -166,10 +165,10 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     
     // Validate combinations of commands.
     std::stringstream invalidMessage;
-    if (args.types.empty()) {
+    if (args.generators.empty()) {
         invalidMessage << "expected at least one maze type to be specified.";
-    } else if (args.baseFileName.has_value() && args.types.size() > 1) {
-        invalidMessage << "-f option is not valid when specifying multiple (" << args.types.size() << ") maze types.";
+    } else if (args.baseFileName.has_value() && args.generators.size() > 1) {
+        invalidMessage << "-f option is not valid when specifying multiple (" << args.generators.size() << ") maze types.";
     } else if (args.specifiedSeed.has_value() && args.count > 1) {
         invalidMessage << "-s option is not valid when maze count (" << args.count << ") is more than 1.";
     }
@@ -187,6 +186,8 @@ void MazeArguments::printWarnings() {
     if (rankedOutput.empty()) {
         std::cout << "No output specified." << std::endl;
         std::cout << "  Use -o or -op to specify which maze(s) to output." << std::endl;
-        std::cout << "  Use -f to specify a file name only the best maze is desired." << std::endl;
+        if (generators.size() <= 1) {
+            std::cout << "  Use -f to specify a file name only the best maze is desired." << std::endl;
+        }
     }
 }

@@ -45,20 +45,19 @@ int main(int argc, const char * argv[]) {
         std::cout << "Running on " << ThreadPool::shared().getThreadCount() << " threads." << std::endl;
     }
     
-    if (args->types.size() > 1) {
-        std::cout << "Generating " << args->types.size() << " maze types x" << args->count << "..." <<std::endl;
+    if (args->generators.size() > 1) {
+        std::cout << "Generating " << args->generators.size() << " maze types x" << args->count << "..." <<std::endl;
     }
     int typeCount = 0;
-    for (auto type : args->types) {
-        auto generator = GeneratorFactory::create(type);
-        auto typeName = getMazeTypeName(generator->getType());
+    for (auto generator : args->generators) {
+        auto typeName = generator->getName();
         typeCount++;
-        if (args->types.size() > 1) {
-            std::cout << "  (" << typeCount << "/" << args->types.size() << ") ";
+        if (args->generators.size() > 1) {
+            std::cout << "  (" << typeCount << "/" << args->generators.size() << ") ";
         }
         std::cout << "Generating x" << args->count << " " << typeName << " " << args->width << "x" << args->height << "..." << std::endl;
         
-        std::function<GeneratedMaze(int)> generate = [args, &generator](int seed){
+        std::function<GeneratedMaze(int)> generate = [args, generator](int seed){
             return generator->generate(args->width, args->height, seed);
         };
         

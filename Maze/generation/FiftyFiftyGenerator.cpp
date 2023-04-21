@@ -10,7 +10,7 @@
 #include "FiftyFiftyGenerator.h"
 #include "Utility.h"
 
-std::unique_ptr<Maze> FiftyFiftyGenerator::generateInternal(int width, int height, int seed) {
+std::unique_ptr<Maze> FiftyFiftyGenerator::generateInternal(int width, int height, int seed) const {
     auto maze = std::make_unique<Maze>(width, height);
     auto rng = std::bind(std::uniform_int_distribution<>(0, INT_MAX), std::mt19937(seed));
     

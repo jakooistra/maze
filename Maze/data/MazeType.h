@@ -29,18 +29,4 @@ inline std::vector<MazeType> allMazeTypes() {
     };
 }
 
-inline std::string getMazeTypeName(MazeType type) {
-    switch (type) {
-        case MazeType::ChainBurst:
-            return "Chain Burst";
-        case MazeType::FiftyFifty:
-            return "Fifty Fifty";
-        case MazeType::RemoveRandomWalls:
-            return "Remove Random Walls";
-        case MazeType::VerticalPathBreaks:
-            return "Vertical Path Breaks";
-    }
-    return "Unknown";
-}
-
 #endif /* MazeType_h */

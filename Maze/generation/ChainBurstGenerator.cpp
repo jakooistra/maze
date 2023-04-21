@@ -148,7 +148,7 @@ static std::vector<XY> burst(Maze *maze, std::vector<std::vector<ChainBurstCell>
     return checkExpansion;
 }
 
-std::unique_ptr<Maze> ChainBurstGenerator::generateInternal(int width, int height, int seed) {
+std::unique_ptr<Maze> ChainBurstGenerator::generateInternal(int width, int height, int seed) const {
     auto maze = std::make_unique<Maze>(width, height);
     auto rng = std::bind(std::uniform_int_distribution<>(0, INT_MAX), std::mt19937(seed));
     

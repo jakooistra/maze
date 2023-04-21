@@ -33,11 +33,17 @@
 //        1: XXXXXXXXXXXXXXXXXXXXX
 class RemoveRandomWallsGenerator : public MazeGenerator {
 public:
-    RemoveRandomWallsGenerator() : MazeGenerator(MazeType::RemoveRandomWalls, "Random walls are iteratively removed.") {}
+    RemoveRandomWallsGenerator()
+    :   MazeGenerator(MazeType::RemoveRandomWalls,
+                      "rr",
+                      "Remove Random Walls",
+                      "Random walls are iteratively removed.",
+                      MazeQuality::Trivial) {}
+    
     virtual ~RemoveRandomWallsGenerator() {}
     
 protected:
-    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed);
+    virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed) const;
 };
 
 #endif /* RemoveRandomWallsGenerator_h */

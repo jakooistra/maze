@@ -12,7 +12,7 @@
 #include <set>
 #include <string>
 
-#include "MazeType.h"
+#include "MazeGenerator.h"
 
 struct MazeArguments {
     int width = 25;
@@ -24,7 +24,8 @@ struct MazeArguments {
     bool showPath = false; // TODO: add command for this visual output argument
     std::optional<int> specifiedSeed;
     std::optional<std::string> baseFileName;
-    std::set<MazeType> types;
+    // TODO: change to vector from set and ensure strict ordering
+    std::set<std::shared_ptr<MazeGenerator const>> generators;
     std::set<int> rankedOutput;
     std::set<int> percentileOutput;
     
