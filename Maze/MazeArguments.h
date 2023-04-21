@@ -21,7 +21,7 @@ struct MazeArguments {
     int cellSize = 9;
     int count = 1;
     bool showAnalysis = false;
-    bool showPath = false; // TODO: add command for this visual output argument
+    bool showPath = false;
     std::optional<int> specifiedSeed;
     std::optional<std::string> baseFileName;
     std::set<std::string> types;

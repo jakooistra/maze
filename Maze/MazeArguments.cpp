@@ -73,6 +73,10 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     auto cmdAnalyze = (*parser)
         .add("a", "Analyze the generated mazes and output statistics.")
         .build();
+    auto cmdShowPath = (*parser)
+        .add("p", "Show the shortest path solution in image output.")
+        .setUncommon()
+        .build();
     auto cmdWallWidth = (*parser)
         .add("ww", "The width of maze walls in pixels.")
         .intArgument("width", args.wallWidth)
@@ -131,6 +135,8 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
             args.height = std::max(1, command.value->integer);
         } else if (command.name == cmdCount.name) {
             args.count = command.value->integer;
+        } else if (command.name == cmdShowPath.name) {
+            args.showPath = true;
         } else if (command.name == cmdWallWidth.name) {
             args.wallWidth = std::max(1, command.value->integer);
         } else if (command.name == cmdCellSize.name) {
