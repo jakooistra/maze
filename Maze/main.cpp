@@ -56,7 +56,11 @@ int main(int argc, const char * argv[]) {
         if (args->types.size() > 1) {
             std::cout << "  (" << typeCount << "/" << args->types.size() << ") ";
         }
-        std::cout << "Generating x" << args->count << " " << typeName << " " << args->width << "x" << args->height << "..." << std::endl;
+        if (args->specifiedSeed.has_value()) {
+            std::cout << "Generating " << typeName << " " << args->width << "x" << args->height << " from seed " << *args->specifiedSeed << "..." << std::endl;
+        } else {
+            std::cout << "Generating x" << args->count << " " << typeName << " " << args->width << "x" << args->height << "..." << std::endl;
+        }
         
         std::function<GeneratedMaze(int)> generate = [args, generator](int seed){
             return generator->generate(args->width, args->height, seed);
@@ -96,7 +100,9 @@ int main(int argc, const char * argv[]) {
                 if (args->rankedOutput.contains(rank)) {
                     std::stringstream fileName;
                     fileName << fileNamePrefix;
-                    if (!args->baseFileName.has_value() || args->rankedOutput.size() > 1) {
+                    if (args->rankedOutput.size() == 1 && args->specifiedSeed.has_value()) {
+                        fileName << " (seed " << *args->specifiedSeed << ")";
+                    } else if (!args->baseFileName.has_value() || args->rankedOutput.size() > 1) {
                         fileName << " (" << rank << " of " << args->count << ")";
                     }
                     fileName << ".png";
