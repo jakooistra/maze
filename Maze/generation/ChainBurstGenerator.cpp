@@ -272,3 +272,5 @@ std::unique_ptr<Maze> ChainBurstGenerator::generateInternal(int width, int heigh
     
     return maze;
 }
+
+REGISTER_AND_STORE_GENERATOR(ChainBurstGenerator);

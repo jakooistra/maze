@@ -10,10 +10,10 @@
 		DB04DBDC29F16C85007C7819 /* CommandDefinition.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB04DBDB29F16BB4007C7819 /* CommandDefinition.cpp */; };
 		DB04DBDF29F1B172007C7819 /* CommandDefinitionBuilder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB04DBDD29F1B172007C7819 /* CommandDefinitionBuilder.cpp */; };
 		DB04DBE329F1BB72007C7819 /* MazeArguments.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB04DBE129F1BB72007C7819 /* MazeArguments.cpp */; };
+		DB04DBEB29F2B57A007C7819 /* MazeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB04DBEA29F2B57A007C7819 /* MazeGenerator.cpp */; };
 		DB4D383B29E904FA007ACBDF /* Analysis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D383929E904FA007ACBDF /* Analysis.cpp */; };
 		DB4D383E29E90505007ACBDF /* Stats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D383C29E90505007ACBDF /* Stats.cpp */; };
 		DB4D384429E905CE007ACBDF /* Solver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D384229E905CE007ACBDF /* Solver.cpp */; };
-		DB4D384E29E9852C007ACBDF /* GeneratorFactory.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D384C29E9852C007ACBDF /* GeneratorFactory.cpp */; };
 		DB4D385229E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D385029E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp */; };
 		DB4D385529E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D385329E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp */; };
 		DB4D385829E9E9A7007ACBDF /* Assessment.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D385629E9E9A7007ACBDF /* Assessment.cpp */; };
@@ -50,6 +50,7 @@
 		DB04DBE229F1BB72007C7819 /* MazeArguments.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeArguments.h; sourceTree = "<group>"; };
 		DB04DBE729F1C1BA007C7819 /* CommandValue.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CommandValue.h; sourceTree = "<group>"; };
 		DB04DBE929F200FA007C7819 /* MazeQuality.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeQuality.h; sourceTree = "<group>"; };
+		DB04DBEA29F2B57A007C7819 /* MazeGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MazeGenerator.cpp; sourceTree = "<group>"; };
 		DB4A736729EA34CF00E3336A /* Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		DB4D383929E904FA007ACBDF /* Analysis.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Analysis.cpp; sourceTree = "<group>"; };
 		DB4D383A29E904FA007ACBDF /* Analysis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Analysis.h; sourceTree = "<group>"; };
@@ -59,8 +60,6 @@
 		DB4D384229E905CE007ACBDF /* Solver.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Solver.cpp; sourceTree = "<group>"; };
 		DB4D384329E905CE007ACBDF /* Solver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Solver.h; sourceTree = "<group>"; };
 		DB4D384929E91A0F007ACBDF /* MazeGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeGenerator.h; sourceTree = "<group>"; };
-		DB4D384C29E9852C007ACBDF /* GeneratorFactory.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GeneratorFactory.cpp; sourceTree = "<group>"; };
-		DB4D384D29E9852C007ACBDF /* GeneratorFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GeneratorFactory.h; sourceTree = "<group>"; };
 		DB4D385029E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = RemoveRandomWallsGenerator.cpp; sourceTree = "<group>"; };
 		DB4D385129E986A1007ACBDF /* RemoveRandomWallsGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = RemoveRandomWallsGenerator.h; sourceTree = "<group>"; };
 		DB4D385329E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VerticalPathBreaksGenerator.cpp; sourceTree = "<group>"; };
@@ -119,8 +118,7 @@
 				DBE7965229ECD3C40049956A /* FiftyFiftyGenerator.cpp */,
 				DBE7965329ECD3C40049956A /* FiftyFiftyGenerator.h */,
 				DBE7965129ECCAF80049956A /* GeneratedMaze.h */,
-				DB4D384C29E9852C007ACBDF /* GeneratorFactory.cpp */,
-				DB4D384D29E9852C007ACBDF /* GeneratorFactory.h */,
+				DB04DBEA29F2B57A007C7819 /* MazeGenerator.cpp */,
 				DB4D384929E91A0F007ACBDF /* MazeGenerator.h */,
 				DB4D385029E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp */,
 				DB4D385129E986A1007ACBDF /* RemoveRandomWallsGenerator.h */,
@@ -333,9 +331,9 @@
 				DB4D383B29E904FA007ACBDF /* Analysis.cpp in Sources */,
 				DB4D385829E9E9A7007ACBDF /* Assessment.cpp in Sources */,
 				DBB26BCE29E8C86100C14D5B /* Maze.cpp in Sources */,
-				DB4D384E29E9852C007ACBDF /* GeneratorFactory.cpp in Sources */,
 				DB04DBDF29F1B172007C7819 /* CommandDefinitionBuilder.cpp in Sources */,
 				DBE7965429ECD3C40049956A /* FiftyFiftyGenerator.cpp in Sources */,
+				DB04DBEB29F2B57A007C7819 /* MazeGenerator.cpp in Sources */,
 				DBE7966D29ED5D470049956A /* CommandParser.cpp in Sources */,
 				DB4D385229E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp in Sources */,
 				DB4D384429E905CE007ACBDF /* Solver.cpp in Sources */,

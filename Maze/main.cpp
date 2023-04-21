@@ -12,9 +12,9 @@
 #include "lodepng.h"
 
 #include "Assessment.h"
-#include "GeneratorFactory.h"
 #include "Maze.h"
 #include "MazeArguments.h"
+#include "MazeGenerator.h"
 #include "MazeToImage.h"
 #include "Stats.h"
 #include "ThreadUtility.h"
@@ -50,7 +50,7 @@ int main(int argc, const char * argv[]) {
     }
     int typeCount = 0;
     for (auto type : args->types) {
-        auto generator = GeneratorFactory::get(type);
+        auto generator = MazeGenerator::get(type);
         auto typeName = generator->getName();
         typeCount++;
         if (args->types.size() > 1) {

@@ -14,8 +14,8 @@
 #include <vector>
 
 #include "CommandParser.h"
-#include "GeneratorFactory.h"
 #include "MazeArguments.h"
+#include "MazeGenerator.h"
 
 std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[]) {
     MazeArguments args;
@@ -24,16 +24,16 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     std::string programName = programPath.filename();
     
     std::map<std::string, std::vector<std::shared_ptr<MazeGenerator const>>> mazeTypeLists;
-    mazeTypeLists["all"] = GeneratorFactory::all();
-    mazeTypeLists["complex"] = GeneratorFactory::complexTypes();
-    mazeTypeLists["trivial"] = GeneratorFactory::trivialTypes();
+    mazeTypeLists["all"] = MazeGenerator::all();
+    mazeTypeLists["complex"] = MazeGenerator::allOfQuality(MazeQuality::Complex);
+    mazeTypeLists["trivial"] = MazeGenerator::allOfQuality(MazeQuality::Trivial);
     
     // Build all command line parameter definitions.
     auto parser = std::make_shared<CommandParser>();
     std::optional<CommandDefinitionBuilder> cmdBuilderType = (*parser)
         .add("t", "Add a maze type to generate. Valid type arguments are:")
         .stringArgument("type");
-    for (auto generator : GeneratorFactory::all()) {
+    for (auto generator : MazeGenerator::all()) {
         std::stringstream message;
         message
             << "'" << generator->getType() << "' "
@@ -116,7 +116,7 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     
     for (auto command : parserResult.commands) {
         if (command.name == cmdType.name) {
-            auto generator = GeneratorFactory::get(command.value->string);
+            auto generator = MazeGenerator::get(command.value->string);
             auto list = mazeTypeLists.find(command.value->string);
             if (generator) {
                 args.types.insert(generator->getType());

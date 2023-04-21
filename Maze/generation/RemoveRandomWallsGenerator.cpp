@@ -30,3 +30,5 @@ std::unique_ptr<Maze> RemoveRandomWallsGenerator::generateInternal(int width, in
     
     return maze;
 }
+
+REGISTER_AND_STORE_GENERATOR(RemoveRandomWallsGenerator);

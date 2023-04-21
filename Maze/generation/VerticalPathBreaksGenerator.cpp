@@ -25,3 +25,5 @@ std::unique_ptr<Maze> VerticalPathBreaksGenerator::generateInternal(int width, i
     
     return maze;
 }
+
+REGISTER_AND_STORE_GENERATOR(VerticalPathBreaksGenerator);

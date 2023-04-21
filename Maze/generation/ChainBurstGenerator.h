@@ -5,6 +5,8 @@
 //  Created by John Kooistra on 2023-04-14.
 //
 
+// TODO: remove header files for these, they're not strictly necessary
+
 #ifndef ChainBurstGenerator_h
 #define ChainBurstGenerator_h
 
