@@ -106,18 +106,26 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DB4D384B29E984D2007ACBDF /* generation */ = {
+		DB04DBED29F2C35F007C7819 /* types */ = {
 			isa = PBXGroup;
 			children = (
 				DB4D385A29EA05DA007ACBDF /* ChainBurstGenerator.cpp */,
 				DBE7965229ECD3C40049956A /* FiftyFiftyGenerator.cpp */,
-				DBE7965129ECCAF80049956A /* GeneratedMaze.h */,
-				DB04DBEA29F2B57A007C7819 /* MazeGenerator.cpp */,
-				DB4D384929E91A0F007ACBDF /* MazeGenerator.h */,
 				DB4D385029E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp */,
 				DB4D385329E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp */,
 			);
-			path = generation;
+			path = types;
+			sourceTree = "<group>";
+		};
+		DB4D384B29E984D2007ACBDF /* generator */ = {
+			isa = PBXGroup;
+			children = (
+				DB04DBED29F2C35F007C7819 /* types */,
+				DBE7965129ECCAF80049956A /* GeneratedMaze.h */,
+				DB04DBEA29F2B57A007C7819 /* MazeGenerator.cpp */,
+				DB4D384929E91A0F007ACBDF /* MazeGenerator.h */,
+			);
+			path = generator;
 			sourceTree = "<group>";
 		};
 		DBB26BB429E8C56400C14D5B = {
@@ -144,7 +152,7 @@
 				DBE7966029ED59820049956A /* analysis */,
 				DBE7966429ED5A810049956A /* commandline */,
 				DBE7966229ED5A250049956A /* data */,
-				DB4D384B29E984D2007ACBDF /* generation */,
+				DB4D384B29E984D2007ACBDF /* generator */,
 				DBE7966329ED5A3D0049956A /* threading */,
 				DBE7966129ED59CE0049956A /* visualization */,
 				DBB26BC029E8C56400C14D5B /* main.cpp */,
