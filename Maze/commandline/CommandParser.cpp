@@ -89,8 +89,13 @@ CommandParserResult CommandParser::parse(std::vector<std::string> const &args) c
     }
     
     // If a required argument is missing, invalidate the result.
-    if (partialCommand.has_value() && isRequired(argumentTypes.find(partialCommand->name)->second)) {
-        result.invalidate("Non-optional argument was missing for command \"" + partialCommand->name + "\"");
+    if (partialCommand.has_value()) {
+        if (isRequired(argumentTypes.find(partialCommand->name)->second)) {
+            result.invalidate("Non-optional argument was missing for command \"" + partialCommand->name + "\"");
+        } else {
+            result.commands.push_back(*partialCommand);
+            partialCommand.reset();
+        }
     }
     
     return result;
