@@ -36,8 +36,8 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     for (auto generator : MazeGenerator::all()) {
         std::stringstream message;
         message
-            << "'" << generator->getType() << "' "
-            << generator->getName() << " - " << generator->getDescription();
+            << "'" << generator->type << "' "
+            << generator->name << " - " << generator->description;
         cmdBuilderType->addMessage(message.str());
     }
     for (auto tuple : mazeTypeLists) {
@@ -47,7 +47,7 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
             if (generator != tuple.second.front()) {
                 message << ", ";
             }
-            message << generator->getType();
+            message << generator->type;
         }
         message << ")";
         cmdBuilderType->addMessage(message.str());
@@ -119,10 +119,10 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
             auto generator = MazeGenerator::get(command.value->string);
             auto list = mazeTypeLists.find(command.value->string);
             if (generator) {
-                args.types.insert(generator->getType());
+                args.types.insert(generator->type);
             } else if (list != mazeTypeLists.end()) {
                 for (auto generator : list->second) {
-                    args.types.insert(generator->getType());
+                    args.types.insert(generator->type);
                 }
             } else {
                 std::cout << "ERROR: '" << command.value->str() << "' is not a valid maze type." << std::endl;

@@ -17,20 +17,18 @@
 struct MazeGeneratorRegistry;
 
 class MazeGenerator {
-private:
-    // TODO: expose these as const properties rather than using accessors.
-    
+public:
     // Lower case short string with no spaces identifying this generator type. Used on the command line.
-    std::string type;
+    std::string const type;
     
     // The human-readable name of this generator.
-    std::string name;
+    std::string const name;
     
     // A short description of what this generator does, used on the command line.
-    std::string description;
+    std::string const description;
     
     // A rough quality type of this generator: trivial, complex, or any other defined value.
-    MazeQuality quality;
+    MazeQuality const quality;
     
 protected:
     MazeGenerator(std::string const &type, std::string const &name, std::string const &description, MazeQuality quality);
@@ -43,12 +41,6 @@ public:
     
     // Generate a maze with the given parameters.
     GeneratedMaze generate(int width, int height, int seed) const;
-    
-    // Metadata for this maze generator.
-    std::string const &getType() const { return type; }
-    std::string const &getName() const { return name; }
-    std::string const &getDescription() const { return description; }
-    MazeQuality getQuality() const { return quality; }
     
     // A global registry for maze generators, populated by distributed generator files.
     static std::shared_ptr<MazeGenerator const> registerGenerator(std::shared_ptr<MazeGenerator const> generator);

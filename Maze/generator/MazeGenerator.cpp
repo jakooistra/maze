@@ -31,7 +31,7 @@ MazeGenerator::MazeGenerator(std::string const &type, std::string const &name, s
 
 GeneratedMaze MazeGenerator::generate(int width, int height, int seed) const {
     return {
-        getType(),
+        type,
         seed,
         generateInternal(width, height, seed),
     };
@@ -43,11 +43,11 @@ std::shared_ptr<MazeGenerator const> MazeGenerator::registerGenerator(std::share
     
     // TODO: validation error if the type name has spaces in it.
     
-    if (registry->generatorByType.find(generator->getType()) == registry->generatorByType.end()) {
-        registry->generatorByType[generator->getType()] = generator;
-        registry->generatorTypeByQuality[generator->getQuality()].insert(generator->getType());
+    if (registry->generatorByType.find(generator->type) == registry->generatorByType.end()) {
+        registry->generatorByType[generator->type] = generator;
+        registry->generatorTypeByQuality[generator->quality].insert(generator->type);
     } else {
-        std::cerr << "ERROR: a maze generator with type " << generator->getType() << " was already specified." << std::endl;
+        std::cerr << "ERROR: a maze generator with type " << generator->type << " was already specified." << std::endl;
     }
     
     return generator;

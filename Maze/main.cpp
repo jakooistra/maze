@@ -51,7 +51,7 @@ int main(int argc, const char * argv[]) {
     int typeCount = 0;
     for (auto type : args->types) {
         auto generator = MazeGenerator::get(type);
-        auto typeName = generator->getName();
+        auto typeName = generator->name;
         typeCount++;
         if (args->types.size() > 1) {
             std::cout << "  (" << typeCount << "/" << args->types.size() << ") ";
