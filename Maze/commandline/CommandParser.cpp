@@ -101,11 +101,11 @@ CommandParserResult CommandParser::parse(std::vector<std::string> const &args) c
     return result;
 }
 
-void CommandParser::printUsage(std::string const &programName) const {
+void CommandParser::printUsage(std::string const &programName, bool detailedUsage) const {
     std::cout << "Usage:" << std::endl;
     std::cout << "  " << getFullCommand(programName, true) << std::endl;
     std::cout << "  " << getFullCommand(programName, false) << std::endl;
-    printDetailedArguments();
+    printCommandDescriptions(detailedUsage);
 }
 
 std::string CommandParser::getFullCommand(std::string const &programName, bool commonArgumentsOnly) const {
@@ -119,7 +119,7 @@ std::string CommandParser::getFullCommand(std::string const &programName, bool c
     return stream.str();
 }
 
-void CommandParser::printDetailedArguments() const {
+void CommandParser::printCommandDescriptions(bool detailedUsage) const {
     std::cout << "Arguments:" << std::endl;
     int commandNameWidths = 0;
     for (auto command : commands) {
@@ -128,16 +128,18 @@ void CommandParser::printDetailedArguments() const {
     commandNameWidths += 1;
     for (auto command : commands) {
         std::vector<std::string> messages = { command.description };
-        if (command.argumentDefault.has_value()) {
-            std::stringstream message;
-            message << "  (" << command.argumentDefault->str() << ") if unspecified.";
-            messages.push_back(message.str());
-        }
-        for (auto &message : command.messages) {
-            messages.push_back("  " + message);
-        }
-        if (!command.singleArgument) {
-            messages.push_back("  Can be specified multiple times.");
+        if (detailedUsage) {
+            if (command.argumentDefault.has_value()) {
+                std::stringstream message;
+                message << "  (" << command.argumentDefault->str() << ") if unspecified.";
+                messages.push_back(message.str());
+            }
+            for (auto &message : command.messages) {
+                messages.push_back("  " + message);
+            }
+            if (!command.singleArgument) {
+                messages.push_back("  Can be specified multiple times.");
+            }
         }
         for (int i = 0; i < messages.size(); ++i) {
             std::string prefix = (i == 0) ? command.singleCommandUsage() : "";

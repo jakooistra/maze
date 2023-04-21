@@ -109,6 +109,10 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         .setUncommon()
         .setMultiple()
         .build();
+    auto cmdOnlyUsage = (*parser)
+        .add("usage", "Ignores other commands, and outputs detailed usage notes.")
+        .setUncommon()
+        .build();
     
     // Print usage and exit early if the input is invalid.
     auto parserResult = parser->parse(argc, argv);
@@ -117,6 +121,7 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         return std::nullopt;
     }
     
+    bool onlyPrintUsage = false;
     for (auto command : parserResult.commands) {
         if (command.name == cmdType.name) {
             auto generator = MazeGenerator::get(command.value->string);
@@ -154,7 +159,14 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
             args.rankedOutput.insert(command.has_value() ? command.value->integer : 1);
         } else if (command.name == cmdOutputPercentile.name) {
             args.percentileOutput.insert(command.has_value() ? command.value->integer : 1);
+        } else if (command.name == cmdOnlyUsage.name) {
+            onlyPrintUsage = true;
         }
+    }
+    
+    if (onlyPrintUsage) {
+        parser->printUsage(programName, true);
+        return std::nullopt;
     }
     
     // Massage valid data and prune invalid specified data.

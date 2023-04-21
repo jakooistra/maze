@@ -46,11 +46,11 @@ public:
     CommandParserResult parse(int argc, const char * argv[]) const;
     CommandParserResult parse(std::vector<std::string> const &args) const;
     
-    void printUsage(std::string const &programName) const;
+    void printUsage(std::string const &programName, bool detailedUsage = false) const;
     
 private:
     std::string getFullCommand(std::string const &programName, bool commonArgumentsOnly) const;
-    void printDetailedArguments() const;
+    void printCommandDescriptions(bool detailedUsage) const;
 };
 
 #endif /* CommandParser_h */
