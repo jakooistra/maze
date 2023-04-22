@@ -128,19 +128,20 @@ int main(int argc, const char * argv[]) {
                     writeMazeImageFile(nameTuple.first, images.front().get());
                 } else {
                     Image collatedImage;
-                    collatedImage.width = args->cellSize * ((int)images.size() - 1);
-                    collatedImage.height = (int)images.front()->height;
+                    int stepSize = args->collatedBorderSize;
+                    collatedImage.width = stepSize * ((int)images.size() - 1) + args->collatedBorderSize * 2;
+                    collatedImage.height = (int)images.front()->height + args->collatedBorderSize * 2;
                     for (auto image : images) {
                         collatedImage.width += image->width;
                         collatedImage.height = std::max(collatedImage.height, image->height);
                     }
                     // TODO: border color white and maybe a border around all mazes for clarity
-                    RGBA borderColor = RGBA::gray(220);
+                    RGBA borderColor = RGBA::gray(255);
                     collatedImage.pixels.resize(collatedImage.width * collatedImage.height, borderColor);
-                    int x = 0;
+                    int x = args->collatedBorderSize;
                     for (auto image : images) {
-                        collatedImage.blit(image.get(), x, 0);
-                        x += args->cellSize + image->width;
+                        collatedImage.blit(image.get(), x, args->collatedBorderSize);
+                        x += stepSize + image->width;
                     }
                     writeMazeImageFile(nameTuple.first, &collatedImage);
                 }

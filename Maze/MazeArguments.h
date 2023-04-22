@@ -19,6 +19,7 @@ struct MazeArguments {
     int height = 25;
     int wallWidth = 1;
     int cellSize = 9;
+    int collatedBorderSize = 12; // TODO: add argument to define this?
     int count = 1;
     bool showAnalysis = false;
     bool measurePerformance = false;
