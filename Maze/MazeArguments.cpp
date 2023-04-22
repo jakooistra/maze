@@ -98,7 +98,7 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         .build();
     auto cmdOutputRanked = (*parser)
         .add("o", "Creates an image of the nth best maze of the ones generated (1-n).")
-        .stringArgument("rank")
+        .intArgument("rank")
         .setOptional()
         .setMultiple()
         .addMessage("If 'rank' is unspecified, outputs the best maze (1).")
