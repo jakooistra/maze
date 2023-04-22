@@ -12,6 +12,7 @@
 		DB04DBE329F1BB72007C7819 /* MazeArguments.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB04DBE129F1BB72007C7819 /* MazeArguments.cpp */; };
 		DB04DBEB29F2B57A007C7819 /* MazeGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB04DBEA29F2B57A007C7819 /* MazeGenerator.cpp */; };
 		DB04DBF129F30D97007C7819 /* Performance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB04DBEF29F30D97007C7819 /* Performance.cpp */; };
+		DB04DBF529F358C3007C7819 /* GenerationRate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB04DBF329F358C3007C7819 /* GenerationRate.cpp */; };
 		DB4D383B29E904FA007ACBDF /* Analysis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D383929E904FA007ACBDF /* Analysis.cpp */; };
 		DB4D383E29E90505007ACBDF /* Stats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D383C29E90505007ACBDF /* Stats.cpp */; };
 		DB4D384429E905CE007ACBDF /* Solver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D384229E905CE007ACBDF /* Solver.cpp */; };
@@ -54,6 +55,8 @@
 		DB04DBEA29F2B57A007C7819 /* MazeGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = MazeGenerator.cpp; sourceTree = "<group>"; };
 		DB04DBEF29F30D97007C7819 /* Performance.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Performance.cpp; sourceTree = "<group>"; };
 		DB04DBF029F30D97007C7819 /* Performance.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Performance.h; sourceTree = "<group>"; };
+		DB04DBF329F358C3007C7819 /* GenerationRate.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = GenerationRate.cpp; sourceTree = "<group>"; };
+		DB04DBF429F358C3007C7819 /* GenerationRate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GenerationRate.h; sourceTree = "<group>"; };
 		DB4A736729EA34CF00E3336A /* Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		DB4D383929E904FA007ACBDF /* Analysis.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Analysis.cpp; sourceTree = "<group>"; };
 		DB4D383A29E904FA007ACBDF /* Analysis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Analysis.h; sourceTree = "<group>"; };
@@ -120,6 +123,17 @@
 			path = types;
 			sourceTree = "<group>";
 		};
+		DB04DBF229F3582E007C7819 /* performance */ = {
+			isa = PBXGroup;
+			children = (
+				DB04DBF329F358C3007C7819 /* GenerationRate.cpp */,
+				DB04DBF429F358C3007C7819 /* GenerationRate.h */,
+				DB04DBEF29F30D97007C7819 /* Performance.cpp */,
+				DB04DBF029F30D97007C7819 /* Performance.h */,
+			);
+			path = performance;
+			sourceTree = "<group>";
+		};
 		DB4D384B29E984D2007ACBDF /* generator */ = {
 			isa = PBXGroup;
 			children = (
@@ -156,13 +170,12 @@
 				DBE7966429ED5A810049956A /* commandline */,
 				DBE7966229ED5A250049956A /* data */,
 				DB4D384B29E984D2007ACBDF /* generator */,
+				DB04DBF229F3582E007C7819 /* performance */,
 				DBE7966329ED5A3D0049956A /* threading */,
 				DBE7966129ED59CE0049956A /* visualization */,
 				DBB26BC029E8C56400C14D5B /* main.cpp */,
 				DB04DBE129F1BB72007C7819 /* MazeArguments.cpp */,
 				DB04DBE229F1BB72007C7819 /* MazeArguments.h */,
-				DB04DBEF29F30D97007C7819 /* Performance.cpp */,
-				DB04DBF029F30D97007C7819 /* Performance.h */,
 				DB4A736729EA34CF00E3336A /* Utility.h */,
 			);
 			path = Maze;
@@ -336,6 +349,7 @@
 				DBB26BD729E8CD2D00C14D5B /* Image.cpp in Sources */,
 				DB4D383B29E904FA007ACBDF /* Analysis.cpp in Sources */,
 				DB4D385829E9E9A7007ACBDF /* Assessment.cpp in Sources */,
+				DB04DBF529F358C3007C7819 /* GenerationRate.cpp in Sources */,
 				DBB26BCE29E8C86100C14D5B /* Maze.cpp in Sources */,
 				DB04DBDF29F1B172007C7819 /* CommandDefinitionBuilder.cpp in Sources */,
 				DBE7965429ECD3C40049956A /* FiftyFiftyGenerator.cpp in Sources */,
