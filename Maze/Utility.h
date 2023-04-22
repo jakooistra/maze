@@ -17,7 +17,13 @@ struct StartAndFinish {
 };
 
 inline int uniqueEdgePointCount(int width, int height) {
-    return (width > 0 && height > 0) ? (width + height - 2) * 2 : 0;
+    if (width <= 0 || height <= 0) {
+        return 0;
+    } else if (width == 1 || height == 1) {
+        return width + height - 1;
+    } else {
+        return (width + height - 2) * 2;
+    }
 }
 
 // Returns a point on the edge of a grid defined as {[0, width), [0, width)}.
