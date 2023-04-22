@@ -89,4 +89,17 @@ inline std::vector<int> consecutiveNumbers(int start, int end) {
     return numbers;
 }
 
+inline void fillDegenerateMaze(Maze *maze) {
+    bool tall = maze->getWidth() < maze->getHeight();
+    for (int x = 0; x < maze->getWidth(); ++x) {
+        for (int y = 0; y < maze->getHeight(); ++y) {
+            if (tall) {
+                maze->setCell(x, y, Cell(false, x != (((y % 2) == 0) ? 0 : maze->getWidth() - 1)));
+            } else {
+                maze->setCell(x, y, Cell(y != (((x % 2) == 0) ? 0 : maze->getHeight() - 1), false));
+            }
+        }
+    }
+}
+
 #endif /* Utility_h */
