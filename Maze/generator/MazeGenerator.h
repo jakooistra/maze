@@ -31,7 +31,7 @@ public:
     MazeQuality const quality;
     
 protected:
-    MazeGenerator(std::string const &type, std::string const &name, std::string const &description, MazeQuality quality);
+    MazeGenerator(std::string const &type, std::string const &name, std::string const &description, MazeQuality quality = MazeQuality::Complex);
     
     // Implement this function in a subclass to allow maze generation.
     virtual std::unique_ptr<Maze> generateInternal(int width, int height, int seed) const = 0;

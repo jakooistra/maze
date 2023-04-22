@@ -159,8 +159,7 @@ public:
     ChainBurstGenerator()
     :   MazeGenerator("cb",
                       "Chain Burst",
-                      "Sequentially picks a recently filled location and splits the path.",
-                      MazeQuality::Complex)
+                      "Sequentially picks a recently filled location and splits the path.")
     {
     }
     
