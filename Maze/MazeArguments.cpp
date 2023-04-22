@@ -117,6 +117,10 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         .add("perf", "Measures maze generation speed for all specified types.")
         .setUncommon()
         .build();
+    auto cmdCollate = (*parser)
+        .add("collate", "When outputting maze images, output all types in one wide image.")
+        .setUncommon()
+        .build();
     
     // Print usage and exit early if the input is invalid.
     auto parserResult = parser->parse(argc, argv);
@@ -167,6 +171,8 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
             onlyPrintUsage = true;
         } else if (command.name == cmdPerformance.name) {
             args.measurePerformance = true;
+        } else if (command.name == cmdCollate.name) {
+            args.collateAllMazeTypeImages = true;
         }
     }
     
@@ -216,5 +222,8 @@ void MazeArguments::printWarnings() {
         if (types.size() <= 1) {
             std::cout << "  Use -f to specify a file name only the best maze is desired." << std::endl;
         }
+    }
+    if (collateAllMazeTypeImages && types.size() == 1) {
+        std::cout << "Collate was specified but only one generator type was specified." << std::endl;
     }
 }

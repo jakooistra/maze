@@ -38,3 +38,13 @@ unsigned int Image::encodePNG(std::vector<unsigned char> &out) const {
     
     return lodepng::encode(out, rgba, width, height);
 }
+
+void Image::blit(Image const *other, int x, int y) {
+    int maxRows = std::min(other->height, height - y);
+    int rowBytes = 4 * std::min(width - x, other->width);
+    if (rowBytes > 0) {
+        for (int srcRow = 0; srcRow < maxRows; ++srcRow) {
+            memcpy(&pixels[x + (y + srcRow) * width], &other->pixels[srcRow * other->width], rowBytes);
+        }
+    }
+}

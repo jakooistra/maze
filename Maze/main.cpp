@@ -21,8 +21,7 @@
 #include "ThreadUtility.h"
 #include "Utility.h"
 
-static void writeMazeImageFile(std::string const &fileName, Maze const *maze, std::vector<XY> const &path, int wallWidth, int cellSize) {
-    auto image = convertToImage(maze, wallWidth, cellSize, path);
+static void writeMazeImageFile(std::string const &fileName, Image const *image) {
     std::vector<unsigned char> rgba;
     image->encodeRGBA(rgba);
     auto error = lodepng::encode(fileName, &rgba[0], image->width, image->height);
@@ -33,7 +32,6 @@ static void writeMazeImageFile(std::string const &fileName, Maze const *maze, st
 }
 
 int main(int argc, const char * argv[]) {
-    // TODO: output of maze collections (grid? best to worst? multiple maze types?)
     std::optional<MazeArguments> args = MazeArguments::parse(argc, argv);
     if (!args) {
         return 0;
@@ -51,6 +49,7 @@ int main(int argc, const char * argv[]) {
             std::cout << "Generating " << args->types.size() << " maze types x" << args->count << "..." <<std::endl;
         }
         int typeCount = 0;
+        std::map<int, std::map<std::string, std::vector<std::shared_ptr<Image>>>> rankedNamedImages;
         for (auto type : args->types) {
             auto generator = MazeGenerator::get(type);
             auto typeName = generator->name;
@@ -95,7 +94,12 @@ int main(int argc, const char * argv[]) {
             
             if (!args->rankedOutput.empty()) {
                 std::vector<XY> const emptyPath;
-                std::string fileNamePrefix = args->baseFileName.has_value() ? *args->baseFileName : typeName;
+                std::string fileNamePrefix = typeName;
+                if (args->baseFileName.has_value()) {
+                    fileNamePrefix = *args->baseFileName;
+                } else if (args->collateAllMazeTypeImages) {
+                    fileNamePrefix = "All";
+                }
                 int rank = 0;
                 for (auto iter = sortedMazes.rbegin(); iter != sortedMazes.rend(); ++iter) {
                     rank++;
@@ -108,11 +112,37 @@ int main(int argc, const char * argv[]) {
                             fileName << " (" << rank << " of " << args->count << ")";
                         }
                         fileName << ".png";
-                        writeMazeImageFile(fileName.str(),
-                                           iter->maze.maze.get(),
-                                           args->showPath ? iter->analysis->shortestPath : emptyPath,
-                                           args->wallWidth, args->cellSize);
+                        
+                        auto path = args->showPath ? iter->analysis->shortestPath : emptyPath;
+                        auto image = convertToImage(iter->maze.maze.get(), args->wallWidth, args->cellSize, path);
+                        rankedNamedImages[rank][fileName.str()].push_back(std::move(image));
                     }
+                }
+            }
+        }
+        
+        for (auto rankTuple : rankedNamedImages) {
+            for (auto nameTuple : rankTuple.second) {
+                auto const &images = nameTuple.second;
+                if (images.size() == 1) {
+                    writeMazeImageFile(nameTuple.first, images.front().get());
+                } else {
+                    Image collatedImage;
+                    collatedImage.width = args->cellSize * ((int)images.size() - 1);
+                    collatedImage.height = (int)images.front()->height;
+                    for (auto image : images) {
+                        collatedImage.width += image->width;
+                        collatedImage.height = std::max(collatedImage.height, image->height);
+                    }
+                    // TODO: border color white and maybe a border around all mazes for clarity
+                    RGBA borderColor = RGBA::gray(220);
+                    collatedImage.pixels.resize(collatedImage.width * collatedImage.height, borderColor);
+                    int x = 0;
+                    for (auto image : images) {
+                        collatedImage.blit(image.get(), x, 0);
+                        x += args->cellSize + image->width;
+                    }
+                    writeMazeImageFile(nameTuple.first, &collatedImage);
                 }
             }
         }

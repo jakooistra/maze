@@ -29,6 +29,8 @@ struct Image {
     
     bool encodeRGBA(std::vector<unsigned char> &out) const;
     unsigned int encodePNG(std::vector<unsigned char> &out) const;
+    
+    void blit(Image const *other, int x, int y);
 };
 
 #endif /* Image_h */
