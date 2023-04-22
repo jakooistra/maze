@@ -140,5 +140,5 @@ protected:
 };
 
 // This line ensures that the generator class can be accessed when running the app.
-REGISTER_AND_STORE_GENERATOR(ChainBurstGenerator);
+REGISTER_AND_STORE_GENERATOR(NewGeneratorClass);
 ```
