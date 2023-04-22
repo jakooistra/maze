@@ -195,6 +195,15 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     if (args.baseFileName.has_value() && args.rankedOutput.empty()) {
         args.rankedOutput.insert(1);
     }
+    // Remove invalid ranked output specifications.
+    while (!args.rankedOutput.empty() && *args.rankedOutput.begin() < 1) {
+        args.rankedOutput.erase(args.rankedOutput.begin());
+        args.rankedOutput.insert(1);
+    }
+    while (!args.rankedOutput.empty() && *args.rankedOutput.rbegin() > args.count) {
+        args.rankedOutput.erase(*args.rankedOutput.rbegin());
+        args.rankedOutput.insert(args.count - 1);
+    }
     
     // Validate combinations of commands.
     std::stringstream invalidMessage;
