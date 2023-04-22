@@ -31,7 +31,7 @@ protected:
         auto maze = std::make_unique<Maze>(width, height);
         auto rng = std::bind(std::uniform_int_distribution<>(0, INT_MAX), std::mt19937(seed));
         
-        setRandomStartAndFinish(maze.get(), width, height, rng);
+        setRandomStartAndFinish(maze.get(), rng);
         
         for (int x = 0; x < width; ++x) {
             for (int y = 0; y < height; ++y) {

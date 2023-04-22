@@ -170,7 +170,7 @@ protected:
         auto maze = std::make_unique<Maze>(width, height);
         auto rng = std::bind(std::uniform_int_distribution<>(0, INT_MAX), std::mt19937(seed));
         
-        setRandomStartAndFinish(maze.get(), width, height, rng);
+        setRandomStartAndFinish(maze.get(), rng);
         
         // Values above zero indicate a visited cell.
         // Values below zero are used to track

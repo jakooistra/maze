@@ -73,8 +73,8 @@ inline StartAndFinish randomStartAndFinish(int width, int height, random_generat
 }
 
 template<typename random_generator>
-inline void setRandomStartAndFinish(Maze *maze, int width, int height, random_generator &rng) {
-    auto startAndFinish = randomStartAndFinish(width, height, rng);
+inline void setRandomStartAndFinish(Maze *maze, random_generator &rng) {
+    auto startAndFinish = randomStartAndFinish(maze->getWidth(), maze->getHeight(), rng);
     maze->setStart(startAndFinish.start);
     maze->setFinish(startAndFinish.finish);
 }

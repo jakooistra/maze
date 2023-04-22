@@ -31,7 +31,7 @@ protected:
         auto maze = std::make_unique<Maze>(width, height);
         auto rng = std::bind(std::uniform_int_distribution<>(0, INT_MAX), std::mt19937(seed));
         
-        setRandomStartAndFinish(maze.get(), width, height, rng);
+        setRandomStartAndFinish(maze.get(), rng);
         
         int numWallsToRemove = (width * height * 3) / 2;
         for (int i = 0; i < numWallsToRemove; ++i) {

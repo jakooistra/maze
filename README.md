@@ -131,7 +131,7 @@ protected:
         auto rng = std::bind(std::uniform_int_distribution<>(0, INT_MAX), std::mt19937(seed));
         
         // Sets up a random start and finish point along the edges of the maze.
-        setRandomStartAndFinish(maze.get(), width, height, rng);
+        setRandomStartAndFinish(maze.get(), rng);
         
         // TODO: use the Maze API to set up maze topology.
         
