@@ -210,7 +210,7 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
 }
 
 void MazeArguments::printWarnings() {
-    if (rankedOutput.empty() && !measurePerformance) {
+    if (rankedOutput.empty() && !measurePerformance && !showAnalysis) {
         std::cout << "No output specified." << std::endl;
         std::cout << "  Use -o or -op to specify which maze(s) to output." << std::endl;
         if (types.size() <= 1) {
