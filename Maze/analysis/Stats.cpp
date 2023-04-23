@@ -158,7 +158,7 @@ void Stats::print(std::string const &title) const {
                 auto tuple = deadEndLength.find(bucket);
                 int length = ((tuple == deadEndLength.end() ? 0 : tuple->second) * normalizedLength + largestBucketCount - 1) / largestBucketCount;
                 std::cout << std::setw(length) << std::setfill('X') << "";
-                std::cout << std::endl;
+                std::cout << std::endl << std::setfill(' ');
             }
         }
     }
