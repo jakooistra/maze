@@ -40,7 +40,7 @@ int main(int argc, const char * argv[]) {
     // If processing takes a long time, it's good to output warnings before generating mazes.
     args->printWarnings();
     
-    if (args->rankedOutput.size() > 0 || args->showAnalysis) {
+    if (args->rankedOutput.size() > 0 || args->showAnalysis || !args->specifiedSeeds.empty()) {
         if (args->count > 1) {
             std::cout << "Running on " << ThreadPool::shared().getThreadCount() << " threads." << std::endl;
         }
@@ -57,8 +57,10 @@ int main(int argc, const char * argv[]) {
             if (args->types.size() > 1) {
                 std::cout << "  (" << typeCount << "/" << args->types.size() << ") ";
             }
-            if (args->specifiedSeed.has_value()) {
-                std::cout << "Generating " << generatorTypeName << " " << args->width << "x" << args->height << " from seed " << *args->specifiedSeed << "..." << std::endl;
+            if (args->specifiedSeeds.size() == 1) {
+                std::cout << "Generating " << generatorTypeName << " " << args->width << "x" << args->height << " from seed " << *args->specifiedSeeds.begin() << "..." << std::endl;
+            } else if (!args->specifiedSeeds.empty()) {
+                std::cout << "Generating x" << args->specifiedSeeds.size() << " seeds of " << generatorTypeName << " " << args->width << "x" << args->height << "..." << std::endl;
             } else {
                 std::cout << "Generating x" << args->count << " " << generatorTypeName << " " << args->width << "x" << args->height << "..." << std::endl;
             }
@@ -70,11 +72,10 @@ int main(int argc, const char * argv[]) {
             // Mazes in order from worst to best.
             std::set<FullAssessment> sortedMazes;
             
-            std::vector<int> seedsToGenerate;
-            if (args->specifiedSeed.has_value() && args->count <= 1) {
-                seedsToGenerate.push_back(args->specifiedSeed.value());
-            } else {
-                seedsToGenerate = consecutiveNumbers(0, args->count-1);
+            std::vector<int> seedsToGenerate = consecutiveNumbers(0, args->count-1);
+            seedsToGenerate.reserve(args->specifiedSeeds.size() + seedsToGenerate.size());
+            for (auto seed : args->specifiedSeeds) {
+                seedsToGenerate.push_back(seed);
             }
             std::vector<GeneratedMaze> mazes = threadedTransform(seedsToGenerate, generate, "Generate");
             
@@ -92,7 +93,7 @@ int main(int argc, const char * argv[]) {
                 stats.print(generatorTypeName + " statistics");
             }
             
-            if (!args->rankedOutput.empty()) {
+            if (!args->rankedOutput.empty() || !args->specifiedSeeds.empty()) {
                 std::vector<XY> const emptyPath;
                 std::stringstream fileNamePrefixStream;
                 if (args->collateAllMazeTypeImages && !args->baseFileName.has_value()) {
@@ -109,11 +110,12 @@ int main(int argc, const char * argv[]) {
                 int rank = 0;
                 for (auto iter = sortedMazes.rbegin(); iter != sortedMazes.rend(); ++iter) {
                     rank++;
-                    if (args->rankedOutput.contains(rank)) {
+                    bool isSpecifiedSeed = args->specifiedSeeds.contains(iter->maze.seed);
+                    if (args->rankedOutput.contains(rank) || isSpecifiedSeed) {
                         std::stringstream fileName;
                         fileName << fileNamePrefix;
-                        if (args->rankedOutput.size() == 1 && args->specifiedSeed.has_value()) {
-                            fileName << " (seed " << *args->specifiedSeed << ")";
+                        if (isSpecifiedSeed) {
+                            fileName << " (seed " << iter->maze.seed << ")";
                         } else if (!args->baseFileName.has_value() || args->rankedOutput.size() > 1) {
                             fileName << " (" << rank << " of " << args->count << ")";
                         }

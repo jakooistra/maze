@@ -64,12 +64,17 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         .build();
     auto cmdCount = (*parser)
         .add("n", "The number of each maze type to generate.")
-        .intArgument("count", args.count)
+        .intArgument("count")
         .build();
-    auto cmdSeed = (*parser) // TODO: allow specification of multiple seeds?
-        .add("s", "The seed used to generate the maze.")
-        .intArgument("seed", args.specifiedSeed)
-        .addMessage("Only valid when generating a single maze")
+    auto cmdSeed = (*parser)
+        .add("s", "An seed value that must be written to a file.")
+        .intArgument("seed")
+        .setUncommon()
+        .setMultiple()
+        .build();
+    auto cmdRandom = (*parser)
+        .add("random", "Write out a specified number of randomly seeded mazes.")
+        .intArgument("count")
         .setUncommon()
         .build();
     auto cmdAnalyze = (*parser)
@@ -130,6 +135,7 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     }
     
     bool onlyPrintUsage = false;
+    int randomSeedCount = 0;
     for (auto command : parserResult.commands) {
         if (command.name == cmdType.name) {
             auto generator = MazeGenerator::get(command.value->string);
@@ -160,7 +166,9 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         } else if (command.name == cmdBaseFileName.name) {
             args.baseFileName = command.value->string;
         } else if (command.name == cmdSeed.name) {
-            args.specifiedSeed = command.value->integer;
+            args.specifiedSeeds.insert(command.value->integer);
+        } else if (command.name == cmdRandom.name) {
+            randomSeedCount = command.value->integer;
         } else if (command.name == cmdAnalyze.name) {
             args.showAnalysis = true;
         } else if (command.name == cmdOutputRanked.name) {
@@ -204,6 +212,11 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         args.rankedOutput.erase(*args.rankedOutput.rbegin());
         args.rankedOutput.insert(args.count - 1);
     }
+    // If a random seed count has been specified, create a number of random seeds
+    srand((unsigned int)time(0));
+    for (int i = 0; i < randomSeedCount; ++i) {
+        args.specifiedSeeds.insert((int)(rand() & 0x7FFFFFFF));
+    }
     
     // Validate combinations of commands.
     std::stringstream invalidMessage;
@@ -211,8 +224,6 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         invalidMessage << "expected at least one maze type to be specified.";
     } else if (args.baseFileName.has_value() && args.types.size() > 1) {
         invalidMessage << "-f option is not valid when specifying multiple (" << args.types.size() << ") maze types.";
-    } else if (args.specifiedSeed.has_value() && args.count > 1) {
-        invalidMessage << "-s option is not valid when maze count (" << args.count << ") is more than 1.";
     }
     auto invalidMessageString = invalidMessage.str();
     if (!invalidMessageString.empty()) {
@@ -225,7 +236,7 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
 }
 
 void MazeArguments::printWarnings() {
-    if (rankedOutput.empty() && !measurePerformance && !showAnalysis) {
+    if (rankedOutput.empty() && !measurePerformance && !showAnalysis && specifiedSeeds.empty()) {
         std::cout << "No output specified." << std::endl;
         std::cout << "  Use -o or -op to specify which maze(s) to output." << std::endl;
         if (types.size() <= 1) {

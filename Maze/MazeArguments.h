@@ -25,7 +25,7 @@ struct MazeArguments {
     bool measurePerformance = false;
     bool showPath = false;
     bool collateAllMazeTypeImages = false;
-    std::optional<int> specifiedSeed;
+    std::set<int> specifiedSeeds;
     std::optional<std::string> baseFileName;
     std::set<std::string> types;
     std::set<int> rankedOutput;
