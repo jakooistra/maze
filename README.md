@@ -71,15 +71,16 @@ maze -usage
 
 Usage:
   maze [-t type [-t type] ...] [-w width] [-h height] [-n count] [-a] [-o [rank] [-o rank] ...]
-  maze [-t type [-t type] ...] [-w width] [-h height] [-n count] [-s seed] [-a] [-p] [-ww width] [-cs size] [-f file] [-o [rank] [-o rank] ...] [-op percentile [-op percentile] ...] [-usage] [-perf]
+  maze [-t type [-t type] ...] [-w width] [-h height] [-n count] [-s seed [-s seed] ...] [-random count] [-a] [-p] [-ww width] [-cs size] [-f file] [-o [rank] [-o rank] ...] [-op percentile [-op percentile] ...] [-usage] [-perf] [-collate]
 Arguments:
   -t type        Add a maze type to generate.
                    'cb' Chain Burst - Sequentially picks a recently filled location and splits the path.
                    'ff' Fifty Fifty - Every wall has a 50% chance to exist.
+                   'pk' Perturbation Kernels - Applies 2x2 kernel transformations until the maze is filled.
                    'rr' Remove Random Walls - Random walls are iteratively removed.
                    'vp' Vertical Path Breaks - Full height paths with one random opening between each.
-                   'all' - (cb, ff, rr, vp)
-                   'complex' - (cb)
+                   'all' - (cb, ff, pk, rr, vp)
+                   'complex' - (cb, pk)
                    'trivial' - (ff, rr, vp)
                    Can be specified multiple times.
   -w width       The width of the maze.
@@ -88,8 +89,9 @@ Arguments:
                    (25) if unspecified.
   -n count       The number of each maze type to generate.
                    (1) if unspecified.
-  -s seed        The seed used to generate the maze.
-                   Only valid when generating a single maze
+  -s seed        An seed value that must be written to a file.
+                   Can be specified multiple times.
+  -random count  Write out a specified number of randomly seeded mazes.
   -a             Analyze the generated mazes and output statistics.
   -p             Show the shortest path solution in image output.
   -ww width      The width of maze walls in pixels.
@@ -106,6 +108,7 @@ Arguments:
                    Can be specified multiple times.
   -usage         Ignores other commands, and outputs detailed usage notes.
   -perf          Measures maze generation speed for all specified types.
+  -collate       When outputting maze images, output all types in one wide image.
 ```
 
 ## Want to make your own maze generator?

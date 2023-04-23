@@ -64,7 +64,7 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         .build();
     auto cmdCount = (*parser)
         .add("n", "The number of each maze type to generate.")
-        .intArgument("count")
+        .intArgument("count", args.count)
         .build();
     auto cmdSeed = (*parser)
         .add("s", "An seed value that must be written to a file.")
