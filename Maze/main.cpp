@@ -94,23 +94,24 @@ int main(int argc, const char * argv[]) {
             
             if (!args->rankedOutput.empty()) {
                 std::vector<XY> const emptyPath;
-                std::stringstream fileNamePrefix;
+                std::stringstream fileNamePrefixStream;
                 if (args->collateAllMazeTypeImages && !args->baseFileName.has_value()) {
-                    fileNamePrefix << "All";
+                    fileNamePrefixStream << "All";
                 } else {
                     if (args->baseFileName.has_value()) {
-                        fileNamePrefix << *args->baseFileName;
+                        fileNamePrefixStream << *args->baseFileName;
                     } else {
-                        fileNamePrefix << generatorTypeName;
+                        fileNamePrefixStream << generatorTypeName;
                     }
-                    fileNamePrefix << " " << args->width << "x" << args->height;
+                    fileNamePrefixStream << " " << args->width << "x" << args->height;
                 }
+                std::string fileNamePrefix = fileNamePrefixStream.str();
                 int rank = 0;
                 for (auto iter = sortedMazes.rbegin(); iter != sortedMazes.rend(); ++iter) {
                     rank++;
                     if (args->rankedOutput.contains(rank)) {
                         std::stringstream fileName;
-                        fileName << fileNamePrefix.str();
+                        fileName << fileNamePrefix;
                         if (args->rankedOutput.size() == 1 && args->specifiedSeed.has_value()) {
                             fileName << " (seed " << *args->specifiedSeed << ")";
                         } else if (!args->baseFileName.has_value() || args->rankedOutput.size() > 1) {
