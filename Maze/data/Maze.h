@@ -39,6 +39,7 @@ public:
     
     XY getStart() const { return start; }
     XY getFinish() const { return finish; }
+    bool isStartOrFinish(int x, int y) const { XY pos(x, y); return pos == start || pos == finish; }
     
     void setStart(XY start);
     void setFinish(XY finish);
