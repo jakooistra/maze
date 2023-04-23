@@ -52,15 +52,15 @@ int main(int argc, const char * argv[]) {
         std::map<int, std::map<std::string, std::vector<std::shared_ptr<Image>>>> rankedNamedImages;
         for (auto type : args->types) {
             auto generator = MazeGenerator::get(type);
-            auto typeName = generator->name;
+            auto generatorTypeName = generator->name;
             typeCount++;
             if (args->types.size() > 1) {
                 std::cout << "  (" << typeCount << "/" << args->types.size() << ") ";
             }
             if (args->specifiedSeed.has_value()) {
-                std::cout << "Generating " << typeName << " " << args->width << "x" << args->height << " from seed " << *args->specifiedSeed << "..." << std::endl;
+                std::cout << "Generating " << generatorTypeName << " " << args->width << "x" << args->height << " from seed " << *args->specifiedSeed << "..." << std::endl;
             } else {
-                std::cout << "Generating x" << args->count << " " << typeName << " " << args->width << "x" << args->height << "..." << std::endl;
+                std::cout << "Generating x" << args->count << " " << generatorTypeName << " " << args->width << "x" << args->height << "..." << std::endl;
             }
             
             std::function<GeneratedMaze(int)> generate = [args, generator](int seed){
@@ -79,7 +79,7 @@ int main(int argc, const char * argv[]) {
             std::vector<GeneratedMaze> mazes = threadedTransform(seedsToGenerate, generate, "Generate");
             
             if (args->showAnalysis) {
-                std::cout << "Analyzing x" << args->count << " " << typeName << "..." << std::endl;
+                std::cout << "Analyzing x" << args->count << " " << generatorTypeName << "..." << std::endl;
             }
             Stats stats;
             std::function<FullAssessment(GeneratedMaze const &)> assessmentFunction = valueOfMaze;
@@ -89,23 +89,28 @@ int main(int argc, const char * argv[]) {
                 stats.accumulate(assessment.analysis.get(), assessment.maze.seed);
             }
             if (args->showAnalysis) {
-                stats.print(typeName + " statistics");
+                stats.print(generatorTypeName + " statistics");
             }
             
             if (!args->rankedOutput.empty()) {
                 std::vector<XY> const emptyPath;
-                std::string fileNamePrefix = typeName;
-                if (args->baseFileName.has_value()) {
-                    fileNamePrefix = *args->baseFileName;
-                } else if (args->collateAllMazeTypeImages) {
-                    fileNamePrefix = "All";
+                std::stringstream fileNamePrefix;
+                if (args->collateAllMazeTypeImages && !args->baseFileName.has_value()) {
+                    fileNamePrefix << "All";
+                } else {
+                    if (args->baseFileName.has_value()) {
+                        fileNamePrefix << *args->baseFileName;
+                    } else {
+                        fileNamePrefix << generatorTypeName;
+                    }
+                    fileNamePrefix << " " << args->width << "x" << args->height;
                 }
                 int rank = 0;
                 for (auto iter = sortedMazes.rbegin(); iter != sortedMazes.rend(); ++iter) {
                     rank++;
                     if (args->rankedOutput.contains(rank)) {
                         std::stringstream fileName;
-                        fileName << fileNamePrefix;
+                        fileName << fileNamePrefix.str();
                         if (args->rankedOutput.size() == 1 && args->specifiedSeed.has_value()) {
                             fileName << " (seed " << *args->specifiedSeed << ")";
                         } else if (!args->baseFileName.has_value() || args->rankedOutput.size() > 1) {
