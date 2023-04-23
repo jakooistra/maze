@@ -16,6 +16,7 @@ struct StartAndFinish {
     XY finish;
 };
 
+// Returns the number of unique cells on the edge of a grid area defined by width and height.
 inline int uniqueEdgePointCount(int width, int height) {
     if (width <= 0 || height <= 0) {
         return 0;
@@ -51,11 +52,13 @@ inline XY getEdgePoint(int width, int height, int circumnavigationDistance) {
     return XY(0, height - 2 - distance);
 }
 
+// Returns a random point on the edge of an area.
 template<typename random_generator>
 inline XY randomEdgePoint(int width, int height, random_generator &rng) {
     return getEdgePoint(width, height, rng() % uniqueEdgePointCount(width, height));
 }
 
+// Return a StartAndFinish where the points are on the edges of the area.
 template<typename random_generator>
 inline StartAndFinish randomStartAndFinish(int width, int height, random_generator &rng) {
     int circumference = uniqueEdgePointCount(width, height);
@@ -72,6 +75,23 @@ inline StartAndFinish randomStartAndFinish(int width, int height, random_generat
     };
 }
 
+// Return a StartAndFinish where the points are exactly opposite from each other.
+template<typename random_generator>
+inline StartAndFinish randomOppositeStartAndFinish(int width, int height, random_generator &rng) {
+    int circumference = uniqueEdgePointCount(width, height);
+    if (circumference <= 1) {
+        return { XY(0, 0), XY(0, 0) };
+    }
+    // Ensure that start/finish are unique and directly opposite of each other.
+    int startDistance = rng() % circumference;
+    int finishDistance = (startDistance + circumference / 2) % circumference;
+    return {
+        getEdgePoint(width, height, startDistance),
+        getEdgePoint(width, height, finishDistance),
+    };
+}
+
+// Sets the start and finish points of a maze, where the points are exactly opposite from each other.
 template<typename random_generator>
 inline void setRandomStartAndFinish(Maze *maze, random_generator &rng) {
     auto startAndFinish = randomStartAndFinish(maze->getWidth(), maze->getHeight(), rng);
@@ -79,6 +99,15 @@ inline void setRandomStartAndFinish(Maze *maze, random_generator &rng) {
     maze->setFinish(startAndFinish.finish);
 }
 
+// Sets the start and finish points of a maze, where the points are exactly opposite from each other.
+template<typename random_generator>
+inline void setRandomOppositeStartAndFinish(Maze *maze, random_generator &rng) {
+    auto startAndFinish = randomOppositeStartAndFinish(maze->getWidth(), maze->getHeight(), rng);
+    maze->setStart(startAndFinish.start);
+    maze->setFinish(startAndFinish.finish);
+}
+
+// Returns a vector of consecutive numbers from start to end inclusive.
 inline std::vector<int> consecutiveNumbers(int start, int end) {
     end = std::max(start, end);
     std::vector<int> numbers;
@@ -89,6 +118,8 @@ inline std::vector<int> consecutiveNumbers(int start, int end) {
     return numbers;
 }
 
+// Fills a maze, guaranteeing it to be solvable. Intended to be used by
+// maze algorithms for which the defined size of the maze is too small.
 inline void fillDegenerateMaze(Maze *maze) {
     bool tall = maze->getWidth() < maze->getHeight();
     for (int x = 0; x < maze->getWidth(); ++x) {
