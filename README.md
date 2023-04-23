@@ -19,7 +19,7 @@ This command outputs the best of the first 1000 seeds of all maze generator type
 ![All (1 of 1000)](https://user-images.githubusercontent.com/5326140/233759804-9e3f06a4-4f3d-4349-9285-f662fb690eeb.png)
 
 ```
-maze -t all -n 1000 -op 50 -collate -p
+maze -t all -n 1000 -op 10 -collate -p
 ```
 This command outputs the 10th percentile best maze of the first 1000 seeds as a single image, including the solution path.
 ![All (100 of 1000)](https://user-images.githubusercontent.com/5326140/233760289-a3607ef6-2ff2-45e7-b685-d2ffcbc25211.png)
