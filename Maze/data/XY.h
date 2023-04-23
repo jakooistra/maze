@@ -51,4 +51,11 @@ struct XY {
     int lengthSquared() const { return x * x + y * y; }
 };
 
+struct XYHashFunction {
+public:
+    size_t operator()(const XY& pos) const{
+        return std::hash<int>{}(pos.x) ^ std::hash<int>{}(pos.y);
+    }
+};
+
 #endif /* XY_h */
