@@ -13,7 +13,8 @@
 
 #include "Image.h"
 #include "Maze.h"
+#include "PixelSizes.h"
 
-std::unique_ptr<Image> convertToImage(Maze const *maze, int wallWidth, int cellWidth, std::vector<XY> const &shortestPath = {});
+std::unique_ptr<Image> convertToImage(Maze const *maze, PixelSizes const &sizes, std::vector<XY> const &shortestPath = {});
 
 #endif /* MazeToImage_h */

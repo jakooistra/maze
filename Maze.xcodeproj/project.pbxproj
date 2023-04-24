@@ -60,6 +60,7 @@
 		DB04DBF429F358C3007C7819 /* GenerationRate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GenerationRate.h; sourceTree = "<group>"; };
 		DB04DBF629F39340007C7819 /* PerturbationKernelsGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PerturbationKernelsGenerator.cpp; sourceTree = "<group>"; };
 		DB04DBF829F40FE4007C7819 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		DB4812C929F6123B00C475BD /* PixelSizes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PixelSizes.h; sourceTree = "<group>"; };
 		DB4A736729EA34CF00E3336A /* Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		DB4D383929E904FA007ACBDF /* Analysis.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Analysis.cpp; sourceTree = "<group>"; };
 		DB4D383A29E904FA007ACBDF /* Analysis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Analysis.h; sourceTree = "<group>"; };
@@ -218,6 +219,7 @@
 				DBB26BC929E8C6A100C14D5B /* lodepng.cpp */,
 				DBB26BD229E8CCB700C14D5B /* MazeToImage.cpp */,
 				DBB26BD329E8CCB700C14D5B /* MazeToImage.h */,
+				DB4812C929F6123B00C475BD /* PixelSizes.h */,
 			);
 			path = visualization;
 			sourceTree = "<group>";

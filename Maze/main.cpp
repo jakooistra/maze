@@ -122,7 +122,7 @@ int main(int argc, const char * argv[]) {
                         fileName << ".png";
                         
                         auto path = args->showPath ? iter->analysis->shortestPath : emptyPath;
-                        auto image = convertToImage(iter->maze.maze.get(), args->wallWidth, args->cellSize, path);
+                        auto image = convertToImage(iter->maze.maze.get(), args->sizes, path);
                         rankedNamedImages[rank][fileName.str()].push_back(std::move(image));
                     }
                 }
@@ -136,20 +136,18 @@ int main(int argc, const char * argv[]) {
                     writeMazeImageFile(nameTuple.first, images.front().get());
                 } else {
                     Image collatedImage;
-                    int stepSize = args->collatedBorderSize;
-                    collatedImage.width = stepSize * ((int)images.size() - 1) + args->collatedBorderSize * 2;
-                    collatedImage.height = (int)images.front()->height + args->collatedBorderSize * 2;
                     for (auto image : images) {
                         collatedImage.width += image->width;
                         collatedImage.height = std::max(collatedImage.height, image->height);
                     }
+                    collatedImage.width -= ((int)images.size() - 1) * args->sizes.border;
                     // TODO: border color white and maybe a border around all mazes for clarity
                     RGBA borderColor = RGBA::gray(255);
                     collatedImage.pixels.resize(collatedImage.width * collatedImage.height, borderColor);
-                    int x = args->collatedBorderSize;
+                    int x = 0;
                     for (auto image : images) {
-                        collatedImage.blit(image.get(), x, args->collatedBorderSize);
-                        x += stepSize + image->width;
+                        collatedImage.blit(image.get(), x, 0);
+                        x += image->width - args->sizes.border;
                     }
                     writeMazeImageFile(nameTuple.first, &collatedImage);
                 }

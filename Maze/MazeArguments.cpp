@@ -86,12 +86,17 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         .build();
     auto cmdWallWidth = (*parser)
         .add("ww", "The width of maze walls in pixels.")
-        .intArgument("width", args.wallWidth)
+        .intArgument("width", args.sizes.wall)
         .setUncommon()
         .build();
     auto cmdCellSize = (*parser)
         .add("cs", "The size of maze cells in pixels.")
-        .intArgument("size", args.cellSize)
+        .intArgument("size", args.sizes.cell)
+        .setUncommon()
+        .build();
+    auto cmdBorderSize = (*parser)
+        .add("bs", "The size of maze border in pixels.")
+        .intArgument("size", args.sizes.border)
         .setUncommon()
         .build();
     auto cmdBaseFileName = (*parser)
@@ -160,9 +165,11 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         } else if (command.name == cmdShowPath.name) {
             args.showPath = true;
         } else if (command.name == cmdWallWidth.name) {
-            args.wallWidth = std::max(1, command.value->integer);
+            args.sizes.wall = std::max(1, command.value->integer);
         } else if (command.name == cmdCellSize.name) {
-            args.cellSize = std::max(1, command.value->integer);
+            args.sizes.cell = std::max(1, command.value->integer);
+        } else if (command.name == cmdBorderSize.name) {
+            args.sizes.border = std::max(0, command.value->integer);
         } else if (command.name == cmdBaseFileName.name) {
             args.baseFileName = command.value->string;
         } else if (command.name == cmdSeed.name) {

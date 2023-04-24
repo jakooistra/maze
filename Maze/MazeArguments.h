@@ -13,13 +13,12 @@
 #include <string>
 
 #include "MazeGenerator.h"
+#include "PixelSizes.h"
 
 struct MazeArguments {
     int width = 25;
     int height = 25;
-    int wallWidth = 1;
-    int cellSize = 9;
-    int collatedBorderSize = 12; // TODO: add argument to define this?
+    PixelSizes sizes;
     int count = 1;
     bool showAnalysis = false;
     bool measurePerformance = false;
