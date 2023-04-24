@@ -15,6 +15,7 @@ struct XY {
     int y;
     
     XY(int _x, int _y) : x(_x), y(_y) {}
+    XY(int both) : x(both), y(both) {}
     
     bool operator==(const XY &other) const {
         return x == other.x && y == other.y;
@@ -26,6 +27,14 @@ struct XY {
     
     bool operator<(const XY &other) const {
         return y < other.y || (y == other.y && x < other.x);
+    }
+    
+    XY operator*(const XY &other) const {
+        return XY(x * other.x, y * other.y);
+    }
+    
+    XY operator+(const XY &other) const {
+        return XY(x + other.x, y + other.y);
     }
     
     XY operator-(const XY &other) const {
