@@ -133,8 +133,8 @@ inline void fillDegenerateMaze(Maze *maze) {
     }
 }
 
-template<typename Input, typename Output>
-inline std::vector<Output> transform(std::vector<Input> const input, std::function<Output(Input)> transform) {
+template<typename Input, typename Output, typename InputIterableCollection>
+inline std::vector<Output> transform(InputIterableCollection input, std::function<Output(Input)> transform) {
     std::vector<Output> output;
     output.reserve(input.size());
     for (auto element : input) {
