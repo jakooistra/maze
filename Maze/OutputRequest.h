@@ -64,14 +64,6 @@ struct OutputRequest {
         return metadata.str();
     }
     
-    OutputRequest requestFor(int seed) {
-        if (type == Type::All) {
-            return OutputRequest::seed(seed);
-        } else {
-            return *this;
-        }
-    }
-    
     bool operator<(OutputRequest const &other) const {
         return type < other.type || (type == other.type && value < other.value);
     }

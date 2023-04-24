@@ -71,7 +71,6 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     auto cmdCount = (*parser)
         .add("n", "The number of each maze type to generate.")
         .intArgument("count", 1)
-        .addMessage("If no seeds are specified or randomized, seed 0 will be generated.")
         .build();
     auto cmdSeed = (*parser)
         .add("s", "An seed value that must be written to a file.")
@@ -106,12 +105,11 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
         .intArgument("size", args.sizes.border)
         .setUncommon()
         .build();
-    auto cmdBaseFileName = (*parser)
-        .add("f", "Specifies the base file name to use when outputting maze images.")
+    auto cmdSingleFileName = (*parser)
+        .add("f", "Outputs all generated mazes to this file name.")
         .stringArgument("file")
         .setUncommon()
-        .addMessage("Defaults to using the maze type name.")
-        .addMessage("Only valid when a single maze type is specified.")
+        .addMessage("By default, arranges images into a page-size layout (letter).")
         .build();
     auto cmdOutputRanked = (*parser)
         .add("o", "Creates an image of the nth best maze of the ones generated (1-n).")
@@ -175,8 +173,9 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
             args.sizes.cell = std::max(1, command.value->integer);
         } else if (command.name == cmdBorderSize.name) {
             args.sizes.border = std::max(0, command.value->integer);
-        } else if (command.name == cmdBaseFileName.name) {
-            args.baseFileName = command.value->string;
+        } else if (command.name == cmdSingleFileName.name) {
+            args.singleFileName = command.value->string;
+            args.imagesToOutput.insert(OutputRequest::all());
         } else if (command.name == cmdSeed.name) {
             specifiedSeeds.insert(command.value->integer);
         } else if (command.name == cmdRandom.name) {
@@ -223,12 +222,6 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     }
     args.seedsToGenerate = std::vector(uniqueSeeds.begin(), uniqueSeeds.end());
     
-    // If a base file name was specified, but no image output is specified,
-    // ensure the best maze will have its image created.
-    if (args.baseFileName.has_value() && args.imagesToOutput.empty()) {
-        args.imagesToOutput.insert(OutputRequest::best());
-    }
-    
     // Remove invalid ranked output specifications.
     std::vector<OutputRequest> invalidOuputSpec;
     for (auto output : args.imagesToOutput) {
@@ -241,19 +234,9 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     }
     
     // Validate combinations of commands.
-    std::stringstream invalidMessage;
-    if (args.types.empty()) {
-        invalidMessage << "expected at least one maze type to be specified.";
-    } else if (args.baseFileName.has_value() && args.types.size() > 1) {
-        // TODO: change meaning of file name to indicate that all mazes, or the best of each, should be included in a collage
-        invalidMessage << "-f option is not valid when specifying multiple (" << args.types.size() << ") maze types.";
-    } else if (args.baseFileName.has_value() && args.seedsToGenerate.size() > 1) {
-        // TODO: change meaning of file name to indicate that all mazes, or the best of each, should be included in a collage
-        invalidMessage << "-f option is not valid when specifying multiple (" << args.seedsToGenerate.size() << ") mazes to generate.";
-    }
-    auto invalidMessageString = invalidMessage.str();
-    if (!invalidMessageString.empty()) {
-        std::cout << "ERROR: " << invalidMessageString << std::endl;
+    auto errorString = args.validateArguments();
+    if (errorString.has_value()) {
+        std::cout << "ERROR: " << *errorString << std::endl;
         parser->printUsage(programName);
         return std::nullopt;
     }
@@ -281,8 +264,22 @@ void MazeArguments::printWarnings() const {
 std::optional<OutputRequest> MazeArguments::getOutputFor(int seed, int rank) const {
     for (auto output : imagesToOutput) {
         if (output.matches(seed, rank, count())) {
+            // If Type::All is specified, we actually want to output the seed
+            // unless all images are being collected into a single output file.
+            if (output.type == OutputRequest::Type::All && !singleFileName.has_value()) {
+                return OutputRequest::seed(seed);
+            }
+            
             return output;
         }
     }
+    return std::nullopt;
+}
+
+std::optional<std::string> MazeArguments::validateArguments() const {
+    if (types.empty()) {
+        return "expected at least one maze type to be specified.";
+    }
+    
     return std::nullopt;
 }

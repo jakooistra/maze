@@ -71,7 +71,7 @@ maze -usage
 
 Usage:
   maze [-t type [-t type] ...] [-w width] [-h height] [-n count] [-a] [-o [rank] [-o rank] ...]
-  maze [-t type [-t type] ...] [-w width] [-h height] [-n count] [-s seed [-s seed] ...] [-random count] [-a] [-p] [-ww width] [-cs size] [-f file] [-o [rank] [-o rank] ...] [-op percentile [-op percentile] ...] [-usage] [-perf] [-collate]
+  maze [-t type [-t type] ...] [-w width] [-h height] [-n count] [-s seed [-s seed] ...] [-random count] [-a] [-p] [-ww width] [-cs size] [-bs size] [-f file] [-o [rank] [-o rank] ...] [-op percentile [-op percentile] ...] [-usage] [-perf] [-collate]
 Arguments:
   -t type        Add a maze type to generate.
                    'cb' Chain Burst - Sequentially picks a recently filled location and splits the path.
@@ -98,11 +98,12 @@ Arguments:
                    (1) if unspecified.
   -cs size       The size of maze cells in pixels.
                    (9) if unspecified.
-  -f file        Specifies the base file name to use when outputting maze images.
-                   Defaults to using the maze type name.
-                   Only valid when a single maze type is specified.
+  -bs size       The size of maze border in pixels.
+                   (12) if unspecified.
+  -f file        Outputs all generated mazes to this file name.
+                   By default, arranges images into a page-size layout (letter).
   -o [rank]      Creates an image of the nth best maze of the ones generated (1-n).
-                   If 'rank' is unspecified, outputs the best maze (1).
+                   If 'rank' is unspecified, outputs all generated mazes.
                    Can be specified multiple times.
   -op percentile Creates an image of the best maze in the given percentile (1-100).
                    Can be specified multiple times.

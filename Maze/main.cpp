@@ -6,6 +6,7 @@
 //
 
 #include <iostream>
+#include <filesystem>
 #include <set>
 #include <sstream>
 
@@ -30,36 +31,29 @@ struct MazeOutput {
     MazeOutput(OutputRequest request, FullAssessment const &assessment) : request(request), assessment(assessment) {}
 };
 
-// TODO: clean up output name code
-static std::string getOutputFileName(OutputRequest request, MazeArguments const &args, std::string const &type) {
+// TODO: clean up output name code (move to another file?)
+static std::string getPerImageOutputFileName(OutputRequest request, MazeArguments const &args, std::string const &type) {
     std::stringstream fileNameStream;
-    // TODO: change meaning of specified file name to include all images in one file
-    if (args.baseFileName.has_value() && args.imagesToOutput.size() == 1 && args.types.size() == 1) {
-        fileNameStream << *args.baseFileName;
-    } else {
-        // TODO: could be organized more safely? This lookup seems wrong for non-collated maze generation.
-        fileNameStream << MazeGenerator::get(type)->name;
-    }
+    fileNameStream << MazeGenerator::get(type)->name;
     fileNameStream << " " << args.width << "x" << args.height;
-    if (!args.baseFileName.has_value()) {
-        fileNameStream << request.fileNameMetadata(args.count());
-    }
-    fileNameStream << ".png";
+    fileNameStream << request.fileNameMetadata(args.count()) << ".png";
     return fileNameStream.str();
 }
 
-// TODO: clean up output name code
+// TODO: clean up output name code (move to another file?)
 static std::string getCollatedFileName(OutputRequest request, MazeArguments const &args) {
     std::stringstream fileNameStream;
-    if (args.collateAllMazeTypeImages && !args.baseFileName.has_value()) {
-        fileNameStream << "All";
+    if (args.singleFileName.has_value()) {
+        fileNameStream << *args.singleFileName;
+        std::filesystem::path path = *args.singleFileName;
+        if (path.extension() != ".png") {
+            fileNameStream << ".png";
+        }
     } else {
-        return getOutputFileName(request, args, MazeGenerator::all().front()->type);
+        fileNameStream << "All";
+        fileNameStream << " " << args.width << "x" << args.height;
+        fileNameStream << request.fileNameMetadata(args.count()) << ".png";
     }
-    if (!args.baseFileName.has_value()) {
-        fileNameStream << request.fileNameMetadata(args.count());
-    }
-    fileNameStream << ".png";
     return fileNameStream.str();
 }
 
@@ -139,7 +133,7 @@ int main(int argc, const char * argv[]) {
                 rank++;
                 std::optional<OutputRequest> output = args->getOutputFor(iter->maze.seed, rank);
                 if (output.has_value()) {
-                    mazeOutput.push_back(MazeOutput(output->requestFor(iter->maze.seed), *iter));
+                    mazeOutput.push_back(MazeOutput(*output, *iter));
                 }
             }
         }
@@ -161,16 +155,18 @@ int main(int argc, const char * argv[]) {
     }
     
     // Output requested data.
+    std::function<Image const *(MazeOutput)> getImages = [](MazeOutput output){ return output.image.get(); };
     for (auto iter : mazeOutputMap) {
         // Determine what to put in the file.
-        if (args->collateAllMazeTypeImages) {
-            std::function<Image const *(MazeOutput)> getImages = [](MazeOutput output){ return output.image.get(); };
-            auto collatedImage = collate(args->sizes.border, transform(iter.second, getImages));
+        if (iter.first.type == OutputRequest::Type::All) {
+            auto collectionImage = collectImages(args->sizes, transform(iter.second, getImages));
+            writeMazeImageFile(getCollatedFileName(iter.first, *args), collectionImage.get());
+        } else if (args->collateAllMazeTypeImages && iter.second.size() > 1) {
+            auto collatedImage = collateImages(args->sizes.border, transform(iter.second, getImages));
             writeMazeImageFile(getCollatedFileName(iter.first, *args), collatedImage.get());
         } else {
-            // TODO: non-collated images need their own file names
             for (auto output : iter.second) {
-                writeMazeImageFile(getOutputFileName(iter.first, *args, output.assessment.maze.type), output.image.get());
+                writeMazeImageFile(getPerImageOutputFileName(iter.first, *args, output.assessment.maze.type), output.image.get());
             }
         }
     }

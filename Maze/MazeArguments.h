@@ -24,7 +24,7 @@ struct MazeArguments {
     bool measurePerformance = false;
     bool showPath = false;
     bool collateAllMazeTypeImages = false;
-    std::optional<std::string> baseFileName;
+    std::optional<std::string> singleFileName;
     std::set<std::string> types;
     std::vector<int> seedsToGenerate;
     std::set<OutputRequest> imagesToOutput;
@@ -35,6 +35,9 @@ struct MazeArguments {
     void printWarnings() const;
     
     std::optional<OutputRequest> getOutputFor(int seed, int rank) const;
+    
+    // Returns an error string if validation fails.
+    std::optional<std::string> validateArguments() const;
 };
 
 #endif /* MazeArguments_h */
