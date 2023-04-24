@@ -12,6 +12,7 @@
 #include "lodepng.h"
 
 #include "Assessment.h"
+#include "ImageUtility.h"
 #include "Maze.h"
 #include "MazeArguments.h"
 #include "MazeGenerator.h"
@@ -21,6 +22,48 @@
 #include "ThreadUtility.h"
 #include "Utility.h"
 
+struct MazeOutput {
+    OutputRequest request;
+    FullAssessment assessment;
+    std::shared_ptr<Image const> image;
+    
+    MazeOutput(OutputRequest request, FullAssessment const &assessment) : request(request), assessment(assessment) {}
+};
+
+// TODO: clean up output name code
+static std::string getOutputFileName(OutputRequest request, MazeArguments const &args, std::string const &type) {
+    std::stringstream fileNameStream;
+    // TODO: change meaning of specified file name to include all images in one file
+    if (args.baseFileName.has_value() && args.imagesToOutput.size() == 1 && args.types.size() == 1) {
+        fileNameStream << *args.baseFileName;
+    } else {
+        // TODO: could be organized more safely? This lookup seems wrong for non-collated maze generation.
+        fileNameStream << MazeGenerator::get(type)->name;
+    }
+    fileNameStream << " " << args.width << "x" << args.height;
+    if (!args.baseFileName.has_value()) {
+        fileNameStream << request.fileNameMetadata(args.count());
+    }
+    fileNameStream << ".png";
+    return fileNameStream.str();
+}
+
+// TODO: clean up output name code
+static std::string getCollatedFileName(OutputRequest request, MazeArguments const &args) {
+    std::stringstream fileNameStream;
+    if (args.collateAllMazeTypeImages && !args.baseFileName.has_value()) {
+        fileNameStream << "All";
+    } else {
+        return getOutputFileName(request, args, MazeGenerator::all().front()->type);
+    }
+    if (!args.baseFileName.has_value()) {
+        fileNameStream << request.fileNameMetadata(args.count());
+    }
+    fileNameStream << ".png";
+    return fileNameStream.str();
+}
+
+// TODO: move to image file, or image utility
 static void writeMazeImageFile(std::string const &fileName, Image const *image) {
     std::vector<unsigned char> rgba;
     image->encodeRGBA(rgba);
@@ -40,6 +83,7 @@ int main(int argc, const char * argv[]) {
     // If processing takes a long time, it's good to output warnings before generating mazes.
     args->printWarnings();
     
+    std::vector<MazeOutput> mazeOutput;
     if (!args->imagesToOutput.empty() || args->showAnalysis) {
         if (args->count() > 1) {
             std::cout << "Running on " << ThreadPool::shared().getThreadCount() << " threads." << std::endl;
@@ -49,7 +93,6 @@ int main(int argc, const char * argv[]) {
             std::cout << "Generating " << args->types.size() << " maze types x" << args->count() << "..." <<std::endl;
         }
         int typeCount = 0;
-        std::map<int, std::map<std::string, std::vector<std::shared_ptr<Image>>>> rankedNamedImages;
         for (auto type : args->types) {
             auto generator = MazeGenerator::get(type);
             auto generatorTypeName = generator->name;
@@ -63,91 +106,76 @@ int main(int argc, const char * argv[]) {
                 std::cout << "Generating x" << args->count() << " " << generatorTypeName << " " << args->width << "x" << args->height << "..." << std::endl;
             }
             
+            // Generate all specified seeds.
             std::function<GeneratedMaze(int)> generate = [args, generator](int seed){
                 return generator->generate(args->width, args->height, seed);
             };
-            
-            // Generate all specified seeds.
             std::vector<GeneratedMaze> mazes = threadedTransform(args->seedsToGenerate, generate, "Generate");
             
+            // Analyze all generated mazes. Even if analysis output
+            // is not specified, this is needed for ranked output.
             if (args->showAnalysis) {
                 std::cout << "Analyzing x" << args->count() << " " << generatorTypeName << "..." << std::endl;
             }
-            Stats stats;
             std::function<FullAssessment(GeneratedMaze const &)> assessmentFunction = valueOfMaze;
             std::vector<FullAssessment> assessments = threadedTransform(mazes, assessmentFunction, "Analyze");
             
-            // Sprt mazes in order from worst to best, and accumulate statistics.
-            std::set<FullAssessment> sortedMazes;
+            // Sort mazes in order from worst to best, and accumulate statistics.
+            std::set<FullAssessment> sortedMazeSet;
+            Stats stats;
             for (auto assessment : assessments) {
-                sortedMazes.insert(assessment);
+                sortedMazeSet.insert(assessment);
                 stats.accumulate(assessment.analysis.get(), assessment.maze.seed);
             }
+            
+            // Output analysis if specified.
             if (args->showAnalysis) {
                 stats.print(generatorTypeName + " statistics");
             }
             
-            if (!args->imagesToOutput.empty()) {
-                std::vector<XY> const emptyPath;
-                std::stringstream fileNamePrefixStream;
-                if (args->collateAllMazeTypeImages && !args->baseFileName.has_value()) {
-                    fileNamePrefixStream << "All";
-                } else {
-                    // TODO: change meaning of specified file name to include all images in one file
-                    if (args->baseFileName.has_value() && args->imagesToOutput.size() == 1 && args->types.size() == 1) {
-                        fileNamePrefixStream << *args->baseFileName;
-                    } else {
-                        fileNamePrefixStream << generatorTypeName;
-                    }
-                    fileNamePrefixStream << " " << args->width << "x" << args->height;
-                }
-                std::string fileNamePrefix = fileNamePrefixStream.str();
-                int rank = 0;
-                for (auto iter = sortedMazes.rbegin(); iter != sortedMazes.rend(); ++iter) {
-                    rank++;
-                    std::optional<MazeOutput> output = args->getOutputFor(iter->maze.seed, rank);
-                    if (output.has_value()) {
-                        std::stringstream fileName;
-                        fileName << fileNamePrefix;
-                        if (!args->baseFileName.has_value()) {
-                            fileName << output->fileNameMetadata(iter->maze.seed, rank, args->count());
-                        }
-                        fileName << ".png";
-                        
-                        auto path = args->showPath ? iter->analysis->shortestPath : emptyPath;
-                        auto image = convertToImage(iter->maze.maze.get(), args->sizes, path);
-                        rankedNamedImages[rank][fileName.str()].push_back(std::move(image));
-                    }
-                }
-            }
-        }
-        
-        for (auto rankTuple : rankedNamedImages) {
-            for (auto nameTuple : rankTuple.second) {
-                auto const &images = nameTuple.second;
-                if (images.size() == 1) {
-                    writeMazeImageFile(nameTuple.first, images.front().get());
-                } else {
-                    Image collatedImage;
-                    for (auto image : images) {
-                        collatedImage.width += image->width;
-                        collatedImage.height = std::max(collatedImage.height, image->height);
-                    }
-                    collatedImage.width -= ((int)images.size() - 1) * args->sizes.border;
-                    // TODO: border color white and maybe a border around all mazes for clarity
-                    RGBA borderColor = RGBA::gray(255);
-                    collatedImage.pixels.resize(collatedImage.width * collatedImage.height, borderColor);
-                    int x = 0;
-                    for (auto image : images) {
-                        collatedImage.blit(image.get(), x, 0);
-                        x += image->width - args->sizes.border;
-                    }
-                    writeMazeImageFile(nameTuple.first, &collatedImage);
+            // Determine which mazes to convert to image data.
+            int rank = 0;
+            for (auto iter = sortedMazeSet.rbegin(); iter != sortedMazeSet.rend(); ++iter) {
+                rank++;
+                std::optional<OutputRequest> output = args->getOutputFor(iter->maze.seed, rank);
+                if (output.has_value()) {
+                    mazeOutput.push_back(MazeOutput(output->requestFor(iter->maze.seed), *iter));
                 }
             }
         }
     }
     
+    // TODO: move most of the following code to a new OutputUtility.h?
+    // Generate images for all output requests across multiple threads.
+    std::function<MazeOutput(MazeOutput)> generateMazeImage = [args](MazeOutput output){
+        auto path = args->showPath ? output.assessment.analysis->shortestPath : std::vector<XY>();
+        output.image = convertToImage(output.assessment.maze.maze.get(), args->sizes, path);
+        return output;
+    };
+    mazeOutput = threadedTransform(mazeOutput, generateMazeImage, "Image Conversion");
+    
+    // Sort output by request type.
+    std::map<OutputRequest, std::vector<MazeOutput>> mazeOutputMap;
+    for (auto output : mazeOutput) {
+        mazeOutputMap[output.request].push_back(output);
+    }
+    
+    // Output requested data.
+    for (auto iter : mazeOutputMap) {
+        // Determine what to put in the file.
+        if (args->collateAllMazeTypeImages) {
+            std::function<Image const *(MazeOutput)> getImages = [](MazeOutput output){ return output.image.get(); };
+            auto collatedImage = collate(args->sizes.border, transform(iter.second, getImages));
+            writeMazeImageFile(getCollatedFileName(iter.first, *args), collatedImage.get());
+        } else {
+            // TODO: non-collated images need their own file names
+            for (auto output : iter.second) {
+                writeMazeImageFile(getOutputFileName(iter.first, *args, output.assessment.maze.type), output.image.get());
+            }
+        }
+    }
+    
+    // Measure performance of each type, if requested.
     if (args->measurePerformance && args->types.size() > 0) {
         Performance::print(args->types);
     }

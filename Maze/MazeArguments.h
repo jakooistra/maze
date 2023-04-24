@@ -13,7 +13,7 @@
 #include <string>
 
 #include "MazeGenerator.h"
-#include "MazeOutput.h"
+#include "OutputRequest.h"
 #include "PixelSizes.h"
 
 struct MazeArguments {
@@ -27,14 +27,14 @@ struct MazeArguments {
     std::optional<std::string> baseFileName;
     std::set<std::string> types;
     std::vector<int> seedsToGenerate;
-    std::set<MazeOutput> imagesToOutput;
+    std::set<OutputRequest> imagesToOutput;
     
     static std::optional<MazeArguments> parse(int argc, const char * argv[]);
     
     int count() const;
     void printWarnings() const;
     
-    std::optional<MazeOutput> getOutputFor(int seed, int rank) const;
+    std::optional<OutputRequest> getOutputFor(int seed, int rank) const;
 };
 
 #endif /* MazeArguments_h */

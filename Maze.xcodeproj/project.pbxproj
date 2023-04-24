@@ -14,6 +14,7 @@
 		DB04DBF129F30D97007C7819 /* Performance.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB04DBEF29F30D97007C7819 /* Performance.cpp */; };
 		DB04DBF529F358C3007C7819 /* GenerationRate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB04DBF329F358C3007C7819 /* GenerationRate.cpp */; };
 		DB04DBF729F39340007C7819 /* PerturbationKernelsGenerator.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB04DBF629F39340007C7819 /* PerturbationKernelsGenerator.cpp */; };
+		DB4812CD29F64A3600C475BD /* ImageUtility.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4812CB29F6488400C475BD /* ImageUtility.cpp */; };
 		DB4D383B29E904FA007ACBDF /* Analysis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D383929E904FA007ACBDF /* Analysis.cpp */; };
 		DB4D383E29E90505007ACBDF /* Stats.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D383C29E90505007ACBDF /* Stats.cpp */; };
 		DB4D384429E905CE007ACBDF /* Solver.cpp in Sources */ = {isa = PBXBuildFile; fileRef = DB4D384229E905CE007ACBDF /* Solver.cpp */; };
@@ -61,7 +62,9 @@
 		DB04DBF629F39340007C7819 /* PerturbationKernelsGenerator.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = PerturbationKernelsGenerator.cpp; sourceTree = "<group>"; };
 		DB04DBF829F40FE4007C7819 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		DB4812C929F6123B00C475BD /* PixelSizes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PixelSizes.h; sourceTree = "<group>"; };
-		DB4812CA29F6185100C475BD /* MazeOutput.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MazeOutput.h; sourceTree = "<group>"; };
+		DB4812CA29F6185100C475BD /* OutputRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OutputRequest.h; sourceTree = "<group>"; };
+		DB4812CB29F6488400C475BD /* ImageUtility.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ImageUtility.cpp; sourceTree = "<group>"; };
+		DB4812CC29F6488400C475BD /* ImageUtility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ImageUtility.h; sourceTree = "<group>"; };
 		DB4A736729EA34CF00E3336A /* Utility.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Utility.h; sourceTree = "<group>"; };
 		DB4D383929E904FA007ACBDF /* Analysis.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = Analysis.cpp; sourceTree = "<group>"; };
 		DB4D383A29E904FA007ACBDF /* Analysis.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Analysis.h; sourceTree = "<group>"; };
@@ -183,7 +186,7 @@
 				DBB26BC029E8C56400C14D5B /* main.cpp */,
 				DB04DBE129F1BB72007C7819 /* MazeArguments.cpp */,
 				DB04DBE229F1BB72007C7819 /* MazeArguments.h */,
-				DB4812CA29F6185100C475BD /* MazeOutput.h */,
+				DB4812CA29F6185100C475BD /* OutputRequest.h */,
 				DB4A736729EA34CF00E3336A /* Utility.h */,
 			);
 			path = Maze;
@@ -217,6 +220,8 @@
 			children = (
 				DBB26BD529E8CD2D00C14D5B /* Image.cpp */,
 				DBB26BD629E8CD2D00C14D5B /* Image.h */,
+				DB4812CB29F6488400C475BD /* ImageUtility.cpp */,
+				DB4812CC29F6488400C475BD /* ImageUtility.h */,
 				DBB26BC829E8C69A00C14D5B /* lodepng.h */,
 				DBB26BC929E8C6A100C14D5B /* lodepng.cpp */,
 				DBB26BD229E8CCB700C14D5B /* MazeToImage.cpp */,
@@ -368,6 +373,7 @@
 				DB4D385229E986A1007ACBDF /* RemoveRandomWallsGenerator.cpp in Sources */,
 				DB4D384429E905CE007ACBDF /* Solver.cpp in Sources */,
 				DB4D385529E994AD007ACBDF /* VerticalPathBreaksGenerator.cpp in Sources */,
+				DB4812CD29F64A3600C475BD /* ImageUtility.cpp in Sources */,
 				DBE7964E29EC89360049956A /* ThreadPool.cpp in Sources */,
 				DB4D385C29EA05DA007ACBDF /* ChainBurstGenerator.cpp in Sources */,
 				DBB26BD429E8CCB700C14D5B /* MazeToImage.cpp in Sources */,

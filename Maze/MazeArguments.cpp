@@ -185,12 +185,12 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
             args.showAnalysis = true;
         } else if (command.name == cmdOutputRanked.name) {
             if (command.has_value()) {
-                args.imagesToOutput.insert(MazeOutput::rank(std::max(1, command.value->integer)));
+                args.imagesToOutput.insert(OutputRequest::rank(std::max(1, command.value->integer)));
             } else {
-                args.imagesToOutput.insert(MazeOutput::all());
+                args.imagesToOutput.insert(OutputRequest::all());
             }
         } else if (command.name == cmdOutputPercentile.name) {
-            args.imagesToOutput.insert(MazeOutput::percentile(std::max(1, std::min(100, command.value->integer))));
+            args.imagesToOutput.insert(OutputRequest::percentile(std::max(1, std::min(100, command.value->integer))));
         } else if (command.name == cmdOnlyUsage.name) {
             onlyPrintUsage = true;
         } else if (command.name == cmdPerformance.name) {
@@ -226,13 +226,13 @@ std::optional<MazeArguments> MazeArguments::parse(int argc, const char * argv[])
     // If a base file name was specified, but no image output is specified,
     // ensure the best maze will have its image created.
     if (args.baseFileName.has_value() && args.imagesToOutput.empty()) {
-        args.imagesToOutput.insert(MazeOutput::best());
+        args.imagesToOutput.insert(OutputRequest::best());
     }
     
     // Remove invalid ranked output specifications.
-    std::vector<MazeOutput> invalidOuputSpec;
+    std::vector<OutputRequest> invalidOuputSpec;
     for (auto output : args.imagesToOutput) {
-        if (output.type == MazeOutput::Type::Rank && output.value >= args.count()) {
+        if (output.type == OutputRequest::Type::Rank && output.value >= args.count()) {
             invalidOuputSpec.push_back(output);
         }
     }
@@ -278,7 +278,7 @@ void MazeArguments::printWarnings() const {
     }
 }
 
-std::optional<MazeOutput> MazeArguments::getOutputFor(int seed, int rank) const {
+std::optional<OutputRequest> MazeArguments::getOutputFor(int seed, int rank) const {
     for (auto output : imagesToOutput) {
         if (output.matches(seed, rank, count())) {
             return output;
