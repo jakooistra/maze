@@ -99,7 +99,7 @@ static std::vector<XY> burst(Maze *maze, std::vector<std::vector<ChainBurstCell>
                 return {};
             } else {
                 auto next = expandFrom(start, maze, cells, rng);
-                start = next.value();
+                start = *next;
             }
         }
     }
@@ -132,7 +132,7 @@ static std::vector<XY> burst(Maze *maze, std::vector<std::vector<ChainBurstCell>
         for (auto checkPoint : checkExpansion) {
             auto next = expandFrom(checkPoint, maze, cells, rng);
             if (next.has_value()) {
-                nextExpansion.push_back(next.value());
+                nextExpansion.push_back(*next);
             }
         }
         
@@ -232,7 +232,7 @@ protected:
                     }
                 }
                 if (best.has_value()) {
-                    nextBurst = best.value();
+                    nextBurst = *best;
                 } else {
                     break;
                 }
@@ -277,7 +277,7 @@ protected:
                         
                         std::optional<XY> expandLocation = adjacent;
                         for (int i = 0; i < 7 && expandLocation.has_value(); ++i) {
-                            expandLocation = expandFrom(expandLocation.value(), maze.get(), cells, rng);
+                            expandLocation = expandFrom(*expandLocation, maze.get(), cells, rng);
                         }
                     }
                     
